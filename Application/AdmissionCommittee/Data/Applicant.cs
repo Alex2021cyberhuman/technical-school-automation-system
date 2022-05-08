@@ -5,7 +5,7 @@ using Application.Specialities.Data;
 
 namespace Application.AdmissionCommittee.Data;
 
-public abstract class Applicant
+public class Applicant
 {
     public long Id { get; set; }
 

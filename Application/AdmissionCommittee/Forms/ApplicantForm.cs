@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.Xml;
+using Application.AdmissionCommittee.Data;
 using Application.Common.Enums;
+using Application.Specialities.Data;
 
 namespace Application.AdmissionCommittee.Forms;
 
@@ -95,4 +98,74 @@ public class ApplicantForm
     [MaxLength(3)]
     [Required]
     public string[] SelectedSpecialityIds { get; set; } = Array.Empty<string>();
+
+    public Applicant ConvertToApplicant(IReadOnlyDictionary<string, Speciality> specialities)
+    {
+        var applicant = new Applicant
+        {
+            Submitted = DateTime.UtcNow,
+            FirstName = FirstName,
+            FamilyName = FamilyName,
+            SurName = SurName,
+            DateOfBirth = DateOfBirth,
+            Description = Description,
+            LanguageRating = LanguageRating,
+            MathRating = MathRating,
+            AverageAttestRating = AverageAttestRating,
+            CommonScore = (AverageAttestRating + (MathRating + LanguageRating) / 40) / 2,
+            EducationType = EducationType,
+            EducationDescription = EducationDescription,
+            EducationDocumentSerial = EducationDocumentSerial,
+            EducationDocumentNumber = EducationDocumentNumber,
+            EducationDocumentIssued = EducationDocumentIssued,
+            EducationForm = EducationForm,
+            FirstTimeInTechnicalSchool = FirstTimeInTechnicalSchool,
+            NeedDormitory = NeedDormitory,
+            FinanceEducationType = FinanceEducationType,
+            Address = Address,
+            PostalCode = PostalCode,
+            Phone = Phone,
+            Mother = HasMother
+                ? new ApplicantParent
+                {
+                    WorkDescription = MotherWorkDescription,
+                    MobilePhone = MotherMobilePhone,
+                    WorkPhone = MotherWorkPhone,
+                    HomePhone = MotherHomePhone,
+                    FirstName = MotherFirstName,
+                    FamilyName = MotherFamilyName,
+                    SurName = MotherSurName
+                }
+                : null,
+            Father = HasFather
+                ? new ApplicantParent
+                {
+                    WorkDescription = FatherWorkDescription,
+                    MobilePhone = FatherMobilePhone,
+                    WorkPhone = FatherWorkPhone,
+                    HomePhone = FatherHomePhone,
+                    FirstName = FatherFirstName,
+                    FamilyName = FatherFamilyName,
+                    SurName = FatherSurName
+                }
+                : null,
+            DistanceApplicantWorkDescription = DistanceApplicantWorkDescription,
+            ApplicantSpecialities = SelectedSpecialityIds.Select(specialities.GetValueOrDefault)
+                .Where(x => x is not null).Select(x => new ApplicantSpeciality()
+                {
+                    SpecialityId = x!.Id
+                }).ToList(),
+            DirectorDecision = DirectorDecisionType.NotСonsidered,
+            Passport = new ApplicantPassport
+            {
+                Serial = PassportSerial,
+                Number = PassportNumber,
+                Issuer = PassportIssuer,
+                IssuerCode = PassportIssuerCode,
+                Type = PassportType,
+                IssueDate = PassportIssueDate,
+            }
+        };
+        return applicant;
+    }
 }

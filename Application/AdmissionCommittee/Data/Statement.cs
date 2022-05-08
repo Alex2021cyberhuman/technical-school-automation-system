@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.AdmissionCommittee.Data;
 
-public abstract class Statement
+public class Statement
 {
     [Required] public long Size { get; set; }
 

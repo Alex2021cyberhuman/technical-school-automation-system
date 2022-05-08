@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.AdmissionCommittee.Data;
 
-public abstract class ApplicantParent
+public class ApplicantParent
 {
     [MaxLength(200)] [Required] public string FirstName { get; set; } = string.Empty;
 

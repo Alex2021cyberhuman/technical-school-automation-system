@@ -3,7 +3,7 @@ using Application.Specialities.Data;
 
 namespace Application.AdmissionCommittee.Data;
 
-public abstract class ApplicantSpeciality
+public class ApplicantSpeciality
 {
     [Key] public long Id { get; set; }
 
