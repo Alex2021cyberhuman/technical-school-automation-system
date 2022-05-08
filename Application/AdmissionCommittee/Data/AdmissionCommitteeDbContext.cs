@@ -27,6 +27,7 @@ public class AdmissionCommitteeDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AdmissionCommitteeDbContext).Assembly);
         modelBuilder.Entity<Applicant>(e =>
         {
+            e.OwnsOne(x => x.Passport);
             e.OwnsOne(x => x.Mother);
             e.OwnsOne(x => x.Father);
             e.OwnsOne(x => x.Statement);

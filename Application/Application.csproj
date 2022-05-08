@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="AdmissionCommittee\Forms" />
         <Folder Include="AdmissionCommittee\Pages" />
     </ItemGroup>
 

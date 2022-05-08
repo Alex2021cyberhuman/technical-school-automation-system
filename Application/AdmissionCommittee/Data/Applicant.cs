@@ -21,25 +21,15 @@ public abstract class Applicant
 
     public DateTime DateOfBirth { get; set; }
 
-    [MaxLength(20)] public string PassportSerial { get; set; } = string.Empty;
-
-    [MaxLength(20)] public string PassportNumber { get; set; } = string.Empty;
-
-    [MaxLength(20)] public string PassportType { get; set; } = string.Empty;
-
-    [MaxLength(2000)] public string PassportIssuer { get; set; } = string.Empty;
-
-    [MaxLength(20)] public string PassportIssuerCode { get; set; } = string.Empty;
-
-    public DateTime PassportIssueDate { get; set; }
-
     [MaxLength(2000)] public string Description { get; set; } = string.Empty;
 
-    public decimal LanguageRating { get; set; }
+    [Required]  public decimal LanguageRating { get; set; }
 
-    public decimal MathRating { get; set; }
+    [Required] public decimal MathRating { get; set; }
 
-    public decimal AverageAttestRating { get; set; }
+    [Required] public decimal AverageAttestRating { get; set; }
+    
+    [Required] public decimal CommonScore { get; set; }
 
     public EducationType EducationType { get; set; }
 
@@ -69,15 +59,15 @@ public abstract class Applicant
 
     public ApplicantParent? Father { get; set; }
 
-    [MaxLength(2000)] public string? DistanceApplicantWorkDescription { get; set; }
+    [MaxLength(2000)] public string DistanceApplicantWorkDescription { get; set; } = string.Empty;
 
     [Required] public List<ApplicantSpeciality> ApplicantSpecialities { get; set; } = null!;
 
     public IEnumerable<Speciality> Specialities => ApplicantSpecialities.Select(x => x.Speciality);
 
-    [Required] public decimal CommonScore { get; set; }
-
     public DirectorDecisionType DirectorDecision { get; set; }
     
     public Statement Statement { get; set; } = null!;
+
+    public ApplicantPassport Passport { get; set; } = null!;
 }
