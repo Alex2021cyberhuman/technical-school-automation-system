@@ -31,15 +31,15 @@
     <InputNumber @bind-Value="@Form.LanguageRating"/>
     <InputNumber @bind-Value="@Form.MathRating"/>
     <InputNumber @bind-Value="@Form.AverageAttestRating"/>
-    <EnumInputRadioGroup @bind-Value="@Form.EducationType"/>
+    <MyEnumInputRadioGroup TValue="EducationType" @bind-Value="@Form.EducationType"/>
     <FluentTextField @bind-Value="@Form.EducationDescription"/>
     <FluentTextField @bind-Value="@Form.EducationDocumentSerial"/>
     <FluentTextField @bind-Value="@Form.EducationDocumentNumber"/>
-    <FluentTextField @bind-Value="@Form.EducationDocumentIssued"/>
-    <EnumInputRadioGroup TValue="EducationForm" @bind-Value="@Form.EducationForm"/>
+    <InputDate @bind-Value="@Form.EducationDocumentIssued"/>
+    <MyEnumInputRadioGroup TValue="EducationForm" @bind-Value="@Form.EducationForm"/>
     <FluentSwitch @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
     <FluentSwitch @bind-Value="@Form.NeedDormitory"/>
-    <EnumInputRadioGroup TValue="FinanceEducationType" @bind-Value="@Form.FinanceEducationType"/>
+    <MyEnumInputRadioGroup TValue="FinanceEducationType" @bind-Value="@Form.FinanceEducationType"/>
     <FluentSwitch @bind-Value="@Form.HasMother"/>
     <FluentTextField @bind-Value="@Form.MotherFirstName"/>
     <FluentTextField @bind-Value="@Form.MotherFamilyName"/>
@@ -74,8 +74,8 @@
 
     public EditContext EditContext { get; set; }
 
-    public IReadOnlyCollection<MyCheckboxGroup<long>.CheckOption> SpecialityIdsOptions => Specialities.Values.Select(x =>
-        new MyCheckboxGroup<long>.CheckOption(
+    public List<MyCheckboxGroup<long>.OptionItem> SpecialityIdsOptions => Specialities.Values.Select(x =>
+        new MyCheckboxGroup<long>.OptionItem(
             $"{x.Code} {x.Name}",
             x.Id,
             Form.SelectedSpecialityIds.Contains(x.Id)))
@@ -96,9 +96,9 @@
         {
             await LocalStorageService.SetItemAsync("ACP_LS", Form);
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(exception);
             throw;
         }
     }

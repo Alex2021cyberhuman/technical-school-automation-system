@@ -1,16 +1,15 @@
 @using System.Globalization
 @typeparam TValue
-@typeparam TLabel
 @inherits InputBase<TValue>
 
 <div class="form-check">
     <fieldset>
         <legend>@DisplayName</legend>
-        @foreach (var tuple in ValuesTuples)
+        @foreach (var radioItem in ValuesTuples)
         {
             <label>
-                <MyInputRadio name="@Name" @attributes="AdditionalAttributes" @bind-Value="@Value" SelectedValue="tuple.Value" @onchange="OnChange"/>
-                @tuple.Label
+                <MyInputRadio name="@Name" @attributes="AdditionalAttributes" @bind-Value="@Value" SelectedValue="radioItem.Value" @onchange="OnChange"/>
+                @radioItem.Label
             </label>
         }
     </fieldset>
@@ -21,7 +20,7 @@
     private string _name = string.Empty;
 
     [Parameter]
-    public IReadOnlyCollection<(TLabel Label, TValue Value)> ValuesTuples { get; set; } = Array.Empty<(TLabel Label, TValue Value)>();
+    public IReadOnlyCollection<RadioItem> ValuesTuples { get; set; } = Array.Empty<RadioItem>();
 
     [Parameter]
     public string Name
@@ -35,8 +34,10 @@
         CurrentValueAsString = args.Value?.ToString();
     }
 
-    protected override bool TryParseValueFromString(string? value,
-        out TValue result, out string errorMessage)
+    protected override bool TryParseValueFromString(
+        string? value,
+        out TValue result,
+        out string errorMessage)
     {
         var success = BindConverter.TryConvertTo<TValue>(
             value, CultureInfo.CurrentCulture, out var parsedValue);
@@ -58,6 +59,19 @@
         var typeName = typeof(TValue).Name;
         _name = typeName;
         return _name;
+    }
+
+    public class RadioItem
+    {
+        public RadioItem(string label, TValue value)
+        {
+            Label = label;
+            Value = value;
+        }
+
+        public string Label { get; set; }
+
+        public TValue Value { get; set; }
     }
 
 }

@@ -186,8 +186,7 @@ public class ApplicantForm
     [MaxLength(3)]
     [Required]
     [Display(Name = "Специальности")]
-    public long[] SelectedSpecialityIds { get; set; } = Array.Empty<long>();
-
+    public List<long> SelectedSpecialityIds { get; set; } = new();
     public Applicant ConvertToApplicant(IReadOnlyDictionary<long, Speciality> specialities)
     {
         var applicant = new Applicant

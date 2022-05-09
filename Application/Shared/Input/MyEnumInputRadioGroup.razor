@@ -1,0 +1,47 @@
+@using System.Linq;
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@typeparam TValue where TValue : struct, Enum
+@inherits InputBase<TValue>
+@inject IStringLocalizer StringLocalizer
+<MyInputRadioGroup ValuesTuples="EnumValuesTuples" @bind-Value="@Value" DisplayName="@DisplayName" @onchange="OnChange"/>
+
+@code{
+
+    public IReadOnlyCollection<MyInputRadioGroup<TValue>.RadioItem> EnumValuesTuples { get; set; } = Array.Empty<MyInputRadioGroup<TValue>.RadioItem>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var values = Enum.GetValues<TValue>()
+            .Select(x => new MyInputRadioGroup<TValue>.RadioItem(StringLocalizer[x.ToString()], x))
+            .ToList();
+        EnumValuesTuples = values;
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out TValue result,
+        out string errorMessage)
+    {
+        var success = BindConverter.TryConvertTo<TValue>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue!;
+            errorMessage = null!;
+
+            return true;
+        }
+        result = default!;
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
+    private void OnChange(ChangeEventArgs args)
+    {
+        CurrentValueAsString = args.Value?.ToString();
+    }
+
+}

@@ -1,6 +1,6 @@
 @using System.Linq;
 @typeparam TCheck
-@inherits InputBase<IReadOnlyCollection<TCheck>>
+@inherits InputBase<List<TCheck>>
 
 <div class="form-check">
     <fieldset>
@@ -8,7 +8,7 @@
         @foreach (var option in Options)
         {
             <label>
-                <InputCheckbox type="checkbox" name="@FieldIdentifier" @bind-Value="option.OptionChecked" @onchange="Callback"/>
+                <InputCheckbox type="checkbox" name="@FieldIdentifier.FieldName" @bind-Value="option.OptionChecked" @onchange="Callback"/>
                 @option.Label
             </label>
         }
@@ -18,16 +18,16 @@
 @code {
 
     [Parameter]
-    public IReadOnlyCollection<CheckOption> Options { get; set; } = Array.Empty<CheckOption>();
+    public List<OptionItem> Options { get; set; } = new();
 
-    private void Callback()
+    private void Callback(ChangeEventArgs args)
     {
-        Value = Options.Where(x => x.OptionChecked).Select(x => x.Value).ToArray();
+        Value = Options.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
     }
 
-    public class CheckOption
+    public class OptionItem
     {
-        public CheckOption(string label, TCheck value, bool optionChecked)
+        public OptionItem(string label, TCheck value, bool optionChecked)
         {
             Label = label;
             Value = value;
@@ -40,5 +40,26 @@
 
         public bool OptionChecked { get; set; }
     }
-    
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out List<TCheck> result,
+        out string validationErrorMessage)
+    {
+        Console.WriteLine(value);
+        // var success = BindConverter.TryConvertTo<TValue>(
+        //     value, CultureInfo.CurrentCulture, out var parsedValue);
+        // if (success)
+        // {
+        //     result = parsedValue!;
+        //     errorMessage = null!;
+        //
+        //     return true;
+        // }
+        result = default!;
+        validationErrorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
 }
