@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.Xml;
 using Application.AdmissionCommittee.Data;
 using Application.Common.Enums;
 using Application.Specialities.Data;
@@ -8,98 +7,188 @@ namespace Application.AdmissionCommittee.Forms;
 
 public class ApplicantForm
 {
-    public bool HasMother { get; set; }
+    [Display(Name = "Фамилия")]
+    [MaxLength(200)]
+    [Required]
+    public string FamilyName { get; set; } = string.Empty;
 
-    public bool HasFather { get; set; }
+    [Display(Name = "Имя")]
+    [MaxLength(200)]
+    [Required]
+    public string FirstName { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string FirstName { get; set; } = string.Empty;
+    [Display(Name = "Отчество")]
+    [MaxLength(200)]
+    public string SurName { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string FamilyName { get; set; } = string.Empty;
+    [Display(Name = "Дата рождения")]
+    [Required]
+    public DateTime DateOfBirth { get; set; } = DateTime.Today;
 
-    [MaxLength(200)] public string SurName { get; set; } = string.Empty;
+    [Display(Name = "Тип паспорта")]
+    [Required]
+    [MaxLength(20)]
+    public string PassportType { get; set; } = "Паспорт";
 
-    [Required] public DateTime DateOfBirth { get; set; } = DateTime.Today;
+    [Display(Name = "Серия паспорта")]
+    [Required]
+    [MaxLength(20)]
+    public string PassportSerial { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] public string PassportSerial { get; set; } = string.Empty;
+    [Display(Name = "Номер паспорта")]
+    [Required]
+    [MaxLength(20)]
+    public string PassportNumber { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] public string PassportNumber { get; set; } = string.Empty;
+    [Display(Name = "Кем выдан паспорт")]
+    [Required]
+    [MaxLength(300)]
+    public string PassportIssuer { get; set; } = string.Empty;
 
-    [Required] [MaxLength(300)] public string PassportIssuer { get; set; } = string.Empty;
+    [Display(Name = "Код паспорта")]
+    [MaxLength(20)]
+    public string PassportIssuerCode { get; set; } = string.Empty;
 
-    [MaxLength(20)] string PassportIssuerCode { get; set; } = string.Empty;
+    [Display(Name = "Дата выдачи паспорта")]
+    [Required]
+    public DateTime PassportIssueDate { get; set; } = DateTime.Today;
 
-    [Required] [MaxLength(20)] public string PassportType { get; set; } = "Паспорт";
+    [Display(Name = "Место жительства")]
+    [Required]
+    [MaxLength(2000)]
+    public string Address { get; set; } = string.Empty;
 
-    [Required] public DateTime PassportIssueDate { get; set; } = DateTime.Today;
+    [Display(Name = "Почтовый индекс")]
+    [MaxLength(20)]
+    [Required]
+    public string PostalCode { get; set; } = string.Empty;
 
+    [Display(Name = "Мобильный телефон")]
+    [MaxLength(20)]
+    [Required]
+    [Phone]
+    public string Phone { get; set; } = string.Empty;
+    
+    [Display(Name = "Дополнительные свединия")]
     public string Description { get; set; } = string.Empty;
 
+    [Display(Name = "Баллы по русскому языку")]
     public decimal LanguageRating { get; set; } = 50;
 
+    [Display(Name = "Баллы по математике")]
     public decimal MathRating { get; set; } = 50;
 
+    [Display(Name = "Средний бал по атестату")]
     public decimal AverageAttestRating { get; set; } = 3;
 
+    [Display(Name = "Тип базового образования")]
     public EducationType EducationType { get; set; } = EducationType.CommonMiddleSchool;
 
-    [Required] [MaxLength(2000)] public string EducationDescription { get; set; } = string.Empty;
+    [Required]
+    [MaxLength(2000)]
+    [Display(Name = "Учебное заведение")]
+    public string EducationDescription { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string EducationDocumentSerial { get; set; } = string.Empty;
+    [Display(Name = "Серия документа об образовании")]
+    [MaxLength(200)]
+    [Required]
+    public string EducationDocumentSerial { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string EducationDocumentNumber { get; set; } = string.Empty;
+    [Display(Name = "Номер документа об образовании")]
+    [MaxLength(200)]
+    [Required]
+    public string EducationDocumentNumber { get; set; } = string.Empty;
 
-    [Required] public DateTime EducationDocumentIssued { get; set; } = DateTime.Today;
+    [Display(Name = "Дата выдачи документа об образовании")]
+    [Required]
+    public DateTime EducationDocumentIssued { get; set; } = DateTime.Today;
 
-    public EducationForm EducationForm { get; set; }
+    [Display(Name = "Форма обучения")] public EducationForm EducationForm { get; set; }
 
+    [Display(Name = "Первый раз в техникуме")]
     public bool FirstTimeInTechnicalSchool { get; set; }
 
-    public bool NeedDormitory { get; set; }
+    [Display(Name = "Нужно общежитие")] public bool NeedDormitory { get; set; }
 
-    public FinanceEducationType FinanceEducationType { get; set; }
+    [Display(Name = "Тип финансирования")] public FinanceEducationType FinanceEducationType { get; set; }
 
-    [Required] [MaxLength(2000)] public string Address { get; set; } = string.Empty;
+    [Display(Name = "Есть мать")]
+    public bool HasMother { get; set; }
 
-    [MaxLength(20)] [Required] public string PostalCode { get; set; } = string.Empty;
+    [Display(Name = "Имя матери")]
+    [MaxLength(200)]
+    public string MotherFirstName { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Required] [Phone] public string Phone { get; set; } = string.Empty;
+    [Display(Name = "Фамилия матери")]
+    [MaxLength(200)]
+    public string MotherFamilyName { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string MotherFirstName { get; set; } = string.Empty;
+    [Display(Name = "Отчество матери")]
+    [MaxLength(200)]
+    public string MotherSurName { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string MotherFamilyName { get; set; } = string.Empty;
-
-    [MaxLength(200)] public string MotherSurName { get; set; } = string.Empty;
-
+    [Display(Name = "Описание работы матери")]
     public string MotherWorkDescription { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] [Phone] public string MotherMobilePhone { get; set; } = string.Empty;
+    [Display(Name = "Мобильный телефон матери")]
+    [MaxLength(20)]
+    [Phone]
+    public string MotherMobilePhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string MotherWorkPhone { get; set; } = string.Empty;
+    [Display(Name = "Рабочий телефон матери")]
+    [MaxLength(20)]
+    [Phone]
+    public string MotherWorkPhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string MotherHomePhone { get; set; } = string.Empty;
+    [Display(Name = "Домашний телефон матери")]
+    [MaxLength(20)]
+    [Phone]
+    public string MotherHomePhone { get; set; } = string.Empty;
 
-    [MaxLength(200)] [Required] public string FatherFirstName { get; set; } = string.Empty;
+    [Display(Name = "Есть отец")]
+    public bool HasFather { get; set; }
 
-    [MaxLength(200)] [Required] public string FatherFamilyName { get; set; } = string.Empty;
+    [Display(Name = "Имя отца")]
+    [MaxLength(200)]
+    public string FatherFirstName { get; set; } = string.Empty;
 
-    [MaxLength(200)] public string FatherSurName { get; set; } = string.Empty;
+    [Display(Name = "Фамилия отца")]
+    [MaxLength(200)]
+    public string FatherFamilyName { get; set; } = string.Empty;
 
+    [Display(Name = "Отчество отца")]
+    [MaxLength(200)]
+    public string FatherSurName { get; set; } = string.Empty;
+
+    [Display(Name = "Описание работы отца")]
     public string FatherWorkDescription { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] [Phone] public string FatherMobilePhone { get; set; } = string.Empty;
+    [Display(Name = "Мобильный телефон отца")]
+    [MaxLength(20)]
+    [Phone]
+    public string FatherMobilePhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string FatherWorkPhone { get; set; } = string.Empty;
+    [Display(Name = "Рабочий телефон отца")]
+    [MaxLength(20)]
+    [Phone]
+    public string FatherWorkPhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string FatherHomePhone { get; set; } = string.Empty;
+    [Display(Name = "Домашний телефон отца")]
+    [MaxLength(20)]
+    [Phone]
+    public string FatherHomePhone { get; set; } = string.Empty;
 
-    [MaxLength(2000)] public string DistanceApplicantWorkDescription { get; set; } = string.Empty;
+    [Display(Name = "Описание работы")]
+    [MaxLength(2000)]
+    public string DistanceApplicantWorkDescription { get; set; } = string.Empty;
 
     [MinLength(1)]
     [MaxLength(3)]
     [Required]
-    public string[] SelectedSpecialityIds { get; set; } = Array.Empty<string>();
+    [Display(Name = "Специальности")]
+    public long[] SelectedSpecialityIds { get; set; } = Array.Empty<long>();
 
-    public Applicant ConvertToApplicant(IReadOnlyDictionary<string, Speciality> specialities)
+    public Applicant ConvertToApplicant(IReadOnlyDictionary<long, Speciality> specialities)
     {
         var applicant = new Applicant
         {

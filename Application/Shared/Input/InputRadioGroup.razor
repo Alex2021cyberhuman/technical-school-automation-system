@@ -1,0 +1,63 @@
+@using System.Globalization
+@typeparam TValue
+@typeparam TLabel
+@inherits InputBase<TValue>
+
+<div class="form-check">
+    <fieldset>
+        <legend>@DisplayName</legend>
+        @foreach (var tuple in ValuesTuples)
+        {
+            <label>
+                <MyInputRadio name="@Name" @attributes="AdditionalAttributes" @bind-Value="@Value" SelectedValue="tuple.Value" @onchange="OnChange"/>
+                @tuple.Label
+            </label>
+        }
+    </fieldset>
+</div>
+
+@code {
+
+    private string _name = string.Empty;
+
+    [Parameter]
+    public IReadOnlyCollection<(TLabel Label, TValue Value)> ValuesTuples { get; set; } = Array.Empty<(TLabel Label, TValue Value)>();
+
+    [Parameter]
+    public string Name
+    {
+        get => string.IsNullOrWhiteSpace(_name) ? SetName() : _name;
+        set => _name = value;
+    }
+
+    private void OnChange(ChangeEventArgs args)
+    {
+        CurrentValueAsString = args.Value?.ToString();
+    }
+
+    protected override bool TryParseValueFromString(string? value,
+        out TValue result, out string errorMessage)
+    {
+        var success = BindConverter.TryConvertTo<TValue>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue!;
+            errorMessage = null!;
+
+            return true;
+        }
+        result = default!;
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
+    private string SetName()
+    {
+        var typeName = typeof(TValue).Name;
+        _name = typeName;
+        return _name;
+    }
+
+}

@@ -1,0 +1,21 @@
+@using System.Linq;
+@using Microsoft.Extensions.Localization
+@typeparam TValue
+@inherits InputBase<TValue> where TValue : struct, Enum
+@inject IStringLocalizer StringLocalizer
+<InputRadioGroup TValue="TValue" TLabel="string" ValuesTuples="ValuesTuples" @bind-Value="@Value" DisplayName="@DisplayName"/>
+
+@code{
+
+    public IReadOnlyCollection<(string Label, TValue Value)> ValuesTuples { get; set; } = Array.Empty<(string Label, TValue Value)>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var values = Enum.GetValues<TValue>()
+            .Select(x => ((string)StringLocalizer[x.ToString()], x))
+            .ToList();
+        ValuesTuples = values;
+    }
+
+}

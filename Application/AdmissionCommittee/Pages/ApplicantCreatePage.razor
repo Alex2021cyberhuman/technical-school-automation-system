@@ -1,0 +1,112 @@
+@page "/applicants/create"
+@using Application.AdmissionCommittee.Forms
+@using Application.Common.Enums
+@using Application.Specialities.Data
+@using Microsoft.EntityFrameworkCore
+@using Application.AdmissionCommittee.Data
+@using Blazored.LocalStorage
+@inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
+@inject ILocalStorageService LocalStorageService
+<PageTitle>Заполнить данные абитуриента</PageTitle>
+<h3>Данные абитуриента</h3>
+<EditForm EditContext="EditContext"
+          OnValidSubmit="OnSubmitAsync">
+    <FluentValidationValidator DisableAssemblyScanning="true"/>
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <FluentTextField @bind-Value="@Form.FamilyName"/>
+    <FluentTextField @bind-Value="@Form.FirstName"/>
+    <FluentTextField @bind-Value="@Form.SurName"/>
+    <InputDate @bind-Value="@Form.DateOfBirth"/>
+    <FluentTextField @bind-Value="@Form.PassportType"/>
+    <FluentTextField @bind-Value="@Form.PassportSerial"/>
+    <FluentTextField @bind-Value="@Form.PassportNumber"/>
+    <FluentTextField @bind-Value="@Form.PassportIssuer"/>
+    <FluentTextField @bind-Value="@Form.PassportIssuerCode"/>
+    <InputDate @bind-Value="@Form.PassportIssueDate"/>
+    <FluentTextField @bind-Value="@Form.Address"/>
+    <FluentTextField @bind-Value="@Form.PostalCode"/>
+    <FluentTextField @bind-Value="@Form.Phone"/>
+    <FluentTextField @bind-Value="@Form.Description"/>
+    <InputNumber @bind-Value="@Form.LanguageRating"/>
+    <InputNumber @bind-Value="@Form.MathRating"/>
+    <InputNumber @bind-Value="@Form.AverageAttestRating"/>
+    <EnumInputRadioGroup @bind-Value="@Form.EducationType"/>
+    <FluentTextField @bind-Value="@Form.EducationDescription"/>
+    <FluentTextField @bind-Value="@Form.EducationDocumentSerial"/>
+    <FluentTextField @bind-Value="@Form.EducationDocumentNumber"/>
+    <FluentTextField @bind-Value="@Form.EducationDocumentIssued"/>
+    <EnumInputRadioGroup TValue="EducationForm" @bind-Value="@Form.EducationForm"/>
+    <FluentSwitch @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
+    <FluentSwitch @bind-Value="@Form.NeedDormitory"/>
+    <EnumInputRadioGroup TValue="FinanceEducationType" @bind-Value="@Form.FinanceEducationType"/>
+    <FluentSwitch @bind-Value="@Form.HasMother"/>
+    <FluentTextField @bind-Value="@Form.MotherFirstName"/>
+    <FluentTextField @bind-Value="@Form.MotherFamilyName"/>
+    <FluentTextField @bind-Value="@Form.MotherSurName"/>
+    <FluentTextField @bind-Value="@Form.MotherWorkDescription"/>
+    <FluentTextField @bind-Value="@Form.MotherMobilePhone"/>
+    <FluentTextField @bind-Value="@Form.MotherWorkPhone"/>
+    <FluentTextField @bind-Value="@Form.MotherHomePhone"/>
+    <FluentSwitch @bind-Value="@Form.HasFather"/>
+    <FluentTextField @bind-Value="@Form.FatherFirstName"/>
+    <FluentTextField @bind-Value="@Form.FatherFamilyName"/>
+    <FluentTextField @bind-Value="@Form.FatherSurName"/>
+    <FluentTextField @bind-Value="@Form.FatherWorkDescription"/>
+    <FluentTextField @bind-Value="@Form.FatherMobilePhone"/>
+    <FluentTextField @bind-Value="@Form.FatherWorkPhone"/>
+    <FluentTextField @bind-Value="@Form.FatherHomePhone"/>
+    <FluentTextField @bind-Value="@Form.DistanceApplicantWorkDescription"/>
+    <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
+    <FluentButton type="submit">Записать</FluentButton>
+</EditForm>
+
+@code {
+
+    public ApplicantCreatePage()
+    {
+        EditContext = new EditContext(Form);
+    }
+
+    public Dictionary<long, Speciality> Specialities { get; set; } = new();
+
+    public ApplicantForm Form { get; set; } = new();
+
+    public EditContext EditContext { get; set; }
+
+    public IReadOnlyCollection<MyCheckboxGroup<long>.CheckOption> SpecialityIdsOptions => Specialities.Values.Select(x =>
+        new MyCheckboxGroup<long>.CheckOption(
+            $"{x.Code} {x.Name}",
+            x.Id,
+            Form.SelectedSpecialityIds.Contains(x.Id)))
+        .ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name).ToDictionaryAsync(x => x.Id);
+        Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
+        EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
+    }
+
+    private async void SaveEditContextOnOnFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        try
+        {
+            await LocalStorageService.SetItemAsync("ACP_LS", Form);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        EditContext.OnFieldChanged -= SaveEditContextOnOnFieldChanged;
+        await LocalStorageService.RemoveItemAsync("ACP_LS");
+    }
+
+}

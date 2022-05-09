@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="AdmissionCommittee\Pages" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
         <PackageReference Include="EFCore.BulkExtensions" Version="6.4.4" />
         <PackageReference Include="EFCore.NamingConventions" Version="6.0.0" />
@@ -22,10 +18,11 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Fast.Components.FluentUI" Version="1.4.0" />
         <PackageReference Include="MR.EntityFrameworkCore.KeysetPagination" Version="1.0.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />

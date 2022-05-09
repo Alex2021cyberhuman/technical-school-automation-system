@@ -1,0 +1,44 @@
+@using System.Linq;
+@typeparam TCheck
+@inherits InputBase<IReadOnlyCollection<TCheck>>
+
+<div class="form-check">
+    <fieldset>
+        <legend>@DisplayName</legend>
+        @foreach (var option in Options)
+        {
+            <label>
+                <InputCheckbox type="checkbox" name="@FieldIdentifier" @bind-Value="option.OptionChecked" @onchange="Callback"/>
+                @option.Label
+            </label>
+        }
+    </fieldset>
+</div>
+
+@code {
+
+    [Parameter]
+    public IReadOnlyCollection<CheckOption> Options { get; set; } = Array.Empty<CheckOption>();
+
+    private void Callback()
+    {
+        Value = Options.Where(x => x.OptionChecked).Select(x => x.Value).ToArray();
+    }
+
+    public class CheckOption
+    {
+        public CheckOption(string label, TCheck value, bool optionChecked)
+        {
+            Label = label;
+            Value = value;
+            OptionChecked = optionChecked;
+        }
+
+        public string Label { get; set; }
+
+        public TCheck Value { get; set; }
+
+        public bool OptionChecked { get; set; }
+    }
+    
+}
