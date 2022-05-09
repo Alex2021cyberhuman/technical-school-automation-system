@@ -23,7 +23,8 @@ public class AdmissionCommitteeDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Speciality>().ToTable("speciality");
+        modelBuilder.Entity<Speciality>().ToTable("speciality", x => x.ExcludeFromMigrations());
+        modelBuilder.Entity<Subject>().ToTable("subject", x => x.ExcludeFromMigrations());
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AdmissionCommitteeDbContext).Assembly);
         modelBuilder.Entity<Applicant>(e =>
         {
