@@ -192,10 +192,6 @@ namespace Application.AdmissionCommittee.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("ApplicantId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("applicant_id");
-
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -214,9 +210,6 @@ namespace Application.AdmissionCommittee.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_speciality");
-
-                    b.HasIndex("ApplicantId")
-                        .HasDatabaseName("ix_speciality_applicant_id");
 
                     b.ToTable("speciality", null, t => t.ExcludeFromMigrations());
                 });
@@ -466,19 +459,9 @@ namespace Application.AdmissionCommittee.Data.Migrations
                     b.Navigation("Speciality");
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.Speciality", b =>
-                {
-                    b.HasOne("Application.AdmissionCommittee.Data.Applicant", null)
-                        .WithMany("Specialities")
-                        .HasForeignKey("ApplicantId")
-                        .HasConstraintName("fk_speciality_applicant_applicant_id");
-                });
-
             modelBuilder.Entity("Application.AdmissionCommittee.Data.Applicant", b =>
                 {
                     b.Navigation("ApplicantSpecialities");
-
-                    b.Navigation("Specialities");
                 });
 #pragma warning restore 612, 618
         }

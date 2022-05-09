@@ -3,11 +3,13 @@ using Application.AdmissionCommittee.Data;
 using Application.Specialities.Data;
 using Blazored.LocalStorage;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddTransient(serviceProvider => (IStringLocalizer)serviceProvider.GetRequiredService<IStringLocalizer<Resource>>());
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));

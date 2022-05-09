@@ -14,49 +14,49 @@
     <FluentValidationValidator DisableAssemblyScanning="true"/>
     <DataAnnotationsValidator/>
     <ValidationSummary/>
-    <FluentTextField @bind-Value="@Form.FamilyName"/>
-    <FluentTextField @bind-Value="@Form.FirstName"/>
-    <FluentTextField @bind-Value="@Form.SurName"/>
+    <InputText @bind-Value="@Form.FamilyName"/>
+    <InputText @bind-Value="@Form.FirstName"/>
+    <InputText @bind-Value="@Form.SurName"/>
     <InputDate @bind-Value="@Form.DateOfBirth"/>
-    <FluentTextField @bind-Value="@Form.PassportType"/>
-    <FluentTextField @bind-Value="@Form.PassportSerial"/>
-    <FluentTextField @bind-Value="@Form.PassportNumber"/>
-    <FluentTextField @bind-Value="@Form.PassportIssuer"/>
-    <FluentTextField @bind-Value="@Form.PassportIssuerCode"/>
+    <InputText @bind-Value="@Form.PassportType"/>
+    <InputText @bind-Value="@Form.PassportSerial"/>
+    <InputText @bind-Value="@Form.PassportNumber"/>
+    <InputText @bind-Value="@Form.PassportIssuer"/>
+    <InputText @bind-Value="@Form.PassportIssuerCode"/>
     <InputDate @bind-Value="@Form.PassportIssueDate"/>
-    <FluentTextField @bind-Value="@Form.Address"/>
-    <FluentTextField @bind-Value="@Form.PostalCode"/>
-    <FluentTextField @bind-Value="@Form.Phone"/>
-    <FluentTextField @bind-Value="@Form.Description"/>
+    <InputText @bind-Value="@Form.Address"/>
+    <InputText @bind-Value="@Form.PostalCode"/>
+    <InputText @bind-Value="@Form.Phone"/>
+    <InputText @bind-Value="@Form.Description"/>
     <InputNumber @bind-Value="@Form.LanguageRating"/>
     <InputNumber @bind-Value="@Form.MathRating"/>
     <InputNumber @bind-Value="@Form.AverageAttestRating"/>
     <MyEnumInputRadioGroup TValue="EducationType" @bind-Value="@Form.EducationType"/>
-    <FluentTextField @bind-Value="@Form.EducationDescription"/>
-    <FluentTextField @bind-Value="@Form.EducationDocumentSerial"/>
-    <FluentTextField @bind-Value="@Form.EducationDocumentNumber"/>
+    <InputText @bind-Value="@Form.EducationDescription"/>
+    <InputText @bind-Value="@Form.EducationDocumentSerial"/>
+    <InputText @bind-Value="@Form.EducationDocumentNumber"/>
     <InputDate @bind-Value="@Form.EducationDocumentIssued"/>
     <MyEnumInputRadioGroup TValue="EducationForm" @bind-Value="@Form.EducationForm"/>
-    <FluentSwitch @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
-    <FluentSwitch @bind-Value="@Form.NeedDormitory"/>
+    <MyInputCheckBox @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
+    <MyInputCheckBox @bind-Value="@Form.NeedDormitory"/>
     <MyEnumInputRadioGroup TValue="FinanceEducationType" @bind-Value="@Form.FinanceEducationType"/>
-    <FluentSwitch @bind-Value="@Form.HasMother"/>
-    <FluentTextField @bind-Value="@Form.MotherFirstName"/>
-    <FluentTextField @bind-Value="@Form.MotherFamilyName"/>
-    <FluentTextField @bind-Value="@Form.MotherSurName"/>
-    <FluentTextField @bind-Value="@Form.MotherWorkDescription"/>
-    <FluentTextField @bind-Value="@Form.MotherMobilePhone"/>
-    <FluentTextField @bind-Value="@Form.MotherWorkPhone"/>
-    <FluentTextField @bind-Value="@Form.MotherHomePhone"/>
-    <FluentSwitch @bind-Value="@Form.HasFather"/>
-    <FluentTextField @bind-Value="@Form.FatherFirstName"/>
-    <FluentTextField @bind-Value="@Form.FatherFamilyName"/>
-    <FluentTextField @bind-Value="@Form.FatherSurName"/>
-    <FluentTextField @bind-Value="@Form.FatherWorkDescription"/>
-    <FluentTextField @bind-Value="@Form.FatherMobilePhone"/>
-    <FluentTextField @bind-Value="@Form.FatherWorkPhone"/>
-    <FluentTextField @bind-Value="@Form.FatherHomePhone"/>
-    <FluentTextField @bind-Value="@Form.DistanceApplicantWorkDescription"/>
+    <MyInputCheckBox @bind-Value="@Form.HasMother"/>
+    <InputText @bind-Value="@Form.MotherFirstName"/>
+    <InputText @bind-Value="@Form.MotherFamilyName"/>
+    <InputText @bind-Value="@Form.MotherSurName"/>
+    <InputText @bind-Value="@Form.MotherWorkDescription"/>
+    <InputText @bind-Value="@Form.MotherMobilePhone"/>
+    <InputText @bind-Value="@Form.MotherWorkPhone"/>
+    <InputText @bind-Value="@Form.MotherHomePhone"/>
+    <MyInputCheckBox @bind-Value="@Form.HasFather"/>
+    <InputText @bind-Value="@Form.FatherFirstName"/>
+    <InputText @bind-Value="@Form.FatherFamilyName"/>
+    <InputText @bind-Value="@Form.FatherSurName"/>
+    <InputText @bind-Value="@Form.FatherWorkDescription"/>
+    <InputText @bind-Value="@Form.FatherMobilePhone"/>
+    <InputText @bind-Value="@Form.FatherWorkPhone"/>
+    <InputText @bind-Value="@Form.FatherHomePhone"/>
+    <InputText @bind-Value="@Form.DistanceApplicantWorkDescription"/>
     <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
     <FluentButton type="submit">Записать</FluentButton>
 </EditForm>
@@ -86,7 +86,10 @@
         await base.OnInitializedAsync();
         await using var context = await DbContextFactory.CreateDbContextAsync();
         Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name).ToDictionaryAsync(x => x.Id);
-        Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
+        if (await LocalStorageService.ContainKeyAsync("ACP_LS"))
+        {
+            Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
+        }
         EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
     }
 
@@ -107,6 +110,7 @@
     {
         EditContext.OnFieldChanged -= SaveEditContextOnOnFieldChanged;
         await LocalStorageService.RemoveItemAsync("ACP_LS");
+        Console.WriteLine("SSS");
     }
 
 }

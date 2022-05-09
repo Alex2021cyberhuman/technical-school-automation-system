@@ -63,8 +63,6 @@ public class Applicant
 
     [Required] public List<ApplicantSpeciality> ApplicantSpecialities { get; set; } = null!;
 
-    public IEnumerable<Speciality> Specialities => ApplicantSpecialities.Select(x => x.Speciality);
-
     public DirectorDecisionType DirectorDecision { get; set; }
     
     public Statement Statement { get; set; } = null!;

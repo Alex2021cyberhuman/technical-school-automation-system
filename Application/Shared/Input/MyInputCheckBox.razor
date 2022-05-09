@@ -1,0 +1,36 @@
+@using System.Globalization
+@inherits InputBase<bool>
+
+<div class="form-check">
+    <label>
+        <input @attributes="AdditionalAttributes" type="checkbox" value="@Value"
+               checked="@Value" @onchange="OnChange"/>
+        @DisplayName
+    </label>
+</div>
+
+@code {
+
+    protected override bool TryParseValueFromString(string? value, out bool result, out string? errorMessage)
+    {
+        var success = BindConverter.TryConvertTo<bool>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue!;
+            errorMessage = null!;
+
+            return true;
+        }
+        result = default!;
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
+    private void OnChange(ChangeEventArgs obj)
+    {
+        CurrentValueAsString = obj.Value.ToString();
+    }
+
+}
