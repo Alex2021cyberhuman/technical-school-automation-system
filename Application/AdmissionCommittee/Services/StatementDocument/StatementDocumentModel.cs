@@ -1,16 +1,81 @@
 ﻿using System.Globalization;
+using Application.AdmissionCommittee.Data;
 using Application.Common.Enums;
 using Application.Common.Helpers;
+using Application.Specialities.Data;
 
 namespace Application.AdmissionCommittee.Services.StatementDocument;
 
 public class StatementDocumentModel
 {
-    public DateTime Now { get; init; } = DateTime.Now;
+    public StatementDocumentModel(Applicant applicant, IEnumerable<Speciality> specialities)
+    {
+        var applicantSpecialityIds = applicant.ApplicantSpecialities.Select(x => x.Id).ToHashSet();
+        Now = DateTime.Now;
+        Culture = new CultureInfo("ru-RU");
+        Specialities = specialities.Select(x => new SpecialityModel
+        {
+            Code = x.Code,
+            Name = x.Name,
+            IsSelected = applicantSpecialityIds.Contains(x.Id),
+            EntranceTest = x.EntranceTest
+        }).ToList();
+        FullName = applicant.FullName;
+        DateOfBirth = applicant.DateOfBirth;
+        PassportNumber = applicant.Passport.Number;
+        PassportSerial = applicant.Passport.Serial;
+        PassportType = applicant.Passport.Type;
+        PassportIssueDate = applicant.Passport.IssueDate;
+        PassportIssuerCode = applicant.Passport.IssuerCode;
+        PassportIssuer = applicant.Passport.Issuer;
+        EducationType = applicant.EducationType;
+        EducationDescription = applicant.EducationDescription;
+        EducationDocumentSerial = applicant.EducationDocumentSerial;
+        EducationDocumentNumber = applicant.EducationDocumentNumber;
+        EducationDocumentIssued = applicant.EducationDocumentIssued;
+        Form = applicant.EducationForm;
+        FirstTimeInTechnicalSchool = applicant.FirstTimeInTechnicalSchool;
+        NeedDormitory = applicant.NeedDormitory;
+        Finance = applicant.FinanceEducationType;
+        NeedFirefighterAssignment =
+            Specialities.Any(x => x.IsSelected && x.EntranceTest == EntranceTestType.Firefighter);
+        Address = applicant.Address;
+        PostalCode = applicant.PostalCode;
+        Phone = applicant.Phone;
+        if (applicant.Mother is not null)
+        {
+            Mother = new ParentModel
+            {
+                FirstName = applicant.Mother.FirstName,
+                FamilyName = applicant.Mother.FamilyName,
+                SurName = applicant.Mother.SurName,
+                WorkDescription = applicant.Mother.WorkDescription,
+                MobilePhone = applicant.Mother.MobilePhone,
+                WorkPhone = applicant.Mother.WorkPhone,
+                HomePhone = applicant.Mother.HomePhone
+            };
+        }
+        if (applicant.Father is not null)
+        {
+            Father = new ParentModel
+            {
+                FirstName = applicant.Father.FirstName,
+                FamilyName = applicant.Father.FamilyName,
+                SurName = applicant.Father.SurName,
+                WorkDescription = applicant.Father.WorkDescription,
+                MobilePhone = applicant.Father.MobilePhone,
+                WorkPhone = applicant.Father.WorkPhone,
+                HomePhone = applicant.Father.HomePhone
+            };
+        }
+        DistanceApplicantWorkDescription = applicant.DistanceApplicantWorkDescription;
+    }
 
-    public CultureInfo Culture { get; init; } = CultureInfo.CurrentCulture;
+    public DateTime Now { get; set; } = DateTime.Now;
 
-    public List<SpecialityModel> Specialities { get; init; } = new();
+    public CultureInfo Culture { get; set; } = CultureInfo.CurrentCulture;
+
+    public List<SpecialityModel> Specialities { get; set; } = new();
 
     public string NowDay => Now.Day.ToString("00");
 
@@ -18,28 +83,28 @@ public class StatementDocumentModel
 
     public string NowYear => Now.Year.ToString("0000");
 
-    public string FullName { get; init; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
 
-    public DateTime DateOfBirth { get; init; }
+    public DateTime DateOfBirth { get; set; }
 
     public string DateOfBirthText => DateOfBirth.ToShortDateString();
 
-    public string PassportNumber { get; init; } = string.Empty;
+    public string PassportNumber { get; set; } = string.Empty;
 
-    public string PassportSerial { get; init; } = string.Empty;
+    public string PassportSerial { get; set; } = string.Empty;
 
-    public string PassportType { get; init; } = string.Empty;
+    public string PassportType { get; set; } = string.Empty;
 
-    public DateTime PassportIssueDate { get; init; }
+    public DateTime PassportIssueDate { get; set; }
 
 
-    public string PassportIssuerCode { get; init; } = string.Empty;
+    public string PassportIssuerCode { get; set; } = string.Empty;
 
-    public string PassportIssuer { get; init; } = string.Empty;
+    public string PassportIssuer { get; set; } = string.Empty;
 
-    public EducationType EducationType { get; init; }
+    public EducationType EducationType { get; set; }
 
-    public string EducationDescription { get; init; } = string.Empty;
+    public string EducationDescription { get; set; } = string.Empty;
 
     public int LearnYear => EducationDocumentIssued.Year;
 
@@ -71,31 +136,31 @@ public class StatementDocumentModel
         ? "✓"
         : string.Empty;
 
-    public string EducationDocumentSerial { get; init; } = string.Empty;
+    public string EducationDocumentSerial { get; set; } = string.Empty;
 
-    public string EducationDocumentNumber { get; init; } = string.Empty;
+    public string EducationDocumentNumber { get; set; } = string.Empty;
 
-    public DateTime EducationDocumentIssued { get; init; }
+    public DateTime EducationDocumentIssued { get; set; }
 
     public string EducationDocumentIssuedText => EducationDocumentIssued.ToShortDateString();
 
-    public EducationForm Form { get; init; }
+    public EducationForm Form { get; set; }
 
     public string DistanceFormSelection => Form == EducationForm.Distance ? "✓" : string.Empty;
 
     public string FullTimeFormSelection => Form == EducationForm.FullTime ? "✓" : string.Empty;
 
-    public bool FirstTimeInTechnicalSchool { get; init; }
+    public bool FirstTimeInTechnicalSchool { get; set; }
 
     public string FirstTimeInTechnicalSchoolSelection => FirstTimeInTechnicalSchool ? "✓" : string.Empty;
 
     public string NotFirstTimeInTechnicalSchoolSelection => !FirstTimeInTechnicalSchool ? "✓" : string.Empty;
 
-    public bool NeedDormitory { get; init; }
+    public bool NeedDormitory { get; set; }
 
     public string NeedDormitorySelection => NeedDormitory ? "✓" : string.Empty;
 
-    public FinanceEducationType Finance { get; init; }
+    public FinanceEducationType Finance { get; set; }
 
     public string BudgetSelection => Finance == FinanceEducationType.Budget ? "✓" : string.Empty;
 
@@ -104,37 +169,39 @@ public class StatementDocumentModel
     public string IndividualEntitiesSelection =>
         Finance == FinanceEducationType.IndividualEntities ? "✓" : string.Empty;
 
-    public bool NeedFirefighterAssignment { get; init; }
+    public bool NeedFirefighterAssignment { get; set; }
 
     public string NeedFirefighterAssignmentSelection => NeedFirefighterAssignment ? "✓" : string.Empty;
 
-    public string Address { get; init; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
 
-    public string PostalCode { get; init; } = string.Empty;
+    public string PostalCode { get; set; } = string.Empty;
 
-    public string Phone { get; init; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
 
-    public ParentModel? Mother { get; init; }
+    public ParentModel? Mother { get; set; }
 
-    public ParentModel? Father { get; init; }
+    public ParentModel? Father { get; set; }
 
-    public string? DistanceApplicantWorkDescription { get; init; } = string.Empty;
+    public string? DistanceApplicantWorkDescription { get; set; } = string.Empty;
 
     public class SpecialityModel
     {
-        public string Name { get; init; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public string Code { get; init; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
 
-        public bool IsSelected { get; init; }
+        public bool IsSelected { get; set; }
 
         public string Selection => IsSelected ? "✓" : string.Empty;
+
+        public EntranceTestType? EntranceTest { get; set; }
     }
 
     public class ParentModel
     {
         public string FullName => NameExtensions.GetFullName(FamilyName, FirstName, SurName);
-    
+
         public string FirstName { get; set; } = string.Empty;
 
         public string FamilyName { get; set; } = string.Empty;
