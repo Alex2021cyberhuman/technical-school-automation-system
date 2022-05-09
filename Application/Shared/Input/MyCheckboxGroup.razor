@@ -1,6 +1,7 @@
 @using System.Linq;
+@using System.Globalization
 @typeparam TCheck
-@inherits InputBase<List<TCheck>>
+@inherits InputBase<List<TCheck>> where TCheck : notnull
 
 <div class="form-control-wrapper">
     <fieldset>
@@ -32,7 +33,7 @@
 
     private void Callback(TCheck optionValue, object? args)
     {
-        Options[optionValue].OptionChecked = (bool)args;
+        Options[optionValue].OptionChecked = (bool)(args ?? false);
         CurrentValue = Options.Values.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
     }
 
@@ -55,20 +56,20 @@
     protected override bool TryParseValueFromString(
         string? value,
         out List<TCheck> result,
-        out string validationErrorMessage)
+        out string errorMessage)
     {
         Console.WriteLine(value);
-    // var success = BindConverter.TryConvertTo<TValue>(
-    //     value, CultureInfo.CurrentCulture, out var parsedValue);
-    // if (success)
-    // {
-    //     result = parsedValue!;
-    //     errorMessage = null!;
-    //
-    //     return true;
-    // }
+        var success = BindConverter.TryConvertTo<List<TCheck>>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue!;
+            errorMessage = null!;
+
+            return true;
+        }
         result = default!;
-        validationErrorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
 
         return false;
     }

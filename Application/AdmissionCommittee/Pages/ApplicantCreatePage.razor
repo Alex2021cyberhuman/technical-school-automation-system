@@ -71,6 +71,7 @@
         <InputText @bind-Value="@Form.DistanceApplicantWorkDescription" placeholder="Описание работы"/>
     }
     <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
+    <button class="btn btn-primary" type="submit" disabled="@IsValid"></button>
 </EditForm>
 
 @code {
@@ -80,6 +81,8 @@
         EditContext = new EditContext(Form);
     }
 
+    public bool IsValid { get; set; }
+    
     public Dictionary<long, Speciality> Specialities { get; set; } = new();
 
     public ApplicantForm Form { get; set; } = new();
@@ -100,7 +103,7 @@
         await base.OnInitializedAsync();
         await using var context = await DbContextFactory.CreateDbContextAsync();
         Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name).ToDictionaryAsync(x => x.Id);
-        EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
+        EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
 
         await Task.Delay(100);
         try
@@ -109,12 +112,12 @@
             {
                 if (await LocalStorageService.ContainKeyAsync("ACP_LS"))
                 {
-                    EditContext.OnFieldChanged -= SaveEditContextOnOnFieldChanged;
+                    EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
 
                     Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
                     EditContext = new EditContext(Form);
 
-                    EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
+                    EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
                     LocalStorageChecked = true;
                 }
             }
@@ -130,10 +133,11 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    private async void SaveEditContextOnOnFieldChanged(object? sender, FieldChangedEventArgs e)
+    private async void EditContextOnOnFieldChanged(object? sender, FieldChangedEventArgs e)
     {
         try
         {
+            IsValid = EditContext.Validate();
             await LocalStorageService.SetItemAsync("ACP_LS", Form);
         }
         catch (Exception exception)
@@ -144,9 +148,16 @@
 
     private async Task OnSubmitAsync()
     {
-        EditContext.OnFieldChanged -= SaveEditContextOnOnFieldChanged;
+        EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
         await LocalStorageService.RemoveItemAsync("ACP_LS");
-        Console.WriteLine("SSS");
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        await using var transaction = await context.Database.BeginTransactionAsync();
+        var specialities = await context.Speciality.ToDictionaryAsync(x => x.Id);
+        var applicant = Form.ConvertToApplicant(specialities);
+        context.Add(applicant);
+        await context.SaveChangesAsync();
+        
+        await transaction.CommitAsync();
     }
 
 }
