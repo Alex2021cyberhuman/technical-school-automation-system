@@ -1,47 +1,66 @@
-@using System.Linq;
+@using System.Linq.Expressions
 @using Microsoft.Extensions.Localization
-@using System.Globalization
 @typeparam TValue where TValue : struct, Enum
 @inherits InputBase<TValue>
 @inject IStringLocalizer StringLocalizer
-<MyInputRadioGroup ValuesTuples="EnumValuesTuples" @bind-Value="@Value" DisplayName="@DisplayName" @onchange="OnChange"/>
+<div class="form-control-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label">@Label</label>
+    }
+    <div class="container">
+        <InputRadioGroup @bind-Value="CurrentValue">
+            <div class="row justify-content-start">
+                @foreach (var radioItem in RadioItems)
+                {
+                    <div class="col-sm-12 col-lg-4">
+                        <label>
+                            <InputRadio Value="@radioItem.Value"/>
+                            @radioItem.Label
+                        </label>
+                    </div>
+                }
+            </div>
+        </InputRadioGroup>
+    </div>
+</div>
 
-@code{
+@code {
+    public List<EnumRadioItem> RadioItems { get; set; } = new();
 
-    public IReadOnlyCollection<MyInputRadioGroup<TValue>.RadioItem> EnumValuesTuples { get; set; } = Array.Empty<MyInputRadioGroup<TValue>.RadioItem>();
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-        var values = Enum.GetValues<TValue>()
-            .Select(x => new MyInputRadioGroup<TValue>.RadioItem(StringLocalizer[x.ToString()], x))
-            .ToList();
-        EnumValuesTuples = values;
+        var enumValues = Enum.GetValues<TValue>()
+            .Select(x => new EnumRadioItem(StringLocalizer[x.ToString()], x));
+        RadioItems.AddRange(enumValues);
     }
 
-    protected override bool TryParseValueFromString(
-        string? value,
-        out TValue result,
-        out string errorMessage)
+    public class EnumRadioItem
     {
-        var success = BindConverter.TryConvertTo<TValue>(
-            value, CultureInfo.CurrentCulture, out var parsedValue);
-        if (success)
+        public EnumRadioItem(string label, TValue value)
         {
-            result = parsedValue!;
-            errorMessage = null!;
+            Label = label;
+            Value = value;
+        }
 
+        public string Label { get; set; }
+
+        public TValue Value { get; set; }
+    }
+
+    protected override bool TryParseValueFromString(string? value, out TValue result, out string? validationErrorMessage)
+    {
+        var parsed = Enum.TryParse<TValue>(value, out result);
+        if (!parsed)
+        {
+            validationErrorMessage = default!;
             return true;
         }
-        result = default!;
-        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
-
+        validationErrorMessage = "ERROR";
         return false;
-    }
-
-    private void OnChange(ChangeEventArgs args)
-    {
-        CurrentValueAsString = args.Value?.ToString();
     }
 
 }

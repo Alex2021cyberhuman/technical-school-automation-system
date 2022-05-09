@@ -5,19 +5,20 @@
     <label>
         <input @attributes="AdditionalAttributes" type="checkbox" value="@Value"
                checked="@Value" @onchange="OnChange"/>
-        @DisplayName
+        @Label
     </label>
 </div>
 
 @code {
 
-    protected override bool TryParseValueFromString(string? value, out bool result, out string? errorMessage)
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+    
+    protected override bool TryParseValueFromString(string? value, out bool result, out string errorMessage)
     {
-        var success = BindConverter.TryConvertTo<bool>(
-            value, CultureInfo.CurrentCulture, out var parsedValue);
+        var success = bool.TryParse(value, out result);
         if (success)
         {
-            result = parsedValue!;
             errorMessage = null!;
 
             return true;
@@ -30,7 +31,7 @@
 
     private void OnChange(ChangeEventArgs obj)
     {
-        CurrentValueAsString = obj.Value.ToString();
+        CurrentValueAsString = obj.Value?.ToString();
     }
 
 }

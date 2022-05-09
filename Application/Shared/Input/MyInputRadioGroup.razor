@@ -4,14 +4,16 @@
 
 <div class="form-check">
     <fieldset>
-        <legend>@DisplayName</legend>
-        @foreach (var radioItem in ValuesTuples)
-        {
-            <label>
-                <MyInputRadio name="@Name" @attributes="AdditionalAttributes" @bind-Value="@Value" SelectedValue="radioItem.Value" @onchange="OnChange"/>
-                @radioItem.Label
-            </label>
-        }
+        <legend>@Label</legend>
+        <InputRadioGroup @bind-Value="Value">
+            @foreach (var radioItem in ValuesTuples)
+            {
+                <label>
+                    <InputRadio Value="@radioItem.Value"/>
+                    @radioItem.Label
+                </label>
+            }
+        </InputRadioGroup>
     </fieldset>
 </div>
 
@@ -28,10 +30,28 @@
         get => string.IsNullOrWhiteSpace(_name) ? SetName() : _name;
         set => _name = value;
     }
+    
+    [Parameter]
+    public string Label { get; set; }
 
-    private void OnChange(ChangeEventArgs args)
+    private string SetName()
     {
-        CurrentValueAsString = args.Value?.ToString();
+        var typeName = typeof(TValue).Name;
+        _name = typeName;
+        return _name;
+    }
+
+    public class RadioItem
+    {
+        public RadioItem(string label, TValue value)
+        {
+            Label = label;
+            Value = value;
+        }
+
+        public string Label { get; set; }
+
+        public TValue Value { get; set; }
     }
 
     protected override bool TryParseValueFromString(
@@ -52,26 +72,6 @@
         errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
 
         return false;
-    }
-
-    private string SetName()
-    {
-        var typeName = typeof(TValue).Name;
-        _name = typeName;
-        return _name;
-    }
-
-    public class RadioItem
-    {
-        public RadioItem(string label, TValue value)
-        {
-            Label = label;
-            Value = value;
-        }
-
-        public string Label { get; set; }
-
-        public TValue Value { get; set; }
     }
 
 }

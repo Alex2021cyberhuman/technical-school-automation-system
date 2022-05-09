@@ -1,64 +1,76 @@
 @page "/applicants/create"
 @using Application.AdmissionCommittee.Forms
-@using Application.Common.Enums
 @using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
 @using Application.AdmissionCommittee.Data
+@using Application.Common.Enums
 @using Blazored.LocalStorage
 @inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
 @inject ILocalStorageService LocalStorageService
+
 <PageTitle>Заполнить данные абитуриента</PageTitle>
 <h3>Данные абитуриента</h3>
 <EditForm EditContext="EditContext"
           OnValidSubmit="OnSubmitAsync">
-    <FluentValidationValidator DisableAssemblyScanning="true"/>
+    @* <FluentValidationValidator DisableAssemblyScanning="true"/> *@
     <DataAnnotationsValidator/>
     <ValidationSummary/>
-    <InputText @bind-Value="@Form.FamilyName"/>
-    <InputText @bind-Value="@Form.FirstName"/>
-    <InputText @bind-Value="@Form.SurName"/>
-    <InputDate @bind-Value="@Form.DateOfBirth"/>
-    <InputText @bind-Value="@Form.PassportType"/>
-    <InputText @bind-Value="@Form.PassportSerial"/>
-    <InputText @bind-Value="@Form.PassportNumber"/>
-    <InputText @bind-Value="@Form.PassportIssuer"/>
-    <InputText @bind-Value="@Form.PassportIssuerCode"/>
-    <InputDate @bind-Value="@Form.PassportIssueDate"/>
-    <InputText @bind-Value="@Form.Address"/>
-    <InputText @bind-Value="@Form.PostalCode"/>
-    <InputText @bind-Value="@Form.Phone"/>
-    <InputText @bind-Value="@Form.Description"/>
-    <InputNumber @bind-Value="@Form.LanguageRating"/>
-    <InputNumber @bind-Value="@Form.MathRating"/>
-    <InputNumber @bind-Value="@Form.AverageAttestRating"/>
-    <MyEnumInputRadioGroup TValue="EducationType" @bind-Value="@Form.EducationType"/>
-    <InputText @bind-Value="@Form.EducationDescription"/>
-    <InputText @bind-Value="@Form.EducationDocumentSerial"/>
-    <InputText @bind-Value="@Form.EducationDocumentNumber"/>
-    <InputDate @bind-Value="@Form.EducationDocumentIssued"/>
-    <MyEnumInputRadioGroup TValue="EducationForm" @bind-Value="@Form.EducationForm"/>
-    <MyInputCheckBox @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
-    <MyInputCheckBox @bind-Value="@Form.NeedDormitory"/>
-    <MyEnumInputRadioGroup TValue="FinanceEducationType" @bind-Value="@Form.FinanceEducationType"/>
-    <MyInputCheckBox @bind-Value="@Form.HasMother"/>
-    <InputText @bind-Value="@Form.MotherFirstName"/>
-    <InputText @bind-Value="@Form.MotherFamilyName"/>
-    <InputText @bind-Value="@Form.MotherSurName"/>
-    <InputText @bind-Value="@Form.MotherWorkDescription"/>
-    <InputText @bind-Value="@Form.MotherMobilePhone"/>
-    <InputText @bind-Value="@Form.MotherWorkPhone"/>
-    <InputText @bind-Value="@Form.MotherHomePhone"/>
-    <MyInputCheckBox @bind-Value="@Form.HasFather"/>
-    <InputText @bind-Value="@Form.FatherFirstName"/>
-    <InputText @bind-Value="@Form.FatherFamilyName"/>
-    <InputText @bind-Value="@Form.FatherSurName"/>
-    <InputText @bind-Value="@Form.FatherWorkDescription"/>
-    <InputText @bind-Value="@Form.FatherMobilePhone"/>
-    <InputText @bind-Value="@Form.FatherWorkPhone"/>
-    <InputText @bind-Value="@Form.FatherHomePhone"/>
-    <InputText @bind-Value="@Form.DistanceApplicantWorkDescription"/>
+    <InputText @bind-Value="@Form.FamilyName" placeholder="Фамилия"/>
+    <InputText @bind-Value="@Form.FirstName" placeholder="Имя"/>
+    <InputText @bind-Value="@Form.SurName" placeholder="Отчество"/>
+    <InputDate @bind-Value="@Form.DateOfBirth" placeholder="Дата рождения"/>
+    <InputText @bind-Value="@Form.PassportType" placeholder="Тип паспорта"/>
+    <InputText @bind-Value="@Form.PassportSerial" placeholder="Серия паспорта"/>
+    <InputText @bind-Value="@Form.PassportNumber" placeholder="Номер паспорта"/>
+    <InputText @bind-Value="@Form.PassportIssuer" placeholder="Кем выдан паспорт"/>
+    <InputText @bind-Value="@Form.PassportIssuerCode" placeholder="Код паспорта"/>
+    <InputDate @bind-Value="@Form.PassportIssueDate" placeholder="Дата выдачи паспорта"/>
+    <InputText @bind-Value="@Form.Address" placeholder="Место жительства"/>
+    <InputText @bind-Value="@Form.PostalCode" placeholder="Почтовый индекс"/>
+    <InputText @bind-Value="@Form.Phone" placeholder="Мобильный телефон"/>
+    <InputText @bind-Value="@Form.Description" placeholder="Дополнительные свединия"/>
+    <InputNumber @bind-Value="@Form.LanguageRating" placeholder="Баллы по русскому языку"/>
+    <InputNumber @bind-Value="@Form.MathRating" placeholder="Баллы по математике"/>
+    <InputNumber @bind-Value="@Form.AverageAttestRating" placeholder="Средний бал по атестату"/>
+    <MyEnumInputRadioGroup Label="Тип базового обучения" @bind-Value="@Form.EducationType" TValue="EducationType"/>
+    <InputText @bind-Value="@Form.EducationDescription" placeholder="Учебное заведение"/>
+    <InputText @bind-Value="@Form.EducationDocumentSerial" placeholder="Серия документа об образовании"/>
+    <InputText @bind-Value="@Form.EducationDocumentNumber" placeholder="Номер документа об образовании"/>
+    <InputDate @bind-Value="@Form.EducationDocumentIssued" placeholder="Дата выдачи документа об образовании"/>
+    <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
+    <MyInputCheckBox Label="Первый раз в техникуме" @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
+    <MyInputCheckBox Label="Нужно общежитие" @bind-Value="@Form.NeedDormitory"/>
+    <MyEnumInputRadioGroup Label="Тип финансирования" @bind-Value="@Form.FinanceEducationType" TValue="FinanceEducationType"/>
+    <MyInputCheckBox Label="Есть мать" @bind-Value="@Form.HasMother"/>
+    @if (Form.EducationForm == EducationForm.FullTime)
+    {
+        @if (Form.HasMother)
+        {
+            <InputText @bind-Value="@Form.MotherFirstName" placeholder="Имя матери"/>
+            <InputText @bind-Value="@Form.MotherFamilyName" placeholder="Фамилия матери"/>
+            <InputText @bind-Value="@Form.MotherSurName" placeholder="Отчество матери"/>
+            <InputText @bind-Value="@Form.MotherWorkDescription" placeholder="Описание работы матери"/>
+            <InputText @bind-Value="@Form.MotherMobilePhone" placeholder="Мобильный телефон матери"/>
+            <InputText @bind-Value="@Form.MotherWorkPhone" placeholder="Рабочий телефон матери"/>
+            <InputText @bind-Value="@Form.MotherHomePhone" placeholder="Домашний телефон матери"/>
+        }
+        <MyInputCheckBox Label="Есть отец" @bind-Value="@Form.HasFather"/>
+        @if (Form.HasFather)
+        {
+            <InputText @bind-Value="@Form.FatherFirstName" placeholder="Имя отца"/>
+            <InputText @bind-Value="@Form.FatherFamilyName" placeholder="Фамилия отца"/>
+            <InputText @bind-Value="@Form.FatherSurName" placeholder="Отчество отца"/>
+            <InputText @bind-Value="@Form.FatherWorkDescription" placeholder="Описание работы отца"/>
+            <InputText @bind-Value="@Form.FatherMobilePhone" placeholder="Мобильный телефон отца"/>
+            <InputText @bind-Value="@Form.FatherWorkPhone" placeholder="Рабочий телефон отца"/>
+            <InputText @bind-Value="@Form.FatherHomePhone" placeholder="Домашний телефон отца"/>
+        }
+    }
+    else
+    {
+        <InputText @bind-Value="@Form.DistanceApplicantWorkDescription" placeholder="Описание работы"/>
+    }
     <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
-    <FluentButton type="submit">Записать</FluentButton>
 </EditForm>
 
 @code {
@@ -74,23 +86,48 @@
 
     public EditContext EditContext { get; set; }
 
-    public List<MyCheckboxGroup<long>.OptionItem> SpecialityIdsOptions => Specialities.Values.Select(x =>
+    public bool LocalStorageChecked { get; set; }
+
+    public Dictionary<long, MyCheckboxGroup<long>.OptionItem> SpecialityIdsOptions => Specialities.Values.Select(x =>
         new MyCheckboxGroup<long>.OptionItem(
             $"{x.Code} {x.Name}",
             x.Id,
             Form.SelectedSpecialityIds.Contains(x.Id)))
-        .ToList();
+        .ToDictionary(x => x.Value);
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await using var context = await DbContextFactory.CreateDbContextAsync();
         Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name).ToDictionaryAsync(x => x.Id);
-        if (await LocalStorageService.ContainKeyAsync("ACP_LS"))
-        {
-            Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
-        }
         EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
+
+        await Task.Delay(100);
+        try
+        {
+            if (!LocalStorageChecked)
+            {
+                if (await LocalStorageService.ContainKeyAsync("ACP_LS"))
+                {
+                    EditContext.OnFieldChanged -= SaveEditContextOnOnFieldChanged;
+
+                    Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
+                    EditContext = new EditContext(Form);
+
+                    EditContext.OnFieldChanged += SaveEditContextOnOnFieldChanged;
+                    LocalStorageChecked = true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async void SaveEditContextOnOnFieldChanged(object? sender, FieldChangedEventArgs e)
@@ -102,7 +139,6 @@
         catch (Exception exception)
         {
             Console.WriteLine(exception);
-            throw;
         }
     }
 

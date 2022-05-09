@@ -2,27 +2,38 @@
 @typeparam TCheck
 @inherits InputBase<List<TCheck>>
 
-<div class="form-check">
+<div class="form-control-wrapper">
     <fieldset>
-        <legend>@DisplayName</legend>
-        @foreach (var option in Options)
+        @if (!string.IsNullOrWhiteSpace(Label))
         {
-            <label>
-                <InputCheckbox type="checkbox" name="@FieldIdentifier.FieldName" @bind-Value="option.OptionChecked" @onchange="Callback"/>
-                @option.Label
-            </label>
+            <label class="form-control-label">@Label</label>
         }
+        <div class="container">
+            <div class="row justify-content-start">
+                @foreach (var option in Options.Values)
+                {
+                    <label>
+                        <input type="checkbox" name="@FieldIdentifier.FieldName" @onchange="eventArgs => Callback(option.Value, eventArgs.Value)" checked="@option.OptionChecked"/>
+                        @option.Label
+                    </label>
+                }
+            </div>
+        </div>
     </fieldset>
 </div>
 
 @code {
 
     [Parameter]
-    public List<OptionItem> Options { get; set; } = new();
+    public Dictionary<TCheck, OptionItem> Options { get; set; } = new();
 
-    private void Callback(ChangeEventArgs args)
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    private void Callback(TCheck optionValue, object? args)
     {
-        Value = Options.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
+        Options[optionValue].OptionChecked = (bool)args;
+        CurrentValue = Options.Values.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
     }
 
     public class OptionItem
@@ -47,15 +58,15 @@
         out string validationErrorMessage)
     {
         Console.WriteLine(value);
-        // var success = BindConverter.TryConvertTo<TValue>(
-        //     value, CultureInfo.CurrentCulture, out var parsedValue);
-        // if (success)
-        // {
-        //     result = parsedValue!;
-        //     errorMessage = null!;
-        //
-        //     return true;
-        // }
+    // var success = BindConverter.TryConvertTo<TValue>(
+    //     value, CultureInfo.CurrentCulture, out var parsedValue);
+    // if (success)
+    // {
+    //     result = parsedValue!;
+    //     errorMessage = null!;
+    //
+    //     return true;
+    // }
         result = default!;
         validationErrorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
 
