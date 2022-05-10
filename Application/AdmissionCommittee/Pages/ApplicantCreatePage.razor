@@ -6,12 +6,13 @@
 @using Application.AdmissionCommittee.Services.StatementDocument
 @using Application.Common.Enums
 @using Blazored.LocalStorage
+@using DocumentFormat.OpenXml.Vml.Spreadsheet
 @inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
 @inject ILocalStorageService LocalStorageService
 @inject IConfiguration Configuration
 @inject StatementDocumentCreator StatementDocumentCreator
 @inject ILogger<ApplicantCreatePage> Logger
-
+@inject NavigationManager NavigationManager
 <PageTitle>Заполнить данные абитуриента</PageTitle>
 <h3>Данные абитуриента</h3>
 <EditForm EditContext="EditContext"
@@ -75,7 +76,7 @@
         <InputText @bind-Value="@Form.DistanceApplicantWorkDescription" placeholder="Описание работы"/>
     }
     <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
-    <button class="btn btn-primary" type="submit" disabled="@IsValid"></button>
+    <button class="btn btn-primary" type="submit" disabled="@(!IsValid)">Записать и провести</button>
 </EditForm>
 
 @code {
@@ -159,10 +160,9 @@
             var specialities = await context.Speciality.ToDictionaryAsync(x => x.Id);
             var applicant = Form.ConvertToApplicant(specialities);
             context.Add(applicant);
-            await context.SaveChangesAsync();
             var statementDocumentModel = new StatementDocumentModel(applicant, specialities.Values);
             var basePath = Configuration["AdmissionCommittee:StatementPath"];
-            var fileName = $"Заявление_На_Зачисление_{statementDocumentModel.Now.ToString("yyyyMMddHHmmss")}_{applicant.Id}.docx";
+            var fileName = $"Заявление_На_Зачисление_{statementDocumentModel.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.docx";
             var fullFileName = Path.Combine(basePath, fileName);
             var size = await StatementDocumentCreator.CreatePackageAsync(fullFileName, statementDocumentModel);
             var statement = new Statement()
@@ -175,6 +175,10 @@
             await transaction.CommitAsync();
             EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
             await LocalStorageService.RemoveItemAsync("ACP_LS");
+            Form = new();
+            EditContext = new(Form);
+            EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
+            NavigationManager.NavigateTo($"applicants/{applicant.Id}/statement", true);
         }
         catch (Exception exception)
         {

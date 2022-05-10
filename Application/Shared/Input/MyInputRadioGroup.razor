@@ -30,9 +30,9 @@
         get => string.IsNullOrWhiteSpace(_name) ? SetName() : _name;
         set => _name = value;
     }
-    
+
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     private string SetName()
     {

@@ -10,8 +10,8 @@ public class StatementDocumentModel
 {
     public StatementDocumentModel(Applicant applicant, IEnumerable<Speciality> specialities)
     {
-        var applicantSpecialityIds = applicant.ApplicantSpecialities.Select(x => x.Id).ToHashSet();
-        Now = DateTime.Now;
+        var applicantSpecialityIds = applicant.ApplicantSpecialities.Select(x => x.SpecialityId).ToHashSet();
+        Now = applicant.Submitted;
         Culture = new CultureInfo("ru-RU");
         Specialities = specialities.Select(x => new SpecialityModel
         {

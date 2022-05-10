@@ -12,9 +12,9 @@ public class ApplicantParent
 
     [MaxLength(1000)] public string WorkDescription { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] [Phone] public string MobilePhone { get; set; } = string.Empty;
+    [Required] [MaxLength(20)] public string MobilePhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string WorkPhone { get; set; } = string.Empty;
+    [MaxLength(20)] public string WorkPhone { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Phone] public string HomePhone { get; set; } = string.Empty;
+    [MaxLength(20)] public string HomePhone { get; set; } = string.Empty;
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using DocumentFormat.OpenXml;
+﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
@@ -19,8 +18,8 @@ public class GeneratedStatementDocument
 
     public async Task<long> CreateAsync(string filePath)
     {
-        await using var fileStream = File.OpenWrite(filePath);
-        using var package = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document);
+        await using var fileStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+        using var package = WordprocessingDocument.Create(fileStream, WordprocessingDocumentType.Document);
         CreateParts(package);
         await fileStream.FlushAsync();
         var length = fileStream.Length;

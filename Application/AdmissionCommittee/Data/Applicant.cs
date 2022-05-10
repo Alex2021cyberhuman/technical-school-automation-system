@@ -53,7 +53,7 @@ public class Applicant
 
     [MaxLength(20)] [Required] public string PostalCode { get; set; } = string.Empty;
 
-    [MaxLength(20)] [Required] [Phone] public string Phone { get; set; } = string.Empty;
+    [MaxLength(20)] [Required] public string Phone { get; set; } = string.Empty;
 
     public ApplicantParent? Mother { get; set; }
 

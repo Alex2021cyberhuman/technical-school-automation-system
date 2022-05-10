@@ -23,7 +23,7 @@ public class ApplicantForm
 
     [Display(Name = "Дата рождения")]
     [Required]
-    public DateTime DateOfBirth { get; set; } = DateTime.Today;
+    public DateTime DateOfBirth { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Тип паспорта")]
     [Required]
@@ -51,7 +51,7 @@ public class ApplicantForm
 
     [Display(Name = "Дата выдачи паспорта")]
     [Required]
-    public DateTime PassportIssueDate { get; set; } = DateTime.Today;
+    public DateTime PassportIssueDate { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Место жительства")]
     [Required]
@@ -66,9 +66,9 @@ public class ApplicantForm
     [Display(Name = "Мобильный телефон")]
     [MaxLength(20)]
     [Required]
-    [Phone]
+    [MyPhone]
     public string Phone { get; set; } = string.Empty;
-    
+
     [Display(Name = "Дополнительные свединия")]
     public string Description { get; set; } = string.Empty;
 
@@ -101,7 +101,7 @@ public class ApplicantForm
 
     [Display(Name = "Дата выдачи документа об образовании")]
     [Required]
-    public DateTime EducationDocumentIssued { get; set; } = DateTime.Today;
+    public DateTime EducationDocumentIssued { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Форма обучения")] public EducationForm EducationForm { get; set; }
 
@@ -112,8 +112,7 @@ public class ApplicantForm
 
     [Display(Name = "Тип финансирования")] public FinanceEducationType FinanceEducationType { get; set; }
 
-    [Display(Name = "Есть мать")]
-    public bool HasMother { get; set; }
+    [Display(Name = "Есть мать")] public bool HasMother { get; set; }
 
     [Display(Name = "Имя матери")]
     [MaxLength(200)]
@@ -132,21 +131,20 @@ public class ApplicantForm
 
     [Display(Name = "Мобильный телефон матери")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string MotherMobilePhone { get; set; } = string.Empty;
 
     [Display(Name = "Рабочий телефон матери")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string MotherWorkPhone { get; set; } = string.Empty;
 
     [Display(Name = "Домашний телефон матери")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string MotherHomePhone { get; set; } = string.Empty;
 
-    [Display(Name = "Есть отец")]
-    public bool HasFather { get; set; }
+    [Display(Name = "Есть отец")] public bool HasFather { get; set; }
 
     [Display(Name = "Имя отца")]
     [MaxLength(200)]
@@ -165,17 +163,17 @@ public class ApplicantForm
 
     [Display(Name = "Мобильный телефон отца")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string FatherMobilePhone { get; set; } = string.Empty;
 
     [Display(Name = "Рабочий телефон отца")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string FatherWorkPhone { get; set; } = string.Empty;
 
     [Display(Name = "Домашний телефон отца")]
     [MaxLength(20)]
-    [Phone]
+    [MyPhone]
     public string FatherHomePhone { get; set; } = string.Empty;
 
     [Display(Name = "Описание работы")]
@@ -187,6 +185,7 @@ public class ApplicantForm
     [Required]
     [Display(Name = "Специальности")]
     public List<long> SelectedSpecialityIds { get; set; } = new();
+
     public Applicant ConvertToApplicant(IReadOnlyDictionary<long, Speciality> specialities)
     {
         var applicant = new Applicant
@@ -195,7 +194,7 @@ public class ApplicantForm
             FirstName = FirstName,
             FamilyName = FamilyName,
             SurName = SurName,
-            DateOfBirth = DateOfBirth,
+            DateOfBirth = DateOfBirth.Date.ToUniversalTime(),
             Description = Description,
             LanguageRating = LanguageRating,
             MathRating = MathRating,
@@ -205,7 +204,7 @@ public class ApplicantForm
             EducationDescription = EducationDescription,
             EducationDocumentSerial = EducationDocumentSerial,
             EducationDocumentNumber = EducationDocumentNumber,
-            EducationDocumentIssued = EducationDocumentIssued,
+            EducationDocumentIssued = EducationDocumentIssued.Date.ToUniversalTime(),
             EducationForm = EducationForm,
             FirstTimeInTechnicalSchool = FirstTimeInTechnicalSchool,
             NeedDormitory = NeedDormitory,
@@ -251,7 +250,7 @@ public class ApplicantForm
                 Issuer = PassportIssuer,
                 IssuerCode = PassportIssuerCode,
                 Type = PassportType,
-                IssueDate = PassportIssueDate,
+                IssueDate = PassportIssueDate.Date.ToUniversalTime()
             }
         };
         return applicant;
