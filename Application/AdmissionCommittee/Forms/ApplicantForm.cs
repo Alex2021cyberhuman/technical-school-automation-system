@@ -69,7 +69,7 @@ public class ApplicantForm
     [MyPhone]
     public string Phone { get; set; } = string.Empty;
 
-    [Display(Name = "Дополнительные свединия")]
+    [Display(Name = "Дополнительные сведения")]
     public string Description { get; set; } = string.Empty;
 
     [Display(Name = "Баллы по русскому языку")]

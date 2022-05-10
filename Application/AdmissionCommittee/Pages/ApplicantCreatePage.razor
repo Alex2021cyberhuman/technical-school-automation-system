@@ -20,27 +20,27 @@
     @* <FluentValidationValidator DisableAssemblyScanning="true"/> *@
     <DataAnnotationsValidator/>
     <ValidationSummary/>
-    <InputText @bind-Value="@Form.FamilyName" placeholder="Фамилия"/>
-    <InputText @bind-Value="@Form.FirstName" placeholder="Имя"/>
-    <InputText @bind-Value="@Form.SurName" placeholder="Отчество"/>
+    <MyInputComponent Label="Фамилия" ValidationFor="@(() => Form.FamilyName)" @bind-Value="@Form.FamilyName" Placeholder="Фамилия"/>
+    <MyInputComponent Label="Имя" ValidationFor="@(() => Form.FirstName)" @bind-Value="@Form.FirstName" Placeholder="Имя"/>
+    <MyInputComponent Label="Отчество" ValidationFor="@(() => Form.SurName)" @bind-Value="@Form.SurName" Placeholder="Отчество"/>
     <InputDate @bind-Value="@Form.DateOfBirth" placeholder="Дата рождения"/>
-    <InputText @bind-Value="@Form.PassportType" placeholder="Тип паспорта"/>
-    <InputText @bind-Value="@Form.PassportSerial" placeholder="Серия паспорта"/>
-    <InputText @bind-Value="@Form.PassportNumber" placeholder="Номер паспорта"/>
-    <InputText @bind-Value="@Form.PassportIssuer" placeholder="Кем выдан паспорт"/>
-    <InputText @bind-Value="@Form.PassportIssuerCode" placeholder="Код паспорта"/>
-    <InputDate @bind-Value="@Form.PassportIssueDate" placeholder="Дата выдачи паспорта"/>
-    <InputText @bind-Value="@Form.Address" placeholder="Место жительства"/>
-    <InputText @bind-Value="@Form.PostalCode" placeholder="Почтовый индекс"/>
-    <InputText @bind-Value="@Form.Phone" placeholder="Мобильный телефон"/>
-    <InputText @bind-Value="@Form.Description" placeholder="Дополнительные свединия"/>
+    <MyInputComponent Label="Тип документа удостоверяющего личность" ValidationFor="@(() => Form.PassportType)" @bind-Value="@Form.PassportType" Placeholder="Тип паспорта"/>
+    <MyInputComponent Label="Серия" ValidationFor="@(() => Form.PassportSerial)" @bind-Value="@Form.PassportSerial" Placeholder="Серия паспорта"/>
+    <MyInputComponent Label="Номер" ValidationFor="@(() => Form.PassportNumber)" @bind-Value="@Form.PassportNumber" Placeholder="Номер паспорта"/>
+    <MyInputComponent Label="Кем выдан" ValidationFor="@(() => Form.PassportIssuer)" @bind-Value="@Form.PassportIssuer" Placeholder="Кем выдан"/>
+    <MyInputComponent Label="Код отделения (если есть)" Placeholder="Код отделения (если есть)" ValidationFor="@(() => Form.PassportIssuerCode)" @bind-Value="@Form.PassportIssuerCode"/>
+    <InputDate @bind-Value="@Form.PassportIssueDate" placeholder="Дата выдачи"/>
+    <MyInputComponent Label="Место жительства" ValidationFor="@(() => Form.Address)" @bind-Value="@Form.Address" Placeholder="Место жительства"/>
+    <MyInputComponent Label="Почтовый индекс" ValidationFor="@(() => Form.PostalCode)" @bind-Value="@Form.PostalCode" Placeholder="Почтовый индекс"/>
+    <MyInputComponent Label="Мобильный телефон" ValidationFor="@(() => Form.Phone)" @bind-Value="@Form.Phone" Placeholder="Мобильный телефон"/>
+    <MyInputComponent Label="Дополнительные сведения" ValidationFor="@(() => Form.Description)" @bind-Value="@Form.Description" Placeholder="Дополнительные сведения"/>
     <InputNumber @bind-Value="@Form.LanguageRating" placeholder="Баллы по русскому языку"/>
     <InputNumber @bind-Value="@Form.MathRating" placeholder="Баллы по математике"/>
     <InputNumber @bind-Value="@Form.AverageAttestRating" placeholder="Средний бал по атестату"/>
     <MyEnumInputRadioGroup Label="Тип базового обучения" @bind-Value="@Form.EducationType" TValue="EducationType"/>
-    <InputText @bind-Value="@Form.EducationDescription" placeholder="Учебное заведение"/>
-    <InputText @bind-Value="@Form.EducationDocumentSerial" placeholder="Серия документа об образовании"/>
-    <InputText @bind-Value="@Form.EducationDocumentNumber" placeholder="Номер документа об образовании"/>
+    <MyInputComponent Label="Учебное заведение" ValidationFor="@(() => Form.EducationDescription)" @bind-Value="@Form.EducationDescription" Placeholder="Учебное заведение"/>
+    <MyInputComponent Label="Серия документа об образовании" ValidationFor="@(() => Form.EducationDocumentSerial)" @bind-Value="@Form.EducationDocumentSerial" Placeholder="Серия документа об образовании"/>
+    <MyInputComponent Label="Номер документа об образовании" ValidationFor="@(() => Form.EducationDocumentNumber)" @bind-Value="@Form.EducationDocumentNumber" Placeholder="Номер документа об образовании"/>
     <InputDate @bind-Value="@Form.EducationDocumentIssued" placeholder="Дата выдачи документа об образовании"/>
     <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
     <MyInputCheckBox Label="Первый раз в техникуме" @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
@@ -51,29 +51,29 @@
     {
         @if (Form.HasMother)
         {
-            <InputText @bind-Value="@Form.MotherFirstName" placeholder="Имя матери"/>
-            <InputText @bind-Value="@Form.MotherFamilyName" placeholder="Фамилия матери"/>
-            <InputText @bind-Value="@Form.MotherSurName" placeholder="Отчество матери"/>
-            <InputText @bind-Value="@Form.MotherWorkDescription" placeholder="Описание работы матери"/>
-            <InputText @bind-Value="@Form.MotherMobilePhone" placeholder="Мобильный телефон матери"/>
-            <InputText @bind-Value="@Form.MotherWorkPhone" placeholder="Рабочий телефон матери"/>
-            <InputText @bind-Value="@Form.MotherHomePhone" placeholder="Домашний телефон матери"/>
+            <MyInputComponent Label="Имя матери" ValidationFor="@(() => Form.MotherFirstName)" @bind-Value="@Form.MotherFirstName" Placeholder="Имя матери"/>
+            <MyInputComponent Label="Фамилия матери" ValidationFor="@(() => Form.MotherFamilyName)" @bind-Value="@Form.MotherFamilyName" Placeholder="Фамилия матери"/>
+            <MyInputComponent Label="Отчество матери" ValidationFor="@(() => Form.MotherSurName)" @bind-Value="@Form.MotherSurName" Placeholder="Отчество матери"/>
+            <MyInputComponent Label="Описание работы матери" ValidationFor="@(() => Form.MotherWorkDescription)" @bind-Value="@Form.MotherWorkDescription" Placeholder="Описание работы матери"/>
+            <MyInputComponent Label="Мобильный телефон матери" ValidationFor="@(() => Form.MotherMobilePhone)" @bind-Value="@Form.MotherMobilePhone" Placeholder="Мобильный телефон матери"/>
+            <MyInputComponent Label="Рабочий телефон матери" ValidationFor="@(() => Form.MotherWorkPhone)" @bind-Value="@Form.MotherWorkPhone" Placeholder="Рабочий телефон матери"/>
+            <MyInputComponent Label="Домашний телефон матери" ValidationFor="@(() => Form.MotherHomePhone)" @bind-Value="@Form.MotherHomePhone" Placeholder="Домашний телефон матери"/>
         }
-        <MyInputCheckBox Label="Есть отец" @bind-Value="@Form.HasFather"/>
+        <MyInputCheckBox Label="Есть отец" ValidationFor="@(() => Form.HasFather)" @bind-Value="@Form.HasFather"/>
         @if (Form.HasFather)
         {
-            <InputText @bind-Value="@Form.FatherFirstName" placeholder="Имя отца"/>
-            <InputText @bind-Value="@Form.FatherFamilyName" placeholder="Фамилия отца"/>
-            <InputText @bind-Value="@Form.FatherSurName" placeholder="Отчество отца"/>
-            <InputText @bind-Value="@Form.FatherWorkDescription" placeholder="Описание работы отца"/>
-            <InputText @bind-Value="@Form.FatherMobilePhone" placeholder="Мобильный телефон отца"/>
-            <InputText @bind-Value="@Form.FatherWorkPhone" placeholder="Рабочий телефон отца"/>
-            <InputText @bind-Value="@Form.FatherHomePhone" placeholder="Домашний телефон отца"/>
+            <MyInputComponent Label="Имя отца" ValidationFor="@(() => Form.FatherFirstName)" @bind-Value="@Form.FatherFirstName" Placeholder="Имя отца"/>
+            <MyInputComponent Label="Фамилия отца" ValidationFor="@(() => Form.FatherFamilyName)" @bind-Value="@Form.FatherFamilyName" Placeholder="Фамилия отца"/>
+            <MyInputComponent Label="Отчество отца" ValidationFor="@(() => Form.FatherSurName)" @bind-Value="@Form.FatherSurName" Placeholder="Отчество отца"/>
+            <MyInputComponent Label="Описание работы отца" ValidationFor="@(() => Form.FatherWorkDescription)" @bind-Value="@Form.FatherWorkDescription" Placeholder="Описание работы отца"/>
+            <MyInputComponent Label="Мобильный телефон отца" ValidationFor="@(() => Form.FatherMobilePhone)" @bind-Value="@Form.FatherMobilePhone" Placeholder="Мобильный телефон отца"/>
+            <MyInputComponent Label="Рабочий телефон отца" ValidationFor="@(() => Form.FatherWorkPhone)" @bind-Value="@Form.FatherWorkPhone" Placeholder="Рабочий телефон отца"/>
+            <MyInputComponent Label="Домашний телефон отца" ValidationFor="@(() => Form.FatherHomePhone)" @bind-Value="@Form.FatherHomePhone" Placeholder="Домашний телефон отца"/>
         }
     }
     else
     {
-        <InputText @bind-Value="@Form.DistanceApplicantWorkDescription" placeholder="Описание работы"/>
+        <MyInputComponent Label="Описание работы" ValidationFor="@(() => Form.DistanceApplicantWorkDescription)" @bind-Value="@Form.DistanceApplicantWorkDescription" Placeholder="Описание работы"/>
     }
     <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
     <button class="btn btn-primary" type="submit" disabled="@(!IsValid)">Записать и провести</button>
@@ -117,12 +117,8 @@
             {
                 if (await LocalStorageService.ContainKeyAsync("ACP_LS"))
                 {
-                    EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
-
                     Form = await LocalStorageService.GetItemAsync<ApplicantForm>("ACP_LS");
-                    EditContext = new EditContext(Form);
-
-                    EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
+                    ReassignForm();
                     LocalStorageChecked = true;
                 }
             }
@@ -173,17 +169,22 @@
             applicant.Statement = statement;
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
-            EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
             await LocalStorageService.RemoveItemAsync("ACP_LS");
             Form = new();
-            EditContext = new(Form);
-            EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
+            ReassignForm();
             NavigationManager.NavigateTo($"applicants/{applicant.Id}/statement", true);
         }
         catch (Exception exception)
         {
             Logger.LogError(exception, "Error in server side client executing");
         }
+    }
+
+    private void ReassignForm()
+    {
+        EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
+        EditContext = new(Form);
+        EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
     }
 
 }

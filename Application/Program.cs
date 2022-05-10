@@ -7,10 +7,15 @@ using FluentValidation;
 using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddDataAnnotationsLocalization(options =>
+{
+    options.DataAnnotationLocalizerProvider = (type, factory) =>
+        factory.Create(typeof(Resource));
+});
 builder.Services.AddHttpClient();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-builder.Services.AddTransient(serviceProvider => (IStringLocalizer)serviceProvider.GetRequiredService<IStringLocalizer<Resource>>());
+builder.Services.AddTransient(serviceProvider =>
+    (IStringLocalizer)serviceProvider.GetRequiredService<IStringLocalizer<Resource>>());
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
