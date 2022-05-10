@@ -1,0 +1,135 @@
+@page "/applicants"
+@using Microsoft.EntityFrameworkCore
+@using Application.AdmissionCommittee.Data
+@using Application.AdmissionCommittee.Forms
+@using Application.Common.Enums
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
+@inject ILogger<ApplicantCreatePage> Logger
+@inject IStringLocalizer StringLocalizer 
+<PageTitle>Данные абитуриентов</PageTitle>
+<h3>Абитуриенты</h3>
+
+<div class="row">
+    <div class="col-12 col-md-4">
+        <EditForm EditContext="FilterContext">
+            <MyInputRadioGroup @bind-Value="FilterForm.SelectedSpecialityId" RadioItems="FilterForm.SpecialityRadioItems" Label="Специальность"/>
+            <MyInputRadioGroup @bind-Value="FilterForm.SelectedYear" RadioItems="FilterForm.YearRadioItems" Label="Год"/>
+            <MyInputRadioGroup @bind-Value="FilterForm.SelectedEducationForm" RadioItems="FilterForm.EducationForms" Label="Форма обучения"/>
+        </EditForm>
+    </div>
+    <div class="col-12 col-md-8">
+        <table class="table">
+            <thead>
+            <tr>
+                <td rowspan="2">№ п.п.</td>
+                <td rowspan="2">ФИО</td>
+                <td rowspan="2">Образование</td>
+                <td colspan="2">Результаты ГИА</td>
+                <td rowspan="2">Средний балл</td>
+                <td rowspan="2">Общая оценка</td>
+                <td rowspan="2">Примечание</td>
+                <td rowspan="2">Решение директора</td>
+            </tr>
+            <tr>
+                <td>Русский Язык</td>
+                <td>Математика</td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Applicants)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.FullName</td>
+                    <td>
+                        <div class="hint-information" data-name="Базовое образование: @item.EducationDescription, Год: @item.EducationDocumentIssued.Year.">
+                            @(StringLocalizer[item.EducationType.ToString()])
+                        </div>
+                    </td>
+                    <td>@item.LanguageRating</td>
+                    <td>@item.MathRating</td>
+                    <td>@item.AverageAttestRating</td>
+                    <td>@item.CommonScore</td>
+                    <td>@item.Description</td>
+                    <td>@item.DirectorDecision</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+    public List<Applicant> Applicants { get; set; } = new();
+
+    public FilterForm FilterForm { get; set; } = new();
+
+    public EditContext FilterContext { get; set; }
+
+    public CancellationTokenSource EditCancellationTokenSource { get; set; } = new();    
+    
+    public ApplicantsListPage()
+    {
+        FilterContext = new EditContext(FilterForm);
+        FilterContext.OnFieldChanged += ApplyFilterAsync;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var specialities = (await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name)
+            .ToListAsync())
+            .Select(x => new MyInputRadioGroup<long>.ValueRadioItem($"{x.Code} {x.Name}", x.Id))
+            .ToList();
+        FilterForm.SpecialityRadioItems = specialities;
+        FilterForm.SelectedSpecialityId = specialities.First().Value;
+        var years = (await context.Applicant.Select(x => x.Submitted.Year).Distinct()
+            .OrderByDescending(x => x)
+            .ToListAsync())
+            .Select(x => new MyInputRadioGroup<int>.ValueRadioItem(x.ToString(), x))
+            .ToList();
+        FilterForm.YearRadioItems = years;
+        FilterForm.SelectedYear = years.First().Value;
+        FilterForm.EducationForms = Enum.GetValues<EducationForm>()
+            .Select(x => new MyInputRadioGroup<EducationForm>.ValueRadioItem(StringLocalizer[x.ToString()], x))
+            .ToList();
+
+        await LoadApplicantsAsync();
+    }
+
+    private async Task LoadApplicantsAsync(CancellationToken cancellationToken = default)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync(cancellationToken);
+        Applicants = await context.Applicant
+            .Where(x =>
+                x.EducationForm == FilterForm.SelectedEducationForm &&
+                x.ApplicantSpecialities.Any(
+                    speciality => speciality.SpecialityId == FilterForm.SelectedSpecialityId) &&
+                x.Submitted.Year == FilterForm.SelectedYear)
+            .ToListAsync(cancellationToken);
+        StateHasChanged();
+    }
+
+    private async void ApplyFilterAsync(object? sender, FieldChangedEventArgs fieldChangedEventArgs)
+    {
+        try
+        {
+            EditCancellationTokenSource.Cancel();
+            EditCancellationTokenSource = new CancellationTokenSource();
+            await LoadApplicantsAsync(EditCancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine();
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Error in async void method");
+        }
+    }
+
+}

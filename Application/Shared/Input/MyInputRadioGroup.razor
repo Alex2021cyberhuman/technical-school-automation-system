@@ -10,13 +10,13 @@
         <label class="form-control-label">@Label</label>
     }
     <div class="container">
-        <InputRadioGroup @bind-Value="CurrentValue" >
+        <InputRadioGroup @bind-Value="CurrentValue">
             <div class="row justify-content-start">
                 @foreach (var radioItem in RadioItems)
                 {
                     <div class="col-sm-12 col-lg-4">
                         <label>
-                            <InputRadio Value="@radioItem.Value" @onchange="OnChange"/>
+                            <InputRadio Value="@radioItem.Value"/>
                             @radioItem.Label
                         </label>
                     </div>
@@ -32,9 +32,6 @@
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
-
-    [Parameter]
-    public EventCallback OnChange { get; set; } = EventCallback.Empty;
     
     public class ValueRadioItem
     {
