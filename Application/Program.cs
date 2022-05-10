@@ -1,6 +1,7 @@
 using Application;
 using Application.AdmissionCommittee.Data;
 using Application.AdmissionCommittee.Services.StatementDocument;
+using Application.Groups.Data;
 using Application.Specialities.Data;
 using Blazored.LocalStorage;
 using FluentValidation;
@@ -23,6 +24,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddSingleton<StatementDocumentCreator>();
 SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
+GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 var app = builder.Build();
 app.UseResourceRequestLocalization();
 if (!app.Environment.IsDevelopment())
