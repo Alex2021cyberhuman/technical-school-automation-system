@@ -1,49 +1,44 @@
+@using System.Linq.Expressions
+@using Microsoft.Extensions.Localization
 @using System.Globalization
 @typeparam TValue
 @inherits InputBase<TValue>
-
-<div class="form-check">
-    <fieldset>
-        <legend>@Label</legend>
-        <InputRadioGroup @bind-Value="Value">
-            @foreach (var radioItem in ValuesTuples)
-            {
-                <label>
-                    <InputRadio Value="@radioItem.Value"/>
-                    @radioItem.Label
-                </label>
-            }
+@inject IStringLocalizer StringLocalizer
+<div class="form-control-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label">@Label</label>
+    }
+    <div class="container">
+        <InputRadioGroup @bind-Value="CurrentValue" >
+            <div class="row justify-content-start">
+                @foreach (var radioItem in RadioItems)
+                {
+                    <div class="col-sm-12 col-lg-4">
+                        <label>
+                            <InputRadio Value="@radioItem.Value" @onchange="OnChange"/>
+                            @radioItem.Label
+                        </label>
+                    </div>
+                }
+            </div>
         </InputRadioGroup>
-    </fieldset>
+    </div>
 </div>
 
 @code {
-
-    private string _name = string.Empty;
-
     [Parameter]
-    public IReadOnlyCollection<RadioItem> ValuesTuples { get; set; } = Array.Empty<RadioItem>();
-
-    [Parameter]
-    public string Name
-    {
-        get => string.IsNullOrWhiteSpace(_name) ? SetName() : _name;
-        set => _name = value;
-    }
+    public List<ValueRadioItem> RadioItems { get; set; } = new();
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
 
-    private string SetName()
+    [Parameter]
+    public EventCallback OnChange { get; set; } = EventCallback.Empty;
+    
+    public class ValueRadioItem
     {
-        var typeName = typeof(TValue).Name;
-        _name = typeName;
-        return _name;
-    }
-
-    public class RadioItem
-    {
-        public RadioItem(string label, TValue value)
+        public ValueRadioItem(string label, TValue value)
         {
             Label = label;
             Value = value;
@@ -52,6 +47,11 @@
         public string Label { get; set; }
 
         public TValue Value { get; set; }
+
+        public static implicit operator ValueRadioItem((string, TValue) tuple)
+        {
+            return new ValueRadioItem(tuple.Item1, tuple.Item2);
+        }
     }
 
     protected override bool TryParseValueFromString(

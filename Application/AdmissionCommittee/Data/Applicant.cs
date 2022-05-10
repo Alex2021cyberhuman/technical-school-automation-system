@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Enums;
 using Application.Common.Helpers;
-using Application.Specialities.Data;
 
 namespace Application.AdmissionCommittee.Data;
 

@@ -1,7 +1,6 @@
 using Application.AdmissionCommittee.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Application.AdmissionCommittee.Controllers;
 
