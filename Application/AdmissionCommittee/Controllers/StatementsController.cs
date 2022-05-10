@@ -8,11 +8,12 @@ namespace Application.AdmissionCommittee.Controllers;
 public class StatementsController : ControllerBase
 {
     private const string DocxMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    
+
     private readonly IDbContextFactory<AdmissionCommitteeDbContext> _dbContextFactory;
     private readonly IConfiguration _configuration;
-    
-    public StatementsController(IDbContextFactory<AdmissionCommitteeDbContext> dbContextFactory, IConfiguration configuration)
+
+    public StatementsController(IDbContextFactory<AdmissionCommitteeDbContext> dbContextFactory,
+        IConfiguration configuration)
     {
         _dbContextFactory = dbContextFactory;
         _configuration = configuration;
@@ -23,10 +24,7 @@ public class StatementsController : ControllerBase
     {
         await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
         var applicant = await context.Applicant.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (applicant is null || applicant.Statement is null)
-        {
-            return NotFound();
-        }
+        if (applicant is null || applicant.Statement is null) return NotFound();
 
         var statement = applicant.Statement;
         var basePath = _configuration["AdmissionCommittee:StatementPath"];

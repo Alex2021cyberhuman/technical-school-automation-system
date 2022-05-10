@@ -14,7 +14,7 @@ public class SpecialitiesDbContext : DbContext
     }
 
     public DbSet<Speciality> Speciality => Set<Speciality>();
-    
+
     public DbSet<Subject> Subject => Set<Subject>();
 
     public static void AddToServices(IServiceCollection services, IConfiguration configuration,

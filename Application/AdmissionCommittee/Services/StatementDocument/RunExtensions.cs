@@ -1,4 +1,5 @@
 ﻿// ReSharper disable once CheckNamespace
+
 namespace DocumentFormat.OpenXml.Wordprocessing;
 
 public static class RunExtensions

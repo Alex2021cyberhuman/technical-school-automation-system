@@ -19,48 +19,30 @@ public class MyPhoneAttribute : DataTypeAttribute
 
     public override bool IsValid(object? value)
     {
-        if (value is null)
-        {
-            return true;
-        }
+        if (value is null) return true;
 
-        if (!(value is string valueAsString))
-        {
-            return false;
-        }
+        if (!(value is string valueAsString)) return false;
 
-        if (string.IsNullOrWhiteSpace(valueAsString))
-        {
-            return true;
-        }
+        if (string.IsNullOrWhiteSpace(valueAsString)) return true;
 
         valueAsString = valueAsString.Replace("+", string.Empty).TrimEnd();
         valueAsString = RemoveExtension(valueAsString);
 
-        bool digitFound = false;
-        foreach (char c in valueAsString)
-        {
+        var digitFound = false;
+        foreach (var c in valueAsString)
             if (char.IsDigit(c))
             {
                 digitFound = true;
                 break;
             }
-        }
 
-        if (!digitFound)
-        {
-            return false;
-        }
+        if (!digitFound) return false;
 
-        foreach (char c in valueAsString)
-        {
+        foreach (var c in valueAsString)
             if (!(char.IsDigit(c)
                   || char.IsWhiteSpace(c)
                   || AdditionalPhoneNumberCharacters.IndexOf(c) != -1))
-            {
                 return false;
-            }
-        }
 
         return true;
     }
@@ -73,10 +55,7 @@ public class MyPhoneAttribute : DataTypeAttribute
         {
             var extension = potentialPhoneNumber.Substring(
                 lastIndexOfExtension + ExtensionAbbreviationExtDot.Length);
-            if (MatchesExtension(extension))
-            {
-                return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
-            }
+            if (MatchesExtension(extension)) return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
         }
 
         lastIndexOfExtension = potentialPhoneNumber
@@ -85,10 +64,7 @@ public class MyPhoneAttribute : DataTypeAttribute
         {
             var extension = potentialPhoneNumber.Substring(
                 lastIndexOfExtension + ExtensionAbbreviationExt.Length);
-            if (MatchesExtension(extension))
-            {
-                return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
-            }
+            if (MatchesExtension(extension)) return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
         }
 
         lastIndexOfExtension = potentialPhoneNumber
@@ -97,10 +73,7 @@ public class MyPhoneAttribute : DataTypeAttribute
         {
             var extension = potentialPhoneNumber.Substring(
                 lastIndexOfExtension + ExtensionAbbreviationX.Length);
-            if (MatchesExtension(extension))
-            {
-                return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
-            }
+            if (MatchesExtension(extension)) return potentialPhoneNumber.Substring(0, lastIndexOfExtension);
         }
 
         return potentialPhoneNumber;
@@ -109,18 +82,11 @@ public class MyPhoneAttribute : DataTypeAttribute
     private static bool MatchesExtension(string potentialExtension)
     {
         potentialExtension = potentialExtension.TrimStart();
-        if (potentialExtension.Length == 0)
-        {
-            return false;
-        }
+        if (potentialExtension.Length == 0) return false;
 
-        foreach (char c in potentialExtension)
-        {
+        foreach (var c in potentialExtension)
             if (!char.IsDigit(c))
-            {
                 return false;
-            }
-        }
 
         return true;
     }

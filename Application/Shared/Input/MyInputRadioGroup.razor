@@ -27,12 +27,13 @@
 </div>
 
 @code {
+
     [Parameter]
     public List<ValueRadioItem> RadioItems { get; set; } = new();
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
-    
+
     public class ValueRadioItem
     {
         public ValueRadioItem(string label, TValue value)

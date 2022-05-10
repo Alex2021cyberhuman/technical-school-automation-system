@@ -13,6 +13,6 @@ public class ApplicantPassport
     [MaxLength(20)] public string IssuerCode { get; set; } = string.Empty;
 
     public string Type { get; set; } = string.Empty;
-    
+
     public DateTime IssueDate { get; set; }
 }

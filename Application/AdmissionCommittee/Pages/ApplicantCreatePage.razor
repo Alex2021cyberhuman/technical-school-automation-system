@@ -169,7 +169,7 @@
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
             await LocalStorageService.RemoveItemAsync("ACP_LS");
-            Form = new();
+            Form = new ApplicantForm();
             ReassignForm();
             NavigationManager.NavigateTo($"applicants/{applicant.Id}/statement", true);
         }
@@ -182,7 +182,7 @@
     private void ReassignForm()
     {
         EditContext.OnFieldChanged -= EditContextOnOnFieldChanged;
-        EditContext = new(Form);
+        EditContext = new EditContext(Form);
         EditContext.OnFieldChanged += EditContextOnOnFieldChanged;
     }
 

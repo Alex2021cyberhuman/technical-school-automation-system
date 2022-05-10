@@ -20,10 +20,7 @@ public static class DbContextExtensions
 
         dbContextOptionsBuilder.UseNpgsql(connectionString, npgsqlDbContextOptionsBuilder =>
         {
-            if (migrationTable != null)
-            {
-                npgsqlDbContextOptionsBuilder.MigrationsHistoryTable(migrationTable);
-            }
+            if (migrationTable != null) npgsqlDbContextOptionsBuilder.MigrationsHistoryTable(migrationTable);
             npgsqlDbContextOptionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             npgsqlDbContextOptionsBuilder.MigrationsAssembly(migrationAssembly);
         });

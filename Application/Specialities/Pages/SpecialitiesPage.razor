@@ -13,7 +13,6 @@
     <tbody>
     @foreach (var item in Specialities)
     {
-        
         <tr>
             <th scope="row">@item.Code</th>
             <td>@item.Name</td>
@@ -25,7 +24,7 @@
 @code
 {
     private List<Speciality> Specialities { get; set; } = new();
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

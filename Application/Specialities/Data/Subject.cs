@@ -8,5 +8,5 @@ public class Subject
 
     [Required] [MaxLength(150)] public string Name { get; set; } = string.Empty;
 
-    [Required] [MaxLength(20)] public string Code { get; set; } = string.Empty; 
+    [Required] [MaxLength(20)] public string Code { get; set; } = string.Empty;
 }

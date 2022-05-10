@@ -12,7 +12,7 @@
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
-    
+
     protected override bool TryParseValueFromString(string? value, out bool result, out string errorMessage)
     {
         var success = bool.TryParse(value, out result);

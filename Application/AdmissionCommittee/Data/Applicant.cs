@@ -22,12 +22,12 @@ public class Applicant
 
     [MaxLength(2000)] public string Description { get; set; } = string.Empty;
 
-    [Required]  public decimal LanguageRating { get; set; }
+    [Required] public decimal LanguageRating { get; set; }
 
     [Required] public decimal MathRating { get; set; }
 
     [Required] public decimal AverageAttestRating { get; set; }
-    
+
     [Required] public decimal CommonScore { get; set; }
 
     public EducationType EducationType { get; set; }
@@ -63,7 +63,7 @@ public class Applicant
     [Required] public List<ApplicantSpeciality> ApplicantSpecialities { get; set; } = null!;
 
     public DirectorDecisionType DirectorDecision { get; set; }
-    
+
     public Statement Statement { get; set; } = null!;
 
     public ApplicantPassport Passport { get; set; } = null!;

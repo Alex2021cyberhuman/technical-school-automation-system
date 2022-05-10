@@ -43,7 +43,6 @@ public class StatementDocumentModel
         PostalCode = applicant.PostalCode;
         Phone = applicant.Phone;
         if (applicant.Mother is not null)
-        {
             Mother = new ParentModel
             {
                 FirstName = applicant.Mother.FirstName,
@@ -54,9 +53,7 @@ public class StatementDocumentModel
                 WorkPhone = applicant.Mother.WorkPhone,
                 HomePhone = applicant.Mother.HomePhone
             };
-        }
         if (applicant.Father is not null)
-        {
             Father = new ParentModel
             {
                 FirstName = applicant.Father.FirstName,
@@ -67,7 +64,6 @@ public class StatementDocumentModel
                 WorkPhone = applicant.Father.WorkPhone,
                 HomePhone = applicant.Father.HomePhone
             };
-        }
         DistanceApplicantWorkDescription = applicant.DistanceApplicantWorkDescription;
     }
 

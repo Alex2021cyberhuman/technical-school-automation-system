@@ -7,27 +7,32 @@
     {
         <label class="form-control-label" for="@Id">@Label</label>
     }
-    <input class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@Placeholder" />
+    <input class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@Placeholder"/>
     <div class="form-control-validation">
-        <ValidationMessage For="@ValidationFor" />
+        <ValidationMessage For="@ValidationFor"/>
     </div>
 </div>
 
 @code {
 
-    [Parameter, EditorRequired] public Expression<Func<string>> ValidationFor { get; set; } = default!;
-    
-    [Parameter] public string? Id { get; set; }
-    
-    [Parameter] public string? Label { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public Expression<Func<string>> ValidationFor { get; set; } = default!;
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
 
     [Parameter]
     public string Placeholder { get; set; }
-    
+
     protected override bool TryParseValueFromString(string? value, out string result, out string validationErrorMessage)
     {
         result = value!;
         validationErrorMessage = null!;
         return true;
     }
+
 }
