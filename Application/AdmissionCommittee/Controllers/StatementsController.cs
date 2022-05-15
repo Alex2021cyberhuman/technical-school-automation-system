@@ -24,7 +24,7 @@ public class StatementsController : ControllerBase
     {
         await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
         var applicant = await context.Applicant.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (applicant is null || applicant.Statement is null) return NotFound();
+        if (applicant is null) return NotFound();
 
         var statement = applicant.Statement;
         var basePath = _configuration["AdmissionCommittee:StatementPath"];

@@ -5,12 +5,13 @@ using Application.Groups.Data;
 using Application.Specialities.Data;
 using Blazored.LocalStorage;
 using FluentValidation;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddDataAnnotationsLocalization(options =>
 {
-    options.DataAnnotationLocalizerProvider = (type, factory) =>
+    options.DataAnnotationLocalizerProvider = (_, factory) =>
         factory.Create(typeof(Resource));
 });
 builder.Services.AddHttpClient();
@@ -35,8 +36,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
+app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new CompositeFileProvider(
+            new PhysicalFileProvider(Path.GetFullPath(builder.Configuration["AdmissionCommittee:ApplicantsTablePath"])),
+            new PhysicalFileProvider(Path.GetFullPath(builder.Configuration["AdmissionCommittee:StatementPath"])))
+    });
 app.UseRouting();
 
 app.MapBlazorHub();

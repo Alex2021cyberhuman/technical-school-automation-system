@@ -3,7 +3,7 @@ using Application.Shared.Input;
 
 namespace Application.AdmissionCommittee.Forms;
 
-public class FilterForm
+public class ApplicantsTableFilterForm
 {
     public long SelectedSpecialityId { get; set; }
 

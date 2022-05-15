@@ -2,24 +2,30 @@
 @using Microsoft.EntityFrameworkCore
 @using Application.AdmissionCommittee.Data
 @using Application.AdmissionCommittee.Forms
+@using Application.AdmissionCommittee.Services.ApplicantsTable
 @using Application.Common.Enums
+@using Application.Specialities.Data
 @using Application.Specialities.Services
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
 @inject ILogger<ApplicantCreatePage> Logger
 @inject IStringLocalizer StringLocalizer
+@inject NavigationManager NavigationManager
+@inject ApplicantsTableCreator ApplicantsTableCreator
+@inject IConfiguration Configuration
 <PageTitle>Данные абитуриентов</PageTitle>
 <h3>Абитуриенты</h3>
 
 <div class="row">
     <div class="col-12 col-md-4">
         <EditForm EditContext="FilterContext">
-            <MyInputRadioGroup @bind-Value="FilterForm.SelectedSpecialityId" RadioItems="FilterForm.SpecialityRadioItems" Label="Специальность"/>
-            <MyInputRadioGroup @bind-Value="FilterForm.SelectedYear" RadioItems="FilterForm.YearRadioItems" Label="Год"/>
-            <MyInputRadioGroup @bind-Value="FilterForm.SelectedEducationForm" RadioItems="FilterForm.EducationForms" Label="Форма обучения"/>
-            <MyInputRadioGroup @bind-Value="FilterForm.SelectedFinanceType" RadioItems="FilterForm.FinanceTypes" Label="Форма обучения"/>
+            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedSpecialityId" RadioItems="ApplicantsTableFilterForm.SpecialityRadioItems" Label="Специальность"/>
+            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedYear" RadioItems="ApplicantsTableFilterForm.YearRadioItems" Label="Год"/>
+            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedEducationForm" RadioItems="ApplicantsTableFilterForm.EducationForms" Label="Форма обучения"/>
+            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedFinanceType" RadioItems="ApplicantsTableFilterForm.FinanceTypes" Label="Форма обучения"/>
         </EditForm>
+        <button type="button" class="btn btn-primary" @onclick="OnDownloadApplicantsTableAsync">Скачать сводную таблицу из текущих данных</button>
     </div>
     <div class="col-12 col-md-8">
         <table class="table">
@@ -57,7 +63,9 @@
                     <td>@item.CommonScore</td>
                     <td>@item.Description</td>
                     <td>@(StringLocalizer[item.DirectorDecision.ToString()])</td>
-                    <td><DownloadApplicantStatementButton ApplicantId="@item.Id"/></td>
+                    <td>
+                        <DownloadApplicantStatementButton ApplicantId="@item.Id"/>
+                    </td>
                 </tr>
             }
             </tbody>
@@ -69,15 +77,17 @@
 
     public List<Applicant> Applicants { get; set; } = new();
 
-    public FilterForm FilterForm { get; set; } = new();
+    public ApplicantsTableFilterForm ApplicantsTableFilterForm { get; set; } = new();
 
     public EditContext FilterContext { get; set; }
 
     public CancellationTokenSource EditCancellationTokenSource { get; set; } = new();
 
+    public List<Speciality> Specialities { get; set; } = new();
+
     public ApplicantsListPage()
     {
-        FilterContext = new EditContext(FilterForm);
+        FilterContext = new EditContext(ApplicantsTableFilterForm);
         FilterContext.OnFieldChanged += ApplyFilterAsync;
     }
 
@@ -85,16 +95,22 @@
     {
         await base.OnInitializedAsync();
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var specialities = await context.GetSpecialitiesAsync();
-        FilterForm.SpecialityRadioItems = specialities;
-        FilterForm.SelectedSpecialityId = specialities.First().Value;
+        Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name)
+            .AsNoTracking()
+            .ToListAsync();
+
+        ApplicantsTableFilterForm.SpecialityRadioItems = Specialities
+            .Select(x => new MyInputRadioGroup<long>.ValueRadioItem($"{x.Code} {x.Name}", x.Id))
+            .ToList();
+
+        ApplicantsTableFilterForm.SelectedSpecialityId = Specialities.First().Id;
         var years = await GetStartYear(context);
-        FilterForm.YearRadioItems = years;
-        FilterForm.SelectedYear = years.First().Value;
-        FilterForm.EducationForms = Enum.GetValues<EducationForm>()
+        ApplicantsTableFilterForm.YearRadioItems = years;
+        ApplicantsTableFilterForm.SelectedYear = years.First().Value;
+        ApplicantsTableFilterForm.EducationForms = Enum.GetValues<EducationForm>()
             .Select(x => new MyInputRadioGroup<EducationForm>.ValueRadioItem(StringLocalizer[x.ToString()], x))
             .ToList();
-        FilterForm.EducationForms = Enum.GetValues<EducationForm>()
+        ApplicantsTableFilterForm.EducationForms = Enum.GetValues<EducationForm>()
             .Select(x => new MyInputRadioGroup<EducationForm>.ValueRadioItem(StringLocalizer[x.ToString()], x))
             .ToList();
         await LoadApplicantsAsync();
@@ -120,10 +136,10 @@
         await using var context = await DbContextFactory.CreateDbContextAsync(cancellationToken);
         Applicants = await context.Applicant
             .Where(x =>
-                x.EducationForm == FilterForm.SelectedEducationForm &&
+                x.EducationForm == ApplicantsTableFilterForm.SelectedEducationForm &&
                 x.ApplicantSpecialities.Any(
-                    speciality => speciality.SpecialityId == FilterForm.SelectedSpecialityId) &&
-                x.Submitted.Year == FilterForm.SelectedYear)
+                    speciality => speciality.SpecialityId == ApplicantsTableFilterForm.SelectedSpecialityId) &&
+                x.Submitted.Year == ApplicantsTableFilterForm.SelectedYear)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
         StateHasChanged();
@@ -145,6 +161,16 @@
         {
             Logger.LogError(exception, "Error in async void method");
         }
+    }
+
+    private async Task OnDownloadApplicantsTableAsync()
+    {
+        var basePath = Configuration["AdmissionCommittee:ApplicantsTablePath"];
+        var fileName = $"Сводная_Абитуриентов_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.xlsx";
+        var fullFileName = Path.Combine(basePath, fileName);
+        var model = new ApplicantsTableModel(Applicants, Specialities.First(x => x.Id == ApplicantsTableFilterForm.SelectedSpecialityId), StringLocalizer);
+        _ = await ApplicantsTableCreator.CreatePackageAsync(fullFileName, model);
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + "/" + fileName);
     }
 
 }
