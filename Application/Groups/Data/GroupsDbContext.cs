@@ -1,11 +1,12 @@
 using Application.AdmissionCommittee.Data;
 using Application.Common.Data;
 using Application.Specialities.Data;
+using Application.Specialities.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Groups.Data;
 
-public class GroupsDbContext : DbContext
+public class GroupsDbContext : DbContext, ISpecialitiesContext
 {
     protected GroupsDbContext()
     {
@@ -28,6 +29,7 @@ public class GroupsDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(GroupsDbContext).Assembly);
         modelBuilder.BuildAdmissionCommitteeModel();
         modelBuilder.Entity<Speciality>().ToTable("speciality", x => x.ExcludeFromMigrations());
         modelBuilder.Entity<Applicant>().ToTable("applicant", x => x.ExcludeFromMigrations());
@@ -41,10 +43,9 @@ public class GroupsDbContext : DbContext
         modelBuilder.Entity<Student>(entity =>
         {
             entity.HasOne(x => x.Applicant)
-                .WithOne()
+                .WithOne(x => x.Student)
                 .HasForeignKey<Student>(x => x.ApplicantId);
         });
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(GroupsDbContext).Assembly);
     }
 
     public static void AddToServices(IServiceCollection services, IConfiguration configuration,

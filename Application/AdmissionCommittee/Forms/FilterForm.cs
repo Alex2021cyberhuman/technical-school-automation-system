@@ -16,4 +16,8 @@ public class FilterForm
     public EducationForm SelectedEducationForm { get; set; } = EducationForm.FullTime;
 
     public List<MyInputRadioGroup<EducationForm>.ValueRadioItem> EducationForms { get; set; } = new();
+    
+    public FinanceEducationType SelectedFinanceType { get; set; }
+
+    public List<MyInputRadioGroup<FinanceEducationType>.ValueRadioItem> FinanceTypes { get; set; } = new();
 }

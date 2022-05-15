@@ -1,10 +1,11 @@
 using Application.Common.Data;
 using Application.Specialities.Data;
+using Application.Specialities.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.AdmissionCommittee.Data;
 
-public class AdmissionCommitteeDbContext : DbContext
+public class AdmissionCommitteeDbContext : DbContext, ISpecialitiesContext
 {
     protected AdmissionCommitteeDbContext()
     {

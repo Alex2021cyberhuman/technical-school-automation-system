@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Groups.Data.Migrations
 {
     [DbContext(typeof(GroupsDbContext))]
-    [Migration("20220510142355_Initial")]
+    [Migration("20220510153446_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,10 +197,6 @@ namespace Application.Groups.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created");
-
-                    b.Property<int>("MaximumStudents")
-                        .HasColumnType("integer")
-                        .HasColumnName("maximum_students");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -19,7 +19,6 @@ namespace Application.Groups.Data.Migrations
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     speciality_id = table.Column<long>(type: "bigint", nullable: false),
-                    maximum_students = table.Column<int>(type: "integer", nullable: false),
                     students_count = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

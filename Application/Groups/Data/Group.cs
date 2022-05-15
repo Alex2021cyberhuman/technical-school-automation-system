@@ -15,8 +15,6 @@ public class Group
 
     public long SpecialityId { get; set; }
 
-    [Required] [Range(0, 1000)] public int MaximumStudents { get; set; }
-
     [Required] [Range(0, 1000)] public int StudentsCount { get; set; }
     
     public List<Student> Students { get; set; } = null!;

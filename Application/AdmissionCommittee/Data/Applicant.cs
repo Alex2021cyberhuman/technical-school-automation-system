@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Common.Enums;
 using Application.Common.Helpers;
+using Application.Groups.Data;
 
 namespace Application.AdmissionCommittee.Data;
 
@@ -67,4 +68,6 @@ public class Applicant
     public Statement Statement { get; set; } = null!;
 
     public ApplicantPassport Passport { get; set; } = null!;
+
+    public Student? Student { get; set; }
 }

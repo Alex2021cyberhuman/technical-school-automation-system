@@ -1,0 +1,101 @@
+@using Application.Groups.Forms
+@using Application.Specialities.Services
+@using Microsoft.EntityFrameworkCore
+@using Application.Groups.Data
+@using DocumentFormat.OpenXml.Bibliography
+@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+<button type="button" class="btn btn-primary" @onclick="OnOpen">
+    Создать группу
+</button>
+
+@if (ModalVisible)
+{
+    <PageTitle>Создать группу</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Создать группу</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" ValidationFor="() => Form.Name" />
+                        <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    public bool ModalVisible { get; set; }
+
+    public CreateGroupModalForm Form { get; set; }
+
+    public EditContext EditContext { get; set; }
+
+    public List<MyInputRadioGroup<long>.ValueRadioItem> SpecialityRadioItems { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<AfterCreateEventArgs> OnAfterCreate { get; set; }
+
+    public CreateGroupModal()
+    {
+        Form = new CreateGroupModalForm();
+        EditContext = new EditContext(Form);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var specialities = await context.GetSpecialitiesAsync();
+        SpecialityRadioItems = specialities;
+        Form.SpecialityId = specialities.First().Value;
+    }
+
+    private void OnOpen()
+    {
+        if (ModalVisible) return;
+        ModalVisible = true;
+        StateHasChanged();
+    }
+
+    private void OnCancel()
+    {
+        if (!ModalVisible) return;
+        ModalVisible = false;
+        Form = new CreateGroupModalForm();
+        EditContext = new EditContext(Form);
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var group = Form.ToGroup();
+        context.Add(group);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnAfterCreate.InvokeAsync(new AfterCreateEventArgs(group));
+    }
+
+    public class AfterCreateEventArgs : EventArgs
+    {
+        public AfterCreateEventArgs(Group created)
+        {
+            Created = created;
+        }
+
+        public Group Created { get; set; }
+    }
+
+}

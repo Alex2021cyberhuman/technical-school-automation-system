@@ -1,9 +1,10 @@
 using Application.Common.Data;
+using Application.Specialities.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Specialities.Data;
 
-public class SpecialitiesDbContext : DbContext
+public class SpecialitiesDbContext : DbContext, ISpecialitiesContext
 {
     protected SpecialitiesDbContext()
     {

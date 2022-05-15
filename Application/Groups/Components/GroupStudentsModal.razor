@@ -1,0 +1,92 @@
+@using Microsoft.EntityFrameworkCore
+@using Application.Groups.Data
+@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+<button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
+    Список студентов
+</button>
+
+@if (ModalVisible)
+{
+    <PageTitle>Список студентов в группе</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Список студентов в группе</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EnrollApplicantModal Group="Group" StudentsAdded="OnStudentsAddedAsync"/>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>№ п.п.</td>
+                            <td>ФИО</td>
+                            <td>Дата рождения</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Students)
+                        {
+                            <tr>
+                                <th scope="row">@item.Id</th>
+                                <td>@item.FullName</td>
+                                <td>@item.DateOfBirth.ToShortDateString()</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    public bool ModalVisible { get; set; }
+
+    public List<Student> Students { get; set; } = new();
+
+    [Parameter]
+    public Group Group { get; set; } = new();
+
+    [Parameter]
+    public EventCallback StudentsAdded { get; set; } = EventCallback.Empty;
+
+    private async Task OnOpenAsync()
+    {
+        if (ModalVisible) return;
+
+        ModalVisible = true;
+        await LoadStudentsAsync();
+    }
+
+    private async Task LoadStudentsAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Students = await context.Student.Where(x => x.GroupId == Group.Id)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    private void OnCancel()
+    {
+        if (!ModalVisible) return;
+        ModalVisible = false;
+        Students.Clear();
+    }
+
+
+    private async Task OnStudentsAddedAsync()
+    {
+        await LoadStudentsAsync();
+        await StudentsAdded.InvokeAsync();
+    }
+
+}

@@ -196,10 +196,6 @@ namespace Application.Groups.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created");
 
-                    b.Property<int>("MaximumStudents")
-                        .HasColumnType("integer")
-                        .HasColumnName("maximum_students");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)

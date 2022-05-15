@@ -79,3 +79,8 @@ a, .btn-link {
     -moz-border-radius: 20px;
     border-radius: 20px;
 }
+
+.my-large-modal-dialog {
+    max-width: 100% !important;
+    margin: 1.75rem;
+}

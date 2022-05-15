@@ -29,6 +29,6 @@
     {
         await base.OnInitializedAsync();
         await using var context = await SpecialitiesDbContextFactory.CreateDbContextAsync();
-        Specialities = await context.Speciality.OrderBy(x => x.Code).ToListAsync();
+        Specialities = await context.Speciality.OrderBy(x => x.Code).AsNoTracking().ToListAsync();
     }
 }

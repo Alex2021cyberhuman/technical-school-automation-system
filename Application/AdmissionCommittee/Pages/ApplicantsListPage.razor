@@ -3,11 +3,12 @@
 @using Application.AdmissionCommittee.Data
 @using Application.AdmissionCommittee.Forms
 @using Application.Common.Enums
+@using Application.Specialities.Services
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
 @inject ILogger<ApplicantCreatePage> Logger
-@inject IStringLocalizer StringLocalizer 
+@inject IStringLocalizer StringLocalizer
 <PageTitle>Данные абитуриентов</PageTitle>
 <h3>Абитуриенты</h3>
 
@@ -17,6 +18,7 @@
             <MyInputRadioGroup @bind-Value="FilterForm.SelectedSpecialityId" RadioItems="FilterForm.SpecialityRadioItems" Label="Специальность"/>
             <MyInputRadioGroup @bind-Value="FilterForm.SelectedYear" RadioItems="FilterForm.YearRadioItems" Label="Год"/>
             <MyInputRadioGroup @bind-Value="FilterForm.SelectedEducationForm" RadioItems="FilterForm.EducationForms" Label="Форма обучения"/>
+            <MyInputRadioGroup @bind-Value="FilterForm.SelectedFinanceType" RadioItems="FilterForm.FinanceTypes" Label="Форма обучения"/>
         </EditForm>
     </div>
     <div class="col-12 col-md-8">
@@ -81,24 +83,34 @@
     {
         await base.OnInitializedAsync();
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var specialities = (await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name)
-            .ToListAsync())
-            .Select(x => new MyInputRadioGroup<long>.ValueRadioItem($"{x.Code} {x.Name}", x.Id))
-            .ToList();
+        var specialities = await context.GetSpecialitiesAsync();
         FilterForm.SpecialityRadioItems = specialities;
         FilterForm.SelectedSpecialityId = specialities.First().Value;
-        var years = (await context.Applicant.Select(x => x.Submitted.Year).Distinct()
-            .OrderByDescending(x => x)
-            .ToListAsync())
-            .Select(x => new MyInputRadioGroup<int>.ValueRadioItem(x.ToString(), x))
-            .ToList();
+        var years = await GetStartYear(context);
         FilterForm.YearRadioItems = years;
         FilterForm.SelectedYear = years.First().Value;
         FilterForm.EducationForms = Enum.GetValues<EducationForm>()
             .Select(x => new MyInputRadioGroup<EducationForm>.ValueRadioItem(StringLocalizer[x.ToString()], x))
             .ToList();
-
+        FilterForm.EducationForms = Enum.GetValues<EducationForm>()
+            .Select(x => new MyInputRadioGroup<EducationForm>.ValueRadioItem(StringLocalizer[x.ToString()], x))
+            .ToList();
         await LoadApplicantsAsync();
+    }
+
+    private static async Task<List<MyInputRadioGroup<int>.ValueRadioItem>> GetStartYear(AdmissionCommitteeDbContext context)
+    {
+        var startYear = (await context.Applicant.OrderBy(x => x.Submitted).Select(x => x.Submitted).FirstOrDefaultAsync())
+            .Year;
+        var currentYear = DateTime.Today.Year;
+        startYear = startYear == default ? currentYear : startYear;
+        var years = Enumerable.Range(
+            startYear,
+            currentYear - startYear + 1)
+            .Select(
+                x => new MyInputRadioGroup<int>.ValueRadioItem(x.ToString(), x))
+            .ToList();
+        return years;
     }
 
     private async Task LoadApplicantsAsync(CancellationToken cancellationToken = default)
@@ -110,6 +122,7 @@
                 x.ApplicantSpecialities.Any(
                     speciality => speciality.SpecialityId == FilterForm.SelectedSpecialityId) &&
                 x.Submitted.Year == FilterForm.SelectedYear)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
         StateHasChanged();
     }
