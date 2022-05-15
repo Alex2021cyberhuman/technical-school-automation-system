@@ -170,8 +170,8 @@
             await transaction.CommitAsync();
             await LocalStorageService.RemoveItemAsync("ACP_LS");
             Form = new ApplicantForm();
-            ReassignForm();
             NavigationManager.NavigateTo($"applicants/{applicant.Id}/statement", true);
+            ReassignForm();
         }
         catch (Exception exception)
         {

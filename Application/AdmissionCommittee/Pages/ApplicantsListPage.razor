@@ -33,6 +33,7 @@
                 <td rowspan="2">Общая оценка</td>
                 <td rowspan="2">Примечание</td>
                 <td rowspan="2">Решение директора</td>
+                <td rowspan="2"></td>
             </tr>
             <tr>
                 <td>Русский Язык</td>
@@ -56,6 +57,7 @@
                     <td>@item.CommonScore</td>
                     <td>@item.Description</td>
                     <td>@(StringLocalizer[item.DirectorDecision.ToString()])</td>
+                    <td><DownloadApplicantStatementButton ApplicantId="@item.Id"/></td>
                 </tr>
             }
             </tbody>
