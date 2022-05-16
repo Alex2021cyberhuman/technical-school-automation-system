@@ -4,6 +4,8 @@
     <attachedFolders />
     <explicitIncludes />
     <explicitExcludes>
+      <Path>Application/AdmissionCommittee/Services/ApplicantsTable/GeneratedApplicantsTable.cs</Path>
+      <Path>Application/AdmissionCommittee/Services/EnrolledStudentsTable/GeneratedEnrolledStudentsTable.cs</Path>
       <Path>Application/AdmissionCommittee/Services/StatementDocument/GeneratedStatementDocument.cs</Path>
     </explicitExcludes>
   </component>
