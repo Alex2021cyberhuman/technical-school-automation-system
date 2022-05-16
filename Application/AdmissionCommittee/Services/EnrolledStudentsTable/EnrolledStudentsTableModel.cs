@@ -11,7 +11,7 @@ public class EnrolledStudentsTableModel
             .OrderBy(x => x.FamilyName)
             .ThenBy(x => x.FirstName)
             .ThenBy(x => x.SurName)
-            .Select((x, i) => new StudentModel((i + 1).ToString(), x.FullName)).ToList();
+            .Select((x) => new StudentModel(x.Id.ToString(), x.FullName)).ToList();
     }
 
     public string GroupName { get; set; }

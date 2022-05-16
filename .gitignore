@@ -406,3 +406,36 @@ FodyWeavers.xsd
 **\*.drawio.bkp
 **\*.drawio.dtmp
 Application/.technical-school-automation-system/statements/
+Application/.technical-school-automation-system/applicants-tables
+Application/.technical-school-automation-system/enrolled-tables
+git rm Application\.technical-school-automation-system\applicants-tables\Сводная_Абитуриентов_20220516110222_iibjr2gz.iv3.xlsx
+git rm Application\.technical-school-automation-system\applicants-tables\Сводная_Абитуриентов_20220516110344_i3uspzgj.rfv.xlsx
+git rm Application\.technical-school-automation-system\applicants-tables\Сводная_Абитуриентов_20220516110355_tkvbih4y.14f.xlsx
+git rm Application\.technical-school-automation-system\enrolled-tables\Список_Зачисленных_В_123_20220516132742_dl1scldi.2th.xlsx
+git rm Application\.technical-school-automation-system\enrolled-tables\Список_Зачисленных_В_ИСП-123_20220516132838_hzlztjv1.nyp.xlsx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091437_ty5rbvyq.f3z.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091608_tdrhk1on.1fb.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091611_yjtjmgur.u4o.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091612_u1qtjm33.t0h.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091613_e1yinidw.zed.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091613_lsna5yq3.sjg.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091613_oc0r2ldq.ilt.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091613_zgyui234.4pz.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091613_zlgdpoga.dlf.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091618_ap4itfaj.aqp.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091618_lx5xy0do.y4a.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091618_t0e4cmdp.4rl.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091618_v0o1cyc4.451.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091618_virlzfug.cvu.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091624_e1sjdyyd.1rj.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091634_aryzjbsc.bhl.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091647_3nycq3vd.los.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509091722_yglpnrpm.ydg.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092029_ext1zisl.cqw.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092108_c51d2nv2.o3b.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092215_sjgpyjwc.h3t.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092458_0zvoytyp.5ed.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092529_1c0krwca.hez.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092715_0yqrf5cn.v35.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509092854_wsbkncyd.qdd.docx
+git rm Application\.technical-school-automation-system\statements\Заявление_На_Зачисление_20220509093326_zaqppff1.hzz.docx
