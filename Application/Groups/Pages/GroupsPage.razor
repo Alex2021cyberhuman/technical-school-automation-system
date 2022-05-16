@@ -27,7 +27,10 @@
                     <td>@item.Name</td>
                     <td>@item.StudentsCount</td>
                     <td>
-                        <GroupStudentsModal Group="item" StudentsAdded="() => OnStudentsAddedAsync(item.Id)"/>
+                        <div class="btn-group">
+                            <GroupStudentsModal Group="item" StudentsAdded="() => OnStudentsAddedAsync(item.Id)"/>
+                            <GroupDownloadEnrolledStudentsButton Group="item"/>
+                        </div>
                     </td>
                 </tr>
             }
@@ -65,4 +68,5 @@
         group.StudentsCount = await context.Student.CountAsync(x => x.GroupId == groupId);
         await context.SaveChangesAsync();
     }
+
 }

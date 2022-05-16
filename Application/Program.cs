@@ -1,5 +1,7 @@
 using Application;
 using Application.AdmissionCommittee.Data;
+using Application.AdmissionCommittee.Services.ApplicantsTable;
+using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 using Application.AdmissionCommittee.Services.StatementDocument;
 using Application.Groups.Data;
 using Application.Specialities.Data;
@@ -23,6 +25,8 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddSingleton<StatementDocumentCreator>();
+builder.Services.AddSingleton<ApplicantsTableCreator>();
+builder.Services.AddSingleton<EnrolledStudentsTableCreator>();
 SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
@@ -36,11 +40,27 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+var applicantsTablePath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:ApplicantsTablePath"]);
+Directory.CreateDirectory(applicantsTablePath);
+
+var statementPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:StatementPath"]);
+Directory.CreateDirectory(statementPath);
+
+var enrolledPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:EnrolledStudentsTablePath"]);
+Directory.CreateDirectory(enrolledPath);
+
+var wwwrootPath = Path.GetFullPath("./wwwroot/");
+Directory.CreateDirectory(wwwrootPath);
+
+app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions()
     {
+        RequestPath = "",
         FileProvider = new CompositeFileProvider(
-            new PhysicalFileProvider(Path.GetFullPath(builder.Configuration["AdmissionCommittee:ApplicantsTablePath"])),
-            new PhysicalFileProvider(Path.GetFullPath(builder.Configuration["AdmissionCommittee:StatementPath"])))
+            new PhysicalFileProvider(wwwrootPath),
+            new PhysicalFileProvider(applicantsTablePath),
+            new PhysicalFileProvider(statementPath),
+            new PhysicalFileProvider(enrolledPath))
     });
 app.UseRouting();
 

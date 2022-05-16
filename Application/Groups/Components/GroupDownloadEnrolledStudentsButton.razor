@@ -1,0 +1,30 @@
+@using Microsoft.EntityFrameworkCore
+@using Application.Groups.Data
+@using Application.AdmissionCommittee.Services.EnrolledStudentsTable
+@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@inject EnrolledStudentsTableCreator EnrolledStudentsTableCreator
+@inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+<button type="button" class="btn btn-primary" @onclick="OnExecuteAsync">
+    Скачать список зачисленных
+</button>
+
+@code {
+
+    [Parameter]
+    public Group Group { get; set; } = new();
+    
+    private async Task OnExecuteAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var basePath = Configuration["AdmissionCommittee:EnrolledStudentsTablePath"];
+        var fileName = $"Список_Зачисленных_В_{Group.Name.ToUpper()}_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.xlsx";
+        var fullFileName = Path.Combine(basePath, fileName);
+        var students = await context.Student.Where(x => x.GroupId == Group.Id)
+            .ToListAsync();
+        var model = new EnrolledStudentsTableModel(Group, students);
+        _ = await EnrolledStudentsTableCreator.CreatePackageAsync(fullFileName, model);
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName, true);
+    }
+
+}
