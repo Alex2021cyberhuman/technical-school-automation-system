@@ -1,4 +1,5 @@
 using Application;
+using Application.Access.Data;
 using Application.AdmissionCommittee.Data;
 using Application.AdmissionCommittee.Services.ApplicantsTable;
 using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
@@ -30,6 +31,7 @@ builder.Services.AddSingleton<EnrolledStudentsTableCreator>();
 SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
+AccessDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 var app = builder.Build();
 app.UseResourceRequestLocalization();
 if (!app.Environment.IsDevelopment())

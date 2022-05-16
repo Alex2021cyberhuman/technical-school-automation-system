@@ -1,3 +1,4 @@
+using Application.Common.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,7 @@ namespace Application.Access.Data;
 public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserClaim<long>, UserRole,
     IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
 {
-    public AccessDbContext(DbContextOptions options) : base(options)
-    {
-    }
-
-    public AccessDbContext()
+    public AccessDbContext(DbContextOptions<AccessDbContext> options) : base(options)
     {
     }
 
@@ -78,6 +75,20 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
         {
             b.HasKey(r => new { r.UserId, r.RoleId });
             b.ToTable("user_role");
+        });
+    }
+    
+    public static void AddToServices(IServiceCollection services, IConfiguration configuration,
+        IHostEnvironment environment)
+    {
+        services.AddPooledDbContextFactory<AccessDbContext>(options =>
+        {
+            var connectionString = configuration.GetConnectionString("Access");
+            options.MakeNpgsqlOptions(
+                connectionString,
+                environment.IsDevelopment(),
+                "access_mt",
+                typeof(AccessDbContext).Assembly.FullName);
         });
     }
 }
