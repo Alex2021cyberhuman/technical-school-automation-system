@@ -1,0 +1,65 @@
+@using Microsoft.Extensions.Localization
+@typeparam TValue where TValue : struct, Enum
+@inherits InputBase<TValue>
+@inject IStringLocalizer StringLocalizer
+<div class="form-control-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-control-label">@Label</label>
+    }
+    <div class="container">
+        <InputRadioGroup @bind-Value="CurrentValue">
+            <div class="row justify-content-start">
+                @foreach (var radioItem in RadioItems)
+                {
+                    <div class="col-sm-12 col-lg-4">
+                        <label>
+                            <InputRadio Value="@radioItem.Value"/>
+                            @radioItem.Label
+                        </label>
+                    </div>
+                }
+            </div>
+        </InputRadioGroup>
+    </div>
+</div>
+
+@code {
+    public List<EnumRadioItem> RadioItems { get; set; } = new();
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        var enumValues = Enum.GetValues<TValue>()
+            .Select(x => new EnumRadioItem(StringLocalizer[x.ToString()], x));
+        RadioItems.AddRange(enumValues);
+    }
+
+    public class EnumRadioItem
+    {
+        public EnumRadioItem(string label, TValue value)
+        {
+            Label = label;
+            Value = value;
+        }
+
+        public string Label { get; set; }
+
+        public TValue Value { get; set; }
+    }
+
+    protected override bool TryParseValueFromString(string? value, out TValue result, out string validationErrorMessage)
+    {
+        var parsed = Enum.TryParse<TValue>(value, out result);
+        if (!parsed)
+        {
+            validationErrorMessage = default!;
+            return true;
+        }
+        validationErrorMessage = "ERROR";
+        return false;
+    }
+
+}

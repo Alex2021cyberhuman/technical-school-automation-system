@@ -1,0 +1,161 @@
+@using Microsoft.EntityFrameworkCore
+@using Application.Groups.Data
+@using Application.AdmissionCommittee.Data
+@using Application.Common.Enums
+@using Microsoft.Extensions.Localization
+@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@inject IStringLocalizer StringLocalizer
+<button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
+    Добавить студентов в группу
+</button>
+
+@if (ModalVisible)
+{
+    <PageTitle>Список студентов в группе</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog my-large-modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Список студентов в группе</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@Applicants">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td rowspan="2">№ п.п.</td>
+                                <td rowspan="2">ФИО</td>
+                                <td rowspan="2">Образование</td>
+                                <td colspan="2">Результаты ГИА</td>
+                                <td rowspan="2">Средний балл</td>
+                                <td rowspan="2">Общая оценка</td>
+                                <td rowspan="2">Примечание</td>
+                                <td rowspan="2">Зачислить</td>
+                            </tr>
+                            <tr>
+                                <td>Русский Язык</td>
+                                <td>Математика</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var model in Applicants)
+                            {
+                                var item = model.Applicant;
+                                <tr>
+                                    <th scope="row">@item.Id</th>
+                                    <td>@item.FullName</td>
+                                    <td>
+                                        <div class="hint-information" data-name="Базовое образование: @item.EducationDescription, Год: @item.EducationDocumentIssued.Year.">
+                                            @(StringLocalizer[item.EducationType.ToString()])
+                                        </div>
+                                    </td>
+                                    <td>@item.LanguageRating</td>
+                                    <td>@item.MathRating</td>
+                                    <td>@item.AverageAttestRating</td>
+                                    <td>@item.CommonScore</td>
+                                    <td>@item.Description</td>
+                                    <td>
+                                        <InputCheckbox @bind-Value="model.Checked"/>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnConfirmAsync">Подтвердить и закрыть</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    public bool ModalVisible { get; set; }
+
+    [Parameter]
+    public Group Group { get; set; } = new();
+
+    public List<ApplicantEnrollModel> Applicants { get; set; } = new();
+
+    [Parameter]
+    public EventCallback StudentsAdded { get; set; } = EventCallback.Empty;
+
+    private async Task OnOpenAsync()
+    {
+        if (ModalVisible) return;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var applicants = await context.Applicant
+            .Where(x => x.Student == null)
+            .Where(x => x.ApplicantSpecialities.Any(speciality => speciality.SpecialityId == Group.SpecialityId))
+            .Where(x => x.DirectorDecision == DirectorDecisionType.NotСonsidered)
+            .OrderBy(x => x.FamilyName)
+            .ThenBy(x => x.FirstName)
+            .ThenBy(x => x.SurName)
+            .AsNoTracking()
+            .ToListAsync();
+        Applicants = applicants.Select(x => new ApplicantEnrollModel(x)).ToList();
+        ModalVisible = true;
+    }
+
+    private void OnCancel()
+    {
+        if (!ModalVisible) return;
+        ModalVisible = false;
+        Applicants.Clear();
+    }
+
+    private async Task OnConfirmAsync()
+    {
+        if (!ModalVisible) return;
+
+        var enrolledApplicants = Applicants.Where(x => x.Checked)
+            .Select(x => x.Applicant)
+            .ToList();
+
+        if (!enrolledApplicants.Any()) return;
+
+        var enrolledApplicantIds = enrolledApplicants.Select(x => x.Id);
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        enrolledApplicants = await context.Applicant.Where(x => enrolledApplicantIds.Contains(x.Id))
+            .ToListAsync();
+        enrolledApplicants.ForEach(x =>
+        {
+            x.DirectorDecision = DirectorDecisionType.Enroll;
+            x.Student = new Student
+            {
+                FirstName = x.FirstName,
+                FamilyName = x.FamilyName,
+                SurName = x.SurName,
+                DateOfBirth = x.DateOfBirth,
+                ApplicantId = x.Id,
+                GroupId = Group.Id
+            };
+        });
+        await context.SaveChangesAsync();
+        await StudentsAdded.InvokeAsync();
+        OnCancel();
+    }
+
+    public class ApplicantEnrollModel
+    {
+        public ApplicantEnrollModel(Applicant applicant)
+        {
+            Applicant = applicant;
+        }
+
+        public Applicant Applicant { get; set; }
+
+        public bool Checked { get; set; }
+    }
+
+
+}

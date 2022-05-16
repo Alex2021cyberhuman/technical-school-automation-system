@@ -1,0 +1,14 @@
+@inject NavigationManager NavigationManager
+<button type="button" class="btn btn-primary" @onclick="@OnClick">Скачать заявление</button>
+
+@code {
+
+    [Parameter]
+    public long ApplicantId { get; set; }
+
+    private void OnClick()
+    {
+        NavigationManager.NavigateTo($"applicants/{ApplicantId}/statement", true);
+    }
+
+}

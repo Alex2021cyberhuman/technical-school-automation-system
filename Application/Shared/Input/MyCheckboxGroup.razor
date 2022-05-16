@@ -1,0 +1,77 @@
+@using System.Linq;
+@using System.Globalization
+@typeparam TCheck where TCheck : notnull
+@inherits InputBase<List<TCheck>>
+
+<div class="form-control-wrapper">
+    <fieldset>
+        @if (!string.IsNullOrWhiteSpace(Label))
+        {
+            <label class="form-control-label">@Label</label>
+        }
+        <div class="container">
+            <div class="row justify-content-start">
+                @foreach (var option in Options.Values)
+                {
+                    <label>
+                        <input type="checkbox" name="@FieldIdentifier.FieldName" @onchange="eventArgs => Callback(option.Value, eventArgs.Value)" checked="@option.OptionChecked"/>
+                        @option.Label
+                    </label>
+                }
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@code {
+
+    [Parameter]
+    public Dictionary<TCheck, OptionItem> Options { get; set; } = new();
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    private void Callback(TCheck optionValue, object? args)
+    {
+        Options[optionValue].OptionChecked = (bool)(args ?? false);
+        CurrentValue = Options.Values.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
+    }
+
+    public class OptionItem
+    {
+        public OptionItem(string label, TCheck value, bool optionChecked)
+        {
+            Label = label;
+            Value = value;
+            OptionChecked = optionChecked;
+        }
+
+        public string Label { get; set; }
+
+        public TCheck Value { get; set; }
+
+        public bool OptionChecked { get; set; }
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out List<TCheck> result,
+        out string errorMessage)
+    {
+        Console.WriteLine(value);
+        var success = BindConverter.TryConvertTo<List<TCheck>>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue!;
+            errorMessage = null!;
+
+            return true;
+        }
+        result = default!;
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
+}

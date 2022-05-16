@@ -1,0 +1,72 @@
+@page "/groups"
+@using Application.Groups.Data
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+<h3>Группы</h3>
+<PageTitle>Группы</PageTitle>
+Просмотр списка груп
+<CreateGroupModal OnAfterCreate="OnAfterGroupCreated"/>
+<div class="row">
+    <div class="col-12 col-md-4">
+    </div>
+    <div class="col-12 col-md-8">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>№ п.п.</td>
+                <td>Название</td>
+                <td>Количество студентов</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Groups)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Name</td>
+                    <td>@item.StudentsCount</td>
+                    <td>
+                        <div class="btn-group">
+                            <GroupStudentsModal Group="item" StudentsAdded="() => OnStudentsAddedAsync(item.Id)"/>
+                            <GroupDownloadEnrolledStudentsButton Group="item"/>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+    public List<Group> Groups { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadGroupsAsync();
+    }
+
+    private async Task OnAfterGroupCreated(CreateGroupModal.AfterCreateEventArgs args)
+    {
+        await LoadGroupsAsync();
+    }
+
+    private async Task LoadGroupsAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Groups = await context.Group.OrderBy(x => x.Name)
+            .ToListAsync();
+    }
+
+    private async Task OnStudentsAddedAsync(long groupId)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var group = await context.Group.FindAsync(groupId) ?? throw new InvalidOperationException();
+        group.StudentsCount = await context.Student.CountAsync(x => x.GroupId == groupId);
+        await context.SaveChangesAsync();
+    }
+
+}

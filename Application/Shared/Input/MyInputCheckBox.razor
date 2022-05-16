@@ -1,0 +1,36 @@
+@inherits InputBase<bool>
+
+<div class="form-check">
+    <label>
+        <input @attributes="AdditionalAttributes" type="checkbox" value="@Value"
+               checked="@Value" @onchange="OnChange"/>
+        @Label
+    </label>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    protected override bool TryParseValueFromString(string? value, out bool result, out string errorMessage)
+    {
+        var success = bool.TryParse(value, out result);
+        if (success)
+        {
+            errorMessage = null!;
+
+            return true;
+        }
+        result = default!;
+        errorMessage = $"{FieldIdentifier.FieldName} не получилось конвертировать.";
+
+        return false;
+    }
+
+    private void OnChange(ChangeEventArgs obj)
+    {
+        CurrentValueAsString = obj.Value?.ToString();
+    }
+
+}
