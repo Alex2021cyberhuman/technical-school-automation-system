@@ -10,7 +10,8 @@ public static class DevelopmentSpecialitiesDbContextInitializer
     {
         var factory = services.GetRequiredService<IDbContextFactory<SpecialitiesDbContext>>();
         await MigrateAsync(factory);
-        await UploadSpecialitiesAsync(factory);
+        var environment = services.GetRequiredService<IHostEnvironment>();
+        if (environment.IsDevelopment()) await UploadSpecialitiesAsync(factory);
     }
 
     private static async Task MigrateAsync(IDbContextFactory<SpecialitiesDbContext> factory)

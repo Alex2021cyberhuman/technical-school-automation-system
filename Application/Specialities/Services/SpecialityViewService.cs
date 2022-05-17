@@ -1,5 +1,4 @@
 using Application.Shared.Input;
-using Application.Specialities.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Specialities.Services;

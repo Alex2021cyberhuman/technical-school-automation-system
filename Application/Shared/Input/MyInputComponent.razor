@@ -7,7 +7,7 @@
     {
         <label class="form-control-label" for="@Id">@Label</label>
     }
-    <input class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@(Placeholder ?? Label ?? string.Empty)"/>
+    <input type="@Type" class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@(Placeholder ?? Label ?? string.Empty)"/>
     <div class="form-control-validation">
         <ValidationMessage For="@ValidationFor"/>
     </div>
@@ -27,6 +27,9 @@
 
     [Parameter]
     public string? Placeholder { get; set; }
+
+    [Parameter]
+    public string Type { get; set; } = "text";
 
     protected override bool TryParseValueFromString(string? value, out string result, out string validationErrorMessage)
     {

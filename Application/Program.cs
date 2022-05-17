@@ -1,5 +1,4 @@
 using Application;
-using Application.Access.Data;
 using Application.AdmissionCommittee.Data;
 using Application.AdmissionCommittee.Services.ApplicantsTable;
 using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
@@ -9,10 +8,18 @@ using Application.Specialities.Data;
 using Application.Startup;
 using Blazored.LocalStorage;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.AreaViewLocationFormats.Add("/Access/{2}/Views/{1}/{0}.cshtml");
+    options.AreaViewLocationFormats.Add("/Access/{2}/Views/Shared/{0}.cshtml");
+});
 builder.Services.AddControllers().AddDataAnnotationsLocalization(options =>
 {
     options.DataAnnotationLocalizerProvider = (_, factory) =>
@@ -34,6 +41,7 @@ AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuratio
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 builder.AddAccess();
 var app = builder.Build();
+
 app.UseResourceRequestLocalization();
 if (!app.Environment.IsDevelopment())
 {
@@ -75,4 +83,9 @@ app.MapControllers();
 await using var scope = app.Services.CreateAsyncScope();
 await scope.ServiceProvider.InitializeSpecialitiesDbContextDevelopmentInstallationAsync();
 await app.InitializeAccessAsync();
+await scope.ServiceProvider.GetRequiredService<IDbContextFactory<AdmissionCommitteeDbContext>>().CreateDbContext()
+    .Database.MigrateAsync();
+await scope.ServiceProvider.GetRequiredService<IDbContextFactory<GroupsDbContext>>().CreateDbContext()
+    .Database.MigrateAsync();
+
 app.Run();
