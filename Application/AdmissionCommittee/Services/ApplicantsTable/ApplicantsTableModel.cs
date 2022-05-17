@@ -6,7 +6,8 @@ namespace Application.AdmissionCommittee.Services.ApplicantsTable;
 
 public class ApplicantsTableModel
 {
-    public ApplicantsTableModel(IEnumerable<Applicant> applicants, Speciality speciality, IStringLocalizer stringLocalizer)
+    public ApplicantsTableModel(IEnumerable<Applicant> applicants, Speciality speciality,
+        IStringLocalizer stringLocalizer)
     {
         SpecialityName = $"{speciality.Code} {speciality.Name}";
         Items = applicants.Select(x => new ApplicantModel(x, stringLocalizer)).ToList();

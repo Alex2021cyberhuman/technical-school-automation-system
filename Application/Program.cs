@@ -6,6 +6,7 @@ using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 using Application.AdmissionCommittee.Services.StatementDocument;
 using Application.Groups.Data;
 using Application.Specialities.Data;
+using Application.Startup;
 using Blazored.LocalStorage;
 using FluentValidation;
 using Microsoft.Extensions.FileProviders;
@@ -31,7 +32,7 @@ builder.Services.AddSingleton<EnrolledStudentsTableCreator>();
 SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
-AccessDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
+builder.AddAccess();
 var app = builder.Build();
 app.UseResourceRequestLocalization();
 if (!app.Environment.IsDevelopment())
@@ -56,22 +57,22 @@ Directory.CreateDirectory(wwwrootPath);
 
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions()
-    {
-        RequestPath = "",
-        FileProvider = new CompositeFileProvider(
-            new PhysicalFileProvider(wwwrootPath),
-            new PhysicalFileProvider(applicantsTablePath),
-            new PhysicalFileProvider(statementPath),
-            new PhysicalFileProvider(enrolledPath))
-    });
+{
+    RequestPath = "",
+    FileProvider = new CompositeFileProvider(
+        new PhysicalFileProvider(wwwrootPath),
+        new PhysicalFileProvider(applicantsTablePath),
+        new PhysicalFileProvider(statementPath),
+        new PhysicalFileProvider(enrolledPath))
+});
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.MapControllers();
 
 await using var scope = app.Services.CreateAsyncScope();
 await scope.ServiceProvider.InitializeSpecialitiesDbContextDevelopmentInstallationAsync();
-var basePath = builder.Configuration["AdmissionCommittee:StatementPath"];
-Directory.CreateDirectory(basePath);
+await app.InitializeAccessAsync();
 app.Run();

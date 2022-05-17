@@ -1,5 +1,7 @@
 @using Microsoft.EntityFrameworkCore
 @using Application.Groups.Data
+@using System.Security.Claims
+@using Application.Access.Enums
 @inject IDbContextFactory<GroupsDbContext> DbContextFactory
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
     Список студентов
@@ -58,6 +60,18 @@
 
     [Parameter]
     public EventCallback StudentsAdded { get; set; } = EventCallback.Empty;
+
+    private ClaimsPrincipal CurrentUser { get; set; } = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
+    }
 
     private async Task OnOpenAsync()
     {

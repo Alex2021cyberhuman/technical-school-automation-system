@@ -6,7 +6,8 @@ namespace Application.Specialities.Services;
 
 public static class SpecialityViewService
 {
-    public static async Task<List<MyInputRadioGroup<long>.ValueRadioItem>> GetSpecialitiesAsync(this ISpecialitiesContext context)
+    public static async Task<List<MyInputRadioGroup<long>.ValueRadioItem>> GetSpecialitiesAsync(
+        this ISpecialitiesContext context)
     {
         var specialities = (await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name)
                 .AsNoTracking()

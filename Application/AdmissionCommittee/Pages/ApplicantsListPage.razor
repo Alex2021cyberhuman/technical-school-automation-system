@@ -1,4 +1,5 @@
 @page "/applicants"
+@attribute [Authorize(Policy = PolicyIdentifiers.AdmissionCommittee)]
 @using Microsoft.EntityFrameworkCore
 @using Application.AdmissionCommittee.Data
 @using Application.AdmissionCommittee.Forms
@@ -8,6 +9,7 @@
 @using Application.Specialities.Services
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
+@using Application.Access.Enums
 @inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
 @inject ILogger<ApplicantCreatePage> Logger
 @inject IStringLocalizer StringLocalizer

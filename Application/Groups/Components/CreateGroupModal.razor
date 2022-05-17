@@ -22,7 +22,7 @@
                 </div>
                 <div class="modal-body">
                     <EditForm EditContext="EditContext">
-                        <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" ValidationFor="() => Form.Name" />
+                        <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" ValidationFor="() => Form.Name"/>
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
                     </EditForm>
                 </div>

@@ -1,6 +1,9 @@
 @page "/groups"
+@attribute [Authorize(Policy = PolicyIdentifiers.HeadOfAdmissionCommittee)]
 @using Application.Groups.Data
 @using Microsoft.EntityFrameworkCore
+@using Application.Access.Enums
+@using System.Security.Claims
 @inject IDbContextFactory<GroupsDbContext> DbContextFactory
 <h3>Группы</h3>
 <PageTitle>Группы</PageTitle>
@@ -41,12 +44,18 @@
 
 @code {
 
-    public List<Group> Groups { get; set; } = new();
+    private List<Group> Groups { get; set; } = new();
+
+    private ClaimsPrincipal CurrentUser { get; set; } = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await LoadGroupsAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
     }
 
     private async Task OnAfterGroupCreated(CreateGroupModal.AfterCreateEventArgs args)

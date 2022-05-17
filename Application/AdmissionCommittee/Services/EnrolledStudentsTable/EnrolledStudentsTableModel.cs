@@ -4,7 +4,7 @@ namespace Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 
 public class EnrolledStudentsTableModel
 {
-    public EnrolledStudentsTableModel(Application.Groups.Data.Group group, IEnumerable<Student> students)
+    public EnrolledStudentsTableModel(Group group, IEnumerable<Student> students)
     {
         GroupName = group.Name;
         Students = students

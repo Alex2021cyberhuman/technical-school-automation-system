@@ -6,10 +6,12 @@ namespace Application.Groups.Forms;
 public class CreateGroupModalForm
 {
     [Display(Name = "Название группы")]
-    [Required] [MaxLength(100)] public string Name { get; set; } = string.Empty;
+    [Required]
+    [MaxLength(100)]
+    public string Name { get; set; } = string.Empty;
 
     public long SpecialityId { get; set; }
-    
+
     public Group ToGroup()
     {
         return new Group

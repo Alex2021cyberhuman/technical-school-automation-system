@@ -1,0 +1,71 @@
+@page "/access/login"
+@using Application.Access.Forms
+@using Microsoft.AspNetCore.Identity
+@using Application.Access.Data
+@inject NavigationManager NavigationManager
+@inject SignInManager<User> SignInManager
+@inject ILogger<LoginPage> Logger
+<PageTitle>Вход</PageTitle>
+<h3>Вход</h3>
+<p>Будте внимательны - после 5 неудачных попыток входа, вы будете заблокированны на 5 минут!</p>
+<EditForm EditContext="@EditContext" OnValidSubmit="OnSubmitAsync">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <MyInputComponent Label="Логин" @bind-Value="@LoginForm.Login" ValidationFor="@(() => LoginForm.Login)"/>
+    <MyInputComponent type="password" Label="Логин" @bind-Value="@LoginForm.Login" ValidationFor="@(() => LoginForm.Password)"/>
+    <button type="submit" class="btn btn-primary">Вход</button>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public string ReturnUrl { get; set; } = "/";
+
+    public LoginForm LoginForm { get; set; } = new();
+
+    public EditContext EditContext { get; set; }
+
+    public ValidationMessageStore ValidationMessageStore { get; set; }
+
+    public LoginPage()
+    {
+        EditContext = new(LoginForm);
+        ValidationMessageStore = new(EditContext);
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        var result = await SignInManager.PasswordSignInAsync(LoginForm.Login, LoginForm.Password, true, true);
+        if (result.Succeeded)
+        {
+            if (ReturnUrl.StartsWith("/") || ReturnUrl.StartsWith(NavigationManager.BaseUri, StringComparison.InvariantCultureIgnoreCase))
+            {
+                NavigationManager.NavigateTo(ReturnUrl);
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+        else if (result.IsLockedOut)
+        {
+            ValidationMessageStore.Add(() => LoginForm.Login, "Учетная запись пользователя заблокирована");
+            Logger.LogWarning("Attempt to login as locked out user {UserName}", LoginForm.Login);
+        }
+        else if (result.IsNotAllowed)
+        {
+            ValidationMessageStore.Add(() => LoginForm.Login, "Нет доступа");
+            Logger.LogWarning("Attempt to login as not allowed to login user {UserName}", LoginForm.Login);
+        }
+        else if (result.RequiresTwoFactor)
+        {
+            throw new NotImplementedException();
+        }
+        else
+        {
+            ValidationMessageStore.Add(() => LoginForm.Login, "Неверный логин или пароль");
+            Logger.LogWarning("Attempt to login as user {UserName} with wrong password", LoginForm.Login);
+        }
+    }
+
+}

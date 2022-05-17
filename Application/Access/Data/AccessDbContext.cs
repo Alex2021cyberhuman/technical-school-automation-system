@@ -77,7 +77,7 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
             b.ToTable("user_role");
         });
     }
-    
+
     public static void AddToServices(IServiceCollection services, IConfiguration configuration,
         IHostEnvironment environment)
     {
