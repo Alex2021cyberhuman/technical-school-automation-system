@@ -7,6 +7,7 @@ using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Startup;
 using Blazored.LocalStorage;
+using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,7 @@ using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<RazorViewEngineOptions>(options =>
-{
-    options.AreaViewLocationFormats.Add("/Access/{2}/Views/{1}/{0}.cshtml");
-    options.AreaViewLocationFormats.Add("/Access/{2}/Views/Shared/{0}.cshtml");
-});
+builder.Services.AddRazorPages();
 builder.Services.AddControllers().AddDataAnnotationsLocalization(options =>
 {
     options.DataAnnotationLocalizerProvider = (_, factory) =>
@@ -29,7 +26,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddTransient(serviceProvider =>
     (IStringLocalizer)serviceProvider.GetRequiredService<IStringLocalizer<Resource>>());
-builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 builder.Services.AddBlazoredLocalStorage();
@@ -40,6 +36,10 @@ SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, bui
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 builder.AddAccess();
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.PageViewLocationFormats.Add("/Access/Pages/{0}.cshtml");
+});
 var app = builder.Build();
 
 app.UseResourceRequestLocalization();
@@ -76,9 +76,11 @@ app.UseStaticFiles(new StaticFileOptions()
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
+app.MapRazorPages();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-app.MapControllers();
 
 await using var scope = app.Services.CreateAsyncScope();
 await scope.ServiceProvider.InitializeSpecialitiesDbContextDevelopmentInstallationAsync();

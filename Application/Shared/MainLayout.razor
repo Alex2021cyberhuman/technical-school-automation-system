@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Security.Claims
+@inherits LayoutComponentBase
 
 <PageTitle>Application</PageTitle>
 
@@ -8,12 +9,34 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        @* <div class="top-row px-4"> *@
+        @*     @if (CurrentUser.Identity?.IsAuthenticated ?? false) *@
+        @*     { *@
+        @*         <span>Вы вошли как @(CurrentUser.FindFirst(ClaimTypes.GivenName) ?? CurrentUser.FindFirst(ClaimTypes.Name))?.Value</span> *@
+        @*     } *@
+        @*     else *@
+        @*     { *@
+        @*         <a href="Access/Login" target="_blank">Вход</a> *@
+        @*     } *@
+        @* </div> *@
 
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code
+{
+
+    private ClaimsPrincipal CurrentUser { get; set; } = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
+    }
+}

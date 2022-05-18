@@ -1,0 +1,61 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Application.Shared
+@namespace Application.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="~/"/>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"/>
+    <link href="css/site.css" rel="stylesheet"/>
+    <link href="css/static.site.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="page">
+    <div class="sidebar">
+        <div>
+            <nav class="flex-column">
+                <div class="nav-item">
+                    <a class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Главная
+                    </a>
+                </div>
+                <hr/>
+                <div class="nav-item">
+                    <a class="nav-link" href="/specialities" Match="NavLinkMatch.All">
+                        Специальности
+                    </a>
+                </div>
+                <hr/>
+                <div class="nav-item">
+                    <a class="nav-link" href="/applicants" Match="NavLinkMatch.All">
+                        Список Абитуриентов
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="/applicants/create" Match="NavLinkMatch.All">
+                        Новый Абитуриент
+                    </a>
+                </div>
+                <hr/>
+                <div class="nav-item">
+                    <a class="nav-link" href="/groups" Match="NavLinkMatch.All">
+                        Группы зачисления абитуриентов
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <main>
+        <article class="content px-4">
+            @RenderBody()
+        </article>
+    </main>
+</div>
+</body>
+</html>

@@ -31,6 +31,7 @@ public static class StartupAccessExtensions
             await roleManager.CreateAsync(new Role(RoleIdentifiers.Director));
             await roleManager.CreateAsync(new Role(RoleIdentifiers.AdmissionCommitteeMember));
             var result = await userManager.CreateAsync(baseUser, password);
+            baseUser = await userManager.FindByNameAsync(baseUser.UserName); 
             await userManager.AddToRolesAsync(baseUser, roles);
             if (result.Succeeded)
                 logger.LogInformation("BaseUser created {UserName} with roles {Roles}", baseUser.UserName, roles);
