@@ -62,6 +62,9 @@
 
     public Dictionary<string, OptionItem<string>> AllRoles { get; set; } = new();
 
+    [Parameter]
+    public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
+
     public CreateUserModal()
     {
         Form = new CreateUserForm();
@@ -116,5 +119,6 @@
         }
 
         OnCancel();
+        await OnSubmit.InvokeAsync();
     }
 }

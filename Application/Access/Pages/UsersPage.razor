@@ -14,6 +14,7 @@
         <EditForm EditContext="FilterContext">
             <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString" ValidationFor="() => Filter.SearchString"/>
         </EditForm>
+        <CreateUserModal OnSubmit="RefreshAsync"/>
     </div>
     <div class="col-12 col-md-8">
         <table class="table">
@@ -39,7 +40,9 @@
                             @StringLocalizer[role.Role.Name]
                         }
                     </td>
-                    <td></td>
+                    <td>
+                        <EditUserModal User="@item" OnSubmit="RefreshAsync"/>
+                    </td>
                 </tr>
             }
             </tbody>
@@ -97,9 +100,9 @@
         }
     }
 
-    private void Close()
+    private async Task RefreshAsync()
     {
-        FilterContext.OnFieldChanged -= FilterContextOnOnFieldChanged;
+        Users = await GetUsersAsync(Filter);
     }
 
 

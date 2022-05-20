@@ -74,6 +74,9 @@
     public Dictionary<string, OptionItem<string>> AllRoles { get; set; } = new();
 
     [Parameter]
+    public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
+
+    [Parameter]
     public User User { get; set; } = new();
 
     public EditUserModal()
@@ -147,6 +150,7 @@
             return;
         }
         OnCancel();
+        await OnSubmit.InvokeAsync();
     }
 
 }
