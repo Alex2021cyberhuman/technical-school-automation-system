@@ -1,4 +1,6 @@
 @page "/manage/users"
+@using Application.Access.Enums
+@attribute [Authorize(Policy = PolicyIdentifiers.Administrators)]
 @using Application.Access.Data
 @using Application.Access.Forms
 @using Microsoft.AspNetCore.Identity

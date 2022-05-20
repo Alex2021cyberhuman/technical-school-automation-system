@@ -18,6 +18,18 @@ public class SpecialitiesDbContext : DbContext, ISpecialitiesContext
 
     public DbSet<Subject> Subject => Set<Subject>();
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Subject>(entity =>
+        {
+            entity.HasOne(x => x.Speciality)
+                .WithMany(x => x.Subjects)
+                .HasForeignKey(x => x.SpecialityId);
+            entity.OwnsMany(x => x.Semesters);
+        });
+    }
+
     public static void AddToServices(IServiceCollection services, IConfiguration configuration,
         IHostEnvironment environment)
     {

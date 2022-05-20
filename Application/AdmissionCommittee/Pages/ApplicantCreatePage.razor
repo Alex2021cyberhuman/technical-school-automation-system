@@ -161,7 +161,7 @@
             var fileName = $"Заявление_На_Зачисление_{statementDocumentModel.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.docx";
             var fullFileName = Path.Combine(basePath, fileName);
             var size = await StatementDocumentCreator.CreatePackageAsync(fullFileName, statementDocumentModel);
-            var statement = new Statement()
+            var statement = new Statement
             {
                 Name = fileName,
                 Size = size

@@ -238,7 +238,7 @@ public class ApplicantForm
                 : null,
             DistanceApplicantWorkDescription = DistanceApplicantWorkDescription,
             ApplicantSpecialities = SelectedSpecialityIds.Select(specialities.GetValueOrDefault)
-                .Where(x => x is not null).Select(x => new ApplicantSpeciality()
+                .Where(x => x is not null).Select(x => new ApplicantSpeciality
                 {
                     SpecialityId = x!.Id
                 }).ToList(),

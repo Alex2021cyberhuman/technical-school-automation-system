@@ -7,7 +7,7 @@ public static class DevelopmentSpecialitiesProvider
     public static List<Speciality> ProvideSpecialities()
     {
         var specialityId = 0;
-        return new List<Speciality>()
+        return new List<Speciality>
         {
             new()
             {

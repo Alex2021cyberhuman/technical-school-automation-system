@@ -12,4 +12,5 @@ public class Speciality
     [Required] [MaxLength(20)] public string Code { get; set; } = string.Empty;
 
     public EntranceTestType? EntranceTest { get; set; }
+    public List<Subject> Subjects { get; set; } = new();
 }

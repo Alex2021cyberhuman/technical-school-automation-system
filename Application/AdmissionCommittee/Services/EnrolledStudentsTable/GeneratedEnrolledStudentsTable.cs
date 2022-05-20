@@ -62,23 +62,23 @@ public class GeneratedEnrolledStudentsTable
     {
         var workbook1 = new Workbook();
         workbook1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-        var fileVersion1 = new FileVersion(){ ApplicationName = "xl", LastEdited = "4", LowestEdited = "4", BuildVersion = "4506" };
-        var workbookProperties1 = new WorkbookProperties(){ DefaultThemeVersion = (UInt32Value)124226U };
+        var fileVersion1 = new FileVersion { ApplicationName = "xl", LastEdited = "4", LowestEdited = "4", BuildVersion = "4506" };
+        var workbookProperties1 = new WorkbookProperties { DefaultThemeVersion = (UInt32Value)124226U };
 
         var bookViews1 = new BookViews();
-        var workbookView1 = new WorkbookView(){ XWindow = 0, YWindow = 0, WindowWidth = (UInt32Value)16380U, WindowHeight = (UInt32Value)8196U, TabRatio = (UInt32Value)500U };
+        var workbookView1 = new WorkbookView { XWindow = 0, YWindow = 0, WindowWidth = (UInt32Value)16380U, WindowHeight = (UInt32Value)8196U, TabRatio = (UInt32Value)500U };
 
         bookViews1.Append(workbookView1);
 
         var sheets1 = new Sheets();
-        var sheet1 = new Sheet(){ Name = "Лист1", SheetId = (UInt32Value)1U, Id = "rId1" };
+        var sheet1 = new Sheet { Name = "Лист1", SheetId = (UInt32Value)1U, Id = "rId1" };
 
         sheets1.Append(sheet1);
-        var calculationProperties1 = new CalculationProperties(){ CalculationId = (UInt32Value)125725U };
+        var calculationProperties1 = new CalculationProperties { CalculationId = (UInt32Value)125725U };
 
         var workbookExtensionList1 = new WorkbookExtensionList();
 
-        var workbookExtension1 = new WorkbookExtension(){ Uri = "{7626C862-2A13-11E5-B345-FEFF819CDC9F}" };
+        var workbookExtension1 = new WorkbookExtension { Uri = "{7626C862-2A13-11E5-B345-FEFF819CDC9F}" };
         workbookExtension1.AddNamespaceDeclaration("loext", "http://schemas.libreoffice.org/");
 
         var openXmlUnknownElement1 = OpenXmlUnknownElement.CreateOpenXmlUnknownElement("<loext:extCalcPr stringRefSyntax=\"CalcA1\" xmlns:loext=\"http://schemas.libreoffice.org/\" />");
@@ -102,14 +102,14 @@ public class GeneratedEnrolledStudentsTable
     {
         var stylesheet1 = new Stylesheet();
 
-        var fonts1 = new Fonts(){ Count = (UInt32Value)1U };
+        var fonts1 = new Fonts { Count = (UInt32Value)1U };
 
         var font1 = new Font();
-        var fontSize1 = new FontSize(){ Val = 11D };
-        var color1 = new Color(){ Rgb = "FF000000" };
-        var fontName1 = new FontName(){ Val = "Calibri" };
-        var fontFamilyNumbering1 = new FontFamilyNumbering(){ Val = 2 };
-        var fontCharSet1 = new FontCharSet(){ Val = 204 };
+        var fontSize1 = new FontSize { Val = 11D };
+        var color1 = new Color { Rgb = "FF000000" };
+        var fontName1 = new FontName { Val = "Calibri" };
+        var fontFamilyNumbering1 = new FontFamilyNumbering { Val = 2 };
+        var fontCharSet1 = new FontCharSet { Val = 204 };
 
         font1.Append(fontSize1);
         font1.Append(color1);
@@ -119,22 +119,22 @@ public class GeneratedEnrolledStudentsTable
 
         fonts1.Append(font1);
 
-        var fills1 = new Fills(){ Count = (UInt32Value)2U };
+        var fills1 = new Fills { Count = (UInt32Value)2U };
 
         var fill1 = new Fill();
-        var patternFill1 = new PatternFill(){ PatternType = PatternValues.None };
+        var patternFill1 = new PatternFill { PatternType = PatternValues.None };
 
         fill1.Append(patternFill1);
 
         var fill2 = new Fill();
-        var patternFill2 = new PatternFill(){ PatternType = PatternValues.Gray125 };
+        var patternFill2 = new PatternFill { PatternType = PatternValues.Gray125 };
 
         fill2.Append(patternFill2);
 
         fills1.Append(fill1);
         fills1.Append(fill2);
 
-        var borders1 = new Borders(){ Count = (UInt32Value)2U };
+        var borders1 = new Borders { Count = (UInt32Value)2U };
 
         var border1 = new Border();
         var leftBorder1 = new LeftBorder();
@@ -151,23 +151,23 @@ public class GeneratedEnrolledStudentsTable
 
         var border2 = new Border();
 
-        var leftBorder2 = new LeftBorder(){ Style = BorderStyleValues.Thin };
-        var color2 = new Color(){ Auto = true };
+        var leftBorder2 = new LeftBorder { Style = BorderStyleValues.Thin };
+        var color2 = new Color { Auto = true };
 
         leftBorder2.Append(color2);
 
-        var rightBorder2 = new RightBorder(){ Style = BorderStyleValues.Thin };
-        var color3 = new Color(){ Auto = true };
+        var rightBorder2 = new RightBorder { Style = BorderStyleValues.Thin };
+        var color3 = new Color { Auto = true };
 
         rightBorder2.Append(color3);
 
-        var topBorder2 = new TopBorder(){ Style = BorderStyleValues.Thin };
-        var color4 = new Color(){ Auto = true };
+        var topBorder2 = new TopBorder { Style = BorderStyleValues.Thin };
+        var color4 = new Color { Auto = true };
 
         topBorder2.Append(color4);
 
-        var bottomBorder2 = new BottomBorder(){ Style = BorderStyleValues.Thin };
-        var color5 = new Color(){ Auto = true };
+        var bottomBorder2 = new BottomBorder { Style = BorderStyleValues.Thin };
+        var color5 = new Color { Auto = true };
 
         bottomBorder2.Append(color5);
         var diagonalBorder2 = new DiagonalBorder();
@@ -181,35 +181,35 @@ public class GeneratedEnrolledStudentsTable
         borders1.Append(border1);
         borders1.Append(border2);
 
-        var cellStyleFormats1 = new CellStyleFormats(){ Count = (UInt32Value)1U };
-        var cellFormat1 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U };
+        var cellStyleFormats1 = new CellStyleFormats { Count = (UInt32Value)1U };
+        var cellFormat1 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U };
 
         cellStyleFormats1.Append(cellFormat1);
 
-        var cellFormats1 = new CellFormats(){ Count = (UInt32Value)7U };
-        var cellFormat2 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U };
+        var cellFormats1 = new CellFormats { Count = (UInt32Value)7U };
+        var cellFormat2 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U };
 
-        var cellFormat3 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyAlignment = true };
-        var alignment1 = new Alignment(){ Horizontal = HorizontalAlignmentValues.Center };
+        var cellFormat3 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyAlignment = true };
+        var alignment1 = new Alignment { Horizontal = HorizontalAlignmentValues.Center };
 
         cellFormat3.Append(alignment1);
-        var cellFormat4 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyAlignment = true };
+        var cellFormat4 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyAlignment = true };
 
-        var cellFormat5 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyAlignment = true };
-        var alignment2 = new Alignment(){ Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top };
+        var cellFormat5 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyAlignment = true };
+        var alignment2 = new Alignment { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top };
 
         cellFormat5.Append(alignment2);
 
-        var cellFormat6 = new CellFormat(){ NumberFormatId = (UInt32Value)49U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyNumberFormat = true, ApplyBorder = true, ApplyAlignment = true };
-        var alignment3 = new Alignment(){ Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top, WrapText = true };
+        var cellFormat6 = new CellFormat { NumberFormatId = (UInt32Value)49U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyNumberFormat = true, ApplyBorder = true, ApplyAlignment = true };
+        var alignment3 = new Alignment { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top, WrapText = true };
 
         cellFormat6.Append(alignment3);
 
-        var cellFormat7 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true, ApplyAlignment = true };
-        var alignment4 = new Alignment(){ Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center };
+        var cellFormat7 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true, ApplyAlignment = true };
+        var alignment4 = new Alignment { Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center };
 
         cellFormat7.Append(alignment4);
-        var cellFormat8 = new CellFormat(){ NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyAlignment = true };
+        var cellFormat8 = new CellFormat { NumberFormatId = (UInt32Value)0U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U, BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyAlignment = true };
 
         cellFormats1.Append(cellFormat2);
         cellFormats1.Append(cellFormat3);
@@ -219,12 +219,12 @@ public class GeneratedEnrolledStudentsTable
         cellFormats1.Append(cellFormat7);
         cellFormats1.Append(cellFormat8);
 
-        var cellStyles1 = new CellStyles(){ Count = (UInt32Value)1U };
-        var cellStyle1 = new CellStyle(){ Name = "Обычный", FormatId = (UInt32Value)0U, BuiltinId = (UInt32Value)0U };
+        var cellStyles1 = new CellStyles { Count = (UInt32Value)1U };
+        var cellStyle1 = new CellStyle { Name = "Обычный", FormatId = (UInt32Value)0U, BuiltinId = (UInt32Value)0U };
 
         cellStyles1.Append(cellStyle1);
-        var differentialFormats1 = new DifferentialFormats(){ Count = (UInt32Value)0U };
-        var tableStyles1 = new TableStyles(){ Count = (UInt32Value)0U, DefaultTableStyle = "TableStyleMedium9", DefaultPivotStyle = "PivotStyleLight16" };
+        var differentialFormats1 = new DifferentialFormats { Count = (UInt32Value)0U };
+        var tableStyles1 = new TableStyles { Count = (UInt32Value)0U, DefaultTableStyle = "TableStyleMedium9", DefaultPivotStyle = "PivotStyleLight16" };
 
         stylesheet1.Append(fonts1);
         stylesheet1.Append(fills1);
@@ -241,70 +241,70 @@ public class GeneratedEnrolledStudentsTable
     // Generates content of themePart1.
     private void GenerateThemePart1Content(ThemePart themePart1)
     {
-        var theme1 = new DocumentFormat.OpenXml.Drawing.Theme(){ Name = "Тема Office" };
+        var theme1 = new DocumentFormat.OpenXml.Drawing.Theme { Name = "Тема Office" };
         theme1.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
 
         var themeElements1 = new DocumentFormat.OpenXml.Drawing.ThemeElements();
 
-        var colorScheme1 = new DocumentFormat.OpenXml.Drawing.ColorScheme(){ Name = "Стандартная" };
+        var colorScheme1 = new DocumentFormat.OpenXml.Drawing.ColorScheme { Name = "Стандартная" };
 
         var dark1Color1 = new DocumentFormat.OpenXml.Drawing.Dark1Color();
-        var systemColor1 = new DocumentFormat.OpenXml.Drawing.SystemColor(){ Val = DocumentFormat.OpenXml.Drawing.SystemColorValues.WindowText, LastColor = "000000" };
+        var systemColor1 = new DocumentFormat.OpenXml.Drawing.SystemColor { Val = DocumentFormat.OpenXml.Drawing.SystemColorValues.WindowText, LastColor = "000000" };
 
         dark1Color1.Append(systemColor1);
 
         var light1Color1 = new DocumentFormat.OpenXml.Drawing.Light1Color();
-        var systemColor2 = new DocumentFormat.OpenXml.Drawing.SystemColor(){ Val = DocumentFormat.OpenXml.Drawing.SystemColorValues.Window, LastColor = "FFFFFF" };
+        var systemColor2 = new DocumentFormat.OpenXml.Drawing.SystemColor { Val = DocumentFormat.OpenXml.Drawing.SystemColorValues.Window, LastColor = "FFFFFF" };
 
         light1Color1.Append(systemColor2);
 
         var dark2Color1 = new DocumentFormat.OpenXml.Drawing.Dark2Color();
-        var rgbColorModelHex1 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "1F497D" };
+        var rgbColorModelHex1 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "1F497D" };
 
         dark2Color1.Append(rgbColorModelHex1);
 
         var light2Color1 = new DocumentFormat.OpenXml.Drawing.Light2Color();
-        var rgbColorModelHex2 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "EEECE1" };
+        var rgbColorModelHex2 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "EEECE1" };
 
         light2Color1.Append(rgbColorModelHex2);
 
         var accent1Color1 = new DocumentFormat.OpenXml.Drawing.Accent1Color();
-        var rgbColorModelHex3 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "4F81BD" };
+        var rgbColorModelHex3 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "4F81BD" };
 
         accent1Color1.Append(rgbColorModelHex3);
 
         var accent2Color1 = new DocumentFormat.OpenXml.Drawing.Accent2Color();
-        var rgbColorModelHex4 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "C0504D" };
+        var rgbColorModelHex4 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "C0504D" };
 
         accent2Color1.Append(rgbColorModelHex4);
 
         var accent3Color1 = new DocumentFormat.OpenXml.Drawing.Accent3Color();
-        var rgbColorModelHex5 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "9BBB59" };
+        var rgbColorModelHex5 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "9BBB59" };
 
         accent3Color1.Append(rgbColorModelHex5);
 
         var accent4Color1 = new DocumentFormat.OpenXml.Drawing.Accent4Color();
-        var rgbColorModelHex6 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "8064A2" };
+        var rgbColorModelHex6 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "8064A2" };
 
         accent4Color1.Append(rgbColorModelHex6);
 
         var accent5Color1 = new DocumentFormat.OpenXml.Drawing.Accent5Color();
-        var rgbColorModelHex7 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "4BACC6" };
+        var rgbColorModelHex7 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "4BACC6" };
 
         accent5Color1.Append(rgbColorModelHex7);
 
         var accent6Color1 = new DocumentFormat.OpenXml.Drawing.Accent6Color();
-        var rgbColorModelHex8 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "F79646" };
+        var rgbColorModelHex8 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "F79646" };
 
         accent6Color1.Append(rgbColorModelHex8);
 
         var hyperlink1 = new DocumentFormat.OpenXml.Drawing.Hyperlink();
-        var rgbColorModelHex9 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "0000FF" };
+        var rgbColorModelHex9 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "0000FF" };
 
         hyperlink1.Append(rgbColorModelHex9);
 
         var followedHyperlinkColor1 = new DocumentFormat.OpenXml.Drawing.FollowedHyperlinkColor();
-        var rgbColorModelHex10 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "800080" };
+        var rgbColorModelHex10 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "800080" };
 
         followedHyperlinkColor1.Append(rgbColorModelHex10);
 
@@ -321,41 +321,41 @@ public class GeneratedEnrolledStudentsTable
         colorScheme1.Append(hyperlink1);
         colorScheme1.Append(followedHyperlinkColor1);
 
-        var fontScheme1 = new DocumentFormat.OpenXml.Drawing.FontScheme(){ Name = "Стандартная" };
+        var fontScheme1 = new DocumentFormat.OpenXml.Drawing.FontScheme { Name = "Стандартная" };
 
         var majorFont1 = new DocumentFormat.OpenXml.Drawing.MajorFont();
-        var latinFont1 = new DocumentFormat.OpenXml.Drawing.LatinFont(){ Typeface = "Cambria" };
-        var eastAsianFont1 = new DocumentFormat.OpenXml.Drawing.EastAsianFont(){ Typeface = "" };
-        var complexScriptFont1 = new DocumentFormat.OpenXml.Drawing.ComplexScriptFont(){ Typeface = "" };
-        var supplementalFont1 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Jpan", Typeface = "ＭＳ Ｐゴシック" };
-        var supplementalFont2 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hang", Typeface = "맑은 고딕" };
-        var supplementalFont3 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hans", Typeface = "宋体" };
-        var supplementalFont4 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hant", Typeface = "新細明體" };
-        var supplementalFont5 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Arab", Typeface = "Times New Roman" };
-        var supplementalFont6 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hebr", Typeface = "Times New Roman" };
-        var supplementalFont7 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Thai", Typeface = "Tahoma" };
-        var supplementalFont8 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Ethi", Typeface = "Nyala" };
-        var supplementalFont9 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Beng", Typeface = "Vrinda" };
-        var supplementalFont10 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Gujr", Typeface = "Shruti" };
-        var supplementalFont11 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Khmr", Typeface = "MoolBoran" };
-        var supplementalFont12 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Knda", Typeface = "Tunga" };
-        var supplementalFont13 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Guru", Typeface = "Raavi" };
-        var supplementalFont14 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Cans", Typeface = "Euphemia" };
-        var supplementalFont15 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Cher", Typeface = "Plantagenet Cherokee" };
-        var supplementalFont16 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Yiii", Typeface = "Microsoft Yi Baiti" };
-        var supplementalFont17 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Tibt", Typeface = "Microsoft Himalaya" };
-        var supplementalFont18 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Thaa", Typeface = "MV Boli" };
-        var supplementalFont19 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Deva", Typeface = "Mangal" };
-        var supplementalFont20 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Telu", Typeface = "Gautami" };
-        var supplementalFont21 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Taml", Typeface = "Latha" };
-        var supplementalFont22 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Syrc", Typeface = "Estrangelo Edessa" };
-        var supplementalFont23 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Orya", Typeface = "Kalinga" };
-        var supplementalFont24 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Mlym", Typeface = "Kartika" };
-        var supplementalFont25 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Laoo", Typeface = "DokChampa" };
-        var supplementalFont26 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Sinh", Typeface = "Iskoola Pota" };
-        var supplementalFont27 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Mong", Typeface = "Mongolian Baiti" };
-        var supplementalFont28 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Viet", Typeface = "Times New Roman" };
-        var supplementalFont29 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Uigh", Typeface = "Microsoft Uighur" };
+        var latinFont1 = new DocumentFormat.OpenXml.Drawing.LatinFont { Typeface = "Cambria" };
+        var eastAsianFont1 = new DocumentFormat.OpenXml.Drawing.EastAsianFont { Typeface = "" };
+        var complexScriptFont1 = new DocumentFormat.OpenXml.Drawing.ComplexScriptFont { Typeface = "" };
+        var supplementalFont1 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Jpan", Typeface = "ＭＳ Ｐゴシック" };
+        var supplementalFont2 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hang", Typeface = "맑은 고딕" };
+        var supplementalFont3 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hans", Typeface = "宋体" };
+        var supplementalFont4 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hant", Typeface = "新細明體" };
+        var supplementalFont5 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Arab", Typeface = "Times New Roman" };
+        var supplementalFont6 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hebr", Typeface = "Times New Roman" };
+        var supplementalFont7 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Thai", Typeface = "Tahoma" };
+        var supplementalFont8 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Ethi", Typeface = "Nyala" };
+        var supplementalFont9 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Beng", Typeface = "Vrinda" };
+        var supplementalFont10 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Gujr", Typeface = "Shruti" };
+        var supplementalFont11 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Khmr", Typeface = "MoolBoran" };
+        var supplementalFont12 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Knda", Typeface = "Tunga" };
+        var supplementalFont13 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Guru", Typeface = "Raavi" };
+        var supplementalFont14 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Cans", Typeface = "Euphemia" };
+        var supplementalFont15 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Cher", Typeface = "Plantagenet Cherokee" };
+        var supplementalFont16 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Yiii", Typeface = "Microsoft Yi Baiti" };
+        var supplementalFont17 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Tibt", Typeface = "Microsoft Himalaya" };
+        var supplementalFont18 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Thaa", Typeface = "MV Boli" };
+        var supplementalFont19 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Deva", Typeface = "Mangal" };
+        var supplementalFont20 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Telu", Typeface = "Gautami" };
+        var supplementalFont21 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Taml", Typeface = "Latha" };
+        var supplementalFont22 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Syrc", Typeface = "Estrangelo Edessa" };
+        var supplementalFont23 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Orya", Typeface = "Kalinga" };
+        var supplementalFont24 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Mlym", Typeface = "Kartika" };
+        var supplementalFont25 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Laoo", Typeface = "DokChampa" };
+        var supplementalFont26 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Sinh", Typeface = "Iskoola Pota" };
+        var supplementalFont27 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Mong", Typeface = "Mongolian Baiti" };
+        var supplementalFont28 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Viet", Typeface = "Times New Roman" };
+        var supplementalFont29 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Uigh", Typeface = "Microsoft Uighur" };
 
         majorFont1.Append(latinFont1);
         majorFont1.Append(eastAsianFont1);
@@ -391,38 +391,38 @@ public class GeneratedEnrolledStudentsTable
         majorFont1.Append(supplementalFont29);
 
         var minorFont1 = new DocumentFormat.OpenXml.Drawing.MinorFont();
-        var latinFont2 = new DocumentFormat.OpenXml.Drawing.LatinFont(){ Typeface = "Calibri" };
-        var eastAsianFont2 = new DocumentFormat.OpenXml.Drawing.EastAsianFont(){ Typeface = "" };
-        var complexScriptFont2 = new DocumentFormat.OpenXml.Drawing.ComplexScriptFont(){ Typeface = "" };
-        var supplementalFont30 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Jpan", Typeface = "ＭＳ Ｐゴシック" };
-        var supplementalFont31 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hang", Typeface = "맑은 고딕" };
-        var supplementalFont32 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hans", Typeface = "宋体" };
-        var supplementalFont33 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hant", Typeface = "新細明體" };
-        var supplementalFont34 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Arab", Typeface = "Arial" };
-        var supplementalFont35 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Hebr", Typeface = "Arial" };
-        var supplementalFont36 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Thai", Typeface = "Tahoma" };
-        var supplementalFont37 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Ethi", Typeface = "Nyala" };
-        var supplementalFont38 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Beng", Typeface = "Vrinda" };
-        var supplementalFont39 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Gujr", Typeface = "Shruti" };
-        var supplementalFont40 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Khmr", Typeface = "DaunPenh" };
-        var supplementalFont41 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Knda", Typeface = "Tunga" };
-        var supplementalFont42 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Guru", Typeface = "Raavi" };
-        var supplementalFont43 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Cans", Typeface = "Euphemia" };
-        var supplementalFont44 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Cher", Typeface = "Plantagenet Cherokee" };
-        var supplementalFont45 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Yiii", Typeface = "Microsoft Yi Baiti" };
-        var supplementalFont46 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Tibt", Typeface = "Microsoft Himalaya" };
-        var supplementalFont47 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Thaa", Typeface = "MV Boli" };
-        var supplementalFont48 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Deva", Typeface = "Mangal" };
-        var supplementalFont49 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Telu", Typeface = "Gautami" };
-        var supplementalFont50 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Taml", Typeface = "Latha" };
-        var supplementalFont51 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Syrc", Typeface = "Estrangelo Edessa" };
-        var supplementalFont52 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Orya", Typeface = "Kalinga" };
-        var supplementalFont53 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Mlym", Typeface = "Kartika" };
-        var supplementalFont54 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Laoo", Typeface = "DokChampa" };
-        var supplementalFont55 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Sinh", Typeface = "Iskoola Pota" };
-        var supplementalFont56 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Mong", Typeface = "Mongolian Baiti" };
-        var supplementalFont57 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Viet", Typeface = "Arial" };
-        var supplementalFont58 = new DocumentFormat.OpenXml.Drawing.SupplementalFont(){ Script = "Uigh", Typeface = "Microsoft Uighur" };
+        var latinFont2 = new DocumentFormat.OpenXml.Drawing.LatinFont { Typeface = "Calibri" };
+        var eastAsianFont2 = new DocumentFormat.OpenXml.Drawing.EastAsianFont { Typeface = "" };
+        var complexScriptFont2 = new DocumentFormat.OpenXml.Drawing.ComplexScriptFont { Typeface = "" };
+        var supplementalFont30 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Jpan", Typeface = "ＭＳ Ｐゴシック" };
+        var supplementalFont31 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hang", Typeface = "맑은 고딕" };
+        var supplementalFont32 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hans", Typeface = "宋体" };
+        var supplementalFont33 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hant", Typeface = "新細明體" };
+        var supplementalFont34 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Arab", Typeface = "Arial" };
+        var supplementalFont35 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Hebr", Typeface = "Arial" };
+        var supplementalFont36 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Thai", Typeface = "Tahoma" };
+        var supplementalFont37 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Ethi", Typeface = "Nyala" };
+        var supplementalFont38 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Beng", Typeface = "Vrinda" };
+        var supplementalFont39 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Gujr", Typeface = "Shruti" };
+        var supplementalFont40 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Khmr", Typeface = "DaunPenh" };
+        var supplementalFont41 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Knda", Typeface = "Tunga" };
+        var supplementalFont42 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Guru", Typeface = "Raavi" };
+        var supplementalFont43 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Cans", Typeface = "Euphemia" };
+        var supplementalFont44 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Cher", Typeface = "Plantagenet Cherokee" };
+        var supplementalFont45 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Yiii", Typeface = "Microsoft Yi Baiti" };
+        var supplementalFont46 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Tibt", Typeface = "Microsoft Himalaya" };
+        var supplementalFont47 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Thaa", Typeface = "MV Boli" };
+        var supplementalFont48 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Deva", Typeface = "Mangal" };
+        var supplementalFont49 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Telu", Typeface = "Gautami" };
+        var supplementalFont50 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Taml", Typeface = "Latha" };
+        var supplementalFont51 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Syrc", Typeface = "Estrangelo Edessa" };
+        var supplementalFont52 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Orya", Typeface = "Kalinga" };
+        var supplementalFont53 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Mlym", Typeface = "Kartika" };
+        var supplementalFont54 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Laoo", Typeface = "DokChampa" };
+        var supplementalFont55 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Sinh", Typeface = "Iskoola Pota" };
+        var supplementalFont56 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Mong", Typeface = "Mongolian Baiti" };
+        var supplementalFont57 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Viet", Typeface = "Arial" };
+        var supplementalFont58 = new DocumentFormat.OpenXml.Drawing.SupplementalFont { Script = "Uigh", Typeface = "Microsoft Uighur" };
 
         minorFont1.Append(latinFont2);
         minorFont1.Append(eastAsianFont2);
@@ -460,46 +460,46 @@ public class GeneratedEnrolledStudentsTable
         fontScheme1.Append(majorFont1);
         fontScheme1.Append(minorFont1);
 
-        var formatScheme1 = new DocumentFormat.OpenXml.Drawing.FormatScheme(){ Name = "Стандартная" };
+        var formatScheme1 = new DocumentFormat.OpenXml.Drawing.FormatScheme { Name = "Стандартная" };
 
         var fillStyleList1 = new DocumentFormat.OpenXml.Drawing.FillStyleList();
 
         var solidFill1 = new DocumentFormat.OpenXml.Drawing.SolidFill();
-        var schemeColor1 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var schemeColor1 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
 
         solidFill1.Append(schemeColor1);
 
-        var gradientFill1 = new DocumentFormat.OpenXml.Drawing.GradientFill(){ RotateWithShape = true };
+        var gradientFill1 = new DocumentFormat.OpenXml.Drawing.GradientFill { RotateWithShape = true };
 
         var gradientStopList1 = new DocumentFormat.OpenXml.Drawing.GradientStopList();
 
-        var gradientStop1 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 0 };
+        var gradientStop1 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 0 };
 
-        var schemeColor2 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint1 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 50000 };
-        var saturationModulation1 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 300000 };
+        var schemeColor2 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint1 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 50000 };
+        var saturationModulation1 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 300000 };
 
         schemeColor2.Append(tint1);
         schemeColor2.Append(saturationModulation1);
 
         gradientStop1.Append(schemeColor2);
 
-        var gradientStop2 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 35000 };
+        var gradientStop2 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 35000 };
 
-        var schemeColor3 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint2 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 37000 };
-        var saturationModulation2 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 300000 };
+        var schemeColor3 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint2 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 37000 };
+        var saturationModulation2 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 300000 };
 
         schemeColor3.Append(tint2);
         schemeColor3.Append(saturationModulation2);
 
         gradientStop2.Append(schemeColor3);
 
-        var gradientStop3 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 100000 };
+        var gradientStop3 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 100000 };
 
-        var schemeColor4 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint3 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 15000 };
-        var saturationModulation3 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 350000 };
+        var schemeColor4 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint3 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 15000 };
+        var saturationModulation3 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 350000 };
 
         schemeColor4.Append(tint3);
         schemeColor4.Append(saturationModulation3);
@@ -509,42 +509,42 @@ public class GeneratedEnrolledStudentsTable
         gradientStopList1.Append(gradientStop1);
         gradientStopList1.Append(gradientStop2);
         gradientStopList1.Append(gradientStop3);
-        var linearGradientFill1 = new DocumentFormat.OpenXml.Drawing.LinearGradientFill(){ Angle = 16200000, Scaled = true };
+        var linearGradientFill1 = new DocumentFormat.OpenXml.Drawing.LinearGradientFill { Angle = 16200000, Scaled = true };
 
         gradientFill1.Append(gradientStopList1);
         gradientFill1.Append(linearGradientFill1);
 
-        var gradientFill2 = new DocumentFormat.OpenXml.Drawing.GradientFill(){ RotateWithShape = true };
+        var gradientFill2 = new DocumentFormat.OpenXml.Drawing.GradientFill { RotateWithShape = true };
 
         var gradientStopList2 = new DocumentFormat.OpenXml.Drawing.GradientStopList();
 
-        var gradientStop4 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 0 };
+        var gradientStop4 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 0 };
 
-        var schemeColor5 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade1 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 51000 };
-        var saturationModulation4 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 130000 };
+        var schemeColor5 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade1 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 51000 };
+        var saturationModulation4 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 130000 };
 
         schemeColor5.Append(shade1);
         schemeColor5.Append(saturationModulation4);
 
         gradientStop4.Append(schemeColor5);
 
-        var gradientStop5 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 80000 };
+        var gradientStop5 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 80000 };
 
-        var schemeColor6 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade2 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 93000 };
-        var saturationModulation5 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 130000 };
+        var schemeColor6 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade2 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 93000 };
+        var saturationModulation5 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 130000 };
 
         schemeColor6.Append(shade2);
         schemeColor6.Append(saturationModulation5);
 
         gradientStop5.Append(schemeColor6);
 
-        var gradientStop6 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 100000 };
+        var gradientStop6 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 100000 };
 
-        var schemeColor7 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade3 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 94000 };
-        var saturationModulation6 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 135000 };
+        var schemeColor7 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade3 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 94000 };
+        var saturationModulation6 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 135000 };
 
         schemeColor7.Append(shade3);
         schemeColor7.Append(saturationModulation6);
@@ -554,7 +554,7 @@ public class GeneratedEnrolledStudentsTable
         gradientStopList2.Append(gradientStop4);
         gradientStopList2.Append(gradientStop5);
         gradientStopList2.Append(gradientStop6);
-        var linearGradientFill2 = new DocumentFormat.OpenXml.Drawing.LinearGradientFill(){ Angle = 16200000, Scaled = false };
+        var linearGradientFill2 = new DocumentFormat.OpenXml.Drawing.LinearGradientFill { Angle = 16200000, Scaled = false };
 
         gradientFill2.Append(gradientStopList2);
         gradientFill2.Append(linearGradientFill2);
@@ -565,41 +565,41 @@ public class GeneratedEnrolledStudentsTable
 
         var lineStyleList1 = new DocumentFormat.OpenXml.Drawing.LineStyleList();
 
-        var outline1 = new DocumentFormat.OpenXml.Drawing.Outline(){ Width = 9525, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
+        var outline1 = new DocumentFormat.OpenXml.Drawing.Outline { Width = 9525, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
 
         var solidFill2 = new DocumentFormat.OpenXml.Drawing.SolidFill();
 
-        var schemeColor8 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade4 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 95000 };
-        var saturationModulation7 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 105000 };
+        var schemeColor8 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade4 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 95000 };
+        var saturationModulation7 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 105000 };
 
         schemeColor8.Append(shade4);
         schemeColor8.Append(saturationModulation7);
 
         solidFill2.Append(schemeColor8);
-        var presetDash1 = new DocumentFormat.OpenXml.Drawing.PresetDash(){ Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
+        var presetDash1 = new DocumentFormat.OpenXml.Drawing.PresetDash { Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
 
         outline1.Append(solidFill2);
         outline1.Append(presetDash1);
 
-        var outline2 = new DocumentFormat.OpenXml.Drawing.Outline(){ Width = 25400, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
+        var outline2 = new DocumentFormat.OpenXml.Drawing.Outline { Width = 25400, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
 
         var solidFill3 = new DocumentFormat.OpenXml.Drawing.SolidFill();
-        var schemeColor9 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var schemeColor9 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
 
         solidFill3.Append(schemeColor9);
-        var presetDash2 = new DocumentFormat.OpenXml.Drawing.PresetDash(){ Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
+        var presetDash2 = new DocumentFormat.OpenXml.Drawing.PresetDash { Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
 
         outline2.Append(solidFill3);
         outline2.Append(presetDash2);
 
-        var outline3 = new DocumentFormat.OpenXml.Drawing.Outline(){ Width = 38100, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
+        var outline3 = new DocumentFormat.OpenXml.Drawing.Outline { Width = 38100, CapType = DocumentFormat.OpenXml.Drawing.LineCapValues.Flat, CompoundLineType = DocumentFormat.OpenXml.Drawing.CompoundLineValues.Single, Alignment = DocumentFormat.OpenXml.Drawing.PenAlignmentValues.Center };
 
         var solidFill4 = new DocumentFormat.OpenXml.Drawing.SolidFill();
-        var schemeColor10 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var schemeColor10 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
 
         solidFill4.Append(schemeColor10);
-        var presetDash3 = new DocumentFormat.OpenXml.Drawing.PresetDash(){ Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
+        var presetDash3 = new DocumentFormat.OpenXml.Drawing.PresetDash { Val = DocumentFormat.OpenXml.Drawing.PresetLineDashValues.Solid };
 
         outline3.Append(solidFill4);
         outline3.Append(presetDash3);
@@ -614,10 +614,10 @@ public class GeneratedEnrolledStudentsTable
 
         var effectList1 = new DocumentFormat.OpenXml.Drawing.EffectList();
 
-        var outerShadow1 = new DocumentFormat.OpenXml.Drawing.OuterShadow(){ BlurRadius = 40000L, Distance = 20000L, Direction = 5400000, RotateWithShape = false };
+        var outerShadow1 = new DocumentFormat.OpenXml.Drawing.OuterShadow { BlurRadius = 40000L, Distance = 20000L, Direction = 5400000, RotateWithShape = false };
 
-        var rgbColorModelHex11 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "000000" };
-        var alpha1 = new DocumentFormat.OpenXml.Drawing.Alpha(){ Val = 38000 };
+        var rgbColorModelHex11 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "000000" };
+        var alpha1 = new DocumentFormat.OpenXml.Drawing.Alpha { Val = 38000 };
 
         rgbColorModelHex11.Append(alpha1);
 
@@ -631,10 +631,10 @@ public class GeneratedEnrolledStudentsTable
 
         var effectList2 = new DocumentFormat.OpenXml.Drawing.EffectList();
 
-        var outerShadow2 = new DocumentFormat.OpenXml.Drawing.OuterShadow(){ BlurRadius = 40000L, Distance = 23000L, Direction = 5400000, RotateWithShape = false };
+        var outerShadow2 = new DocumentFormat.OpenXml.Drawing.OuterShadow { BlurRadius = 40000L, Distance = 23000L, Direction = 5400000, RotateWithShape = false };
 
-        var rgbColorModelHex12 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "000000" };
-        var alpha2 = new DocumentFormat.OpenXml.Drawing.Alpha(){ Val = 35000 };
+        var rgbColorModelHex12 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "000000" };
+        var alpha2 = new DocumentFormat.OpenXml.Drawing.Alpha { Val = 35000 };
 
         rgbColorModelHex12.Append(alpha2);
 
@@ -648,10 +648,10 @@ public class GeneratedEnrolledStudentsTable
 
         var effectList3 = new DocumentFormat.OpenXml.Drawing.EffectList();
 
-        var outerShadow3 = new DocumentFormat.OpenXml.Drawing.OuterShadow(){ BlurRadius = 40000L, Distance = 23000L, Direction = 5400000, RotateWithShape = false };
+        var outerShadow3 = new DocumentFormat.OpenXml.Drawing.OuterShadow { BlurRadius = 40000L, Distance = 23000L, Direction = 5400000, RotateWithShape = false };
 
-        var rgbColorModelHex13 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex(){ Val = "000000" };
-        var alpha3 = new DocumentFormat.OpenXml.Drawing.Alpha(){ Val = 35000 };
+        var rgbColorModelHex13 = new DocumentFormat.OpenXml.Drawing.RgbColorModelHex { Val = "000000" };
+        var alpha3 = new DocumentFormat.OpenXml.Drawing.Alpha { Val = 35000 };
 
         rgbColorModelHex13.Append(alpha3);
 
@@ -661,13 +661,13 @@ public class GeneratedEnrolledStudentsTable
 
         var scene3DType1 = new DocumentFormat.OpenXml.Drawing.Scene3DType();
 
-        var camera1 = new DocumentFormat.OpenXml.Drawing.Camera(){ Preset = DocumentFormat.OpenXml.Drawing.PresetCameraValues.OrthographicFront };
-        var rotation1 = new DocumentFormat.OpenXml.Drawing.Rotation(){ Latitude = 0, Longitude = 0, Revolution = 0 };
+        var camera1 = new DocumentFormat.OpenXml.Drawing.Camera { Preset = DocumentFormat.OpenXml.Drawing.PresetCameraValues.OrthographicFront };
+        var rotation1 = new DocumentFormat.OpenXml.Drawing.Rotation { Latitude = 0, Longitude = 0, Revolution = 0 };
 
         camera1.Append(rotation1);
 
-        var lightRig1 = new DocumentFormat.OpenXml.Drawing.LightRig(){ Rig = DocumentFormat.OpenXml.Drawing.LightRigValues.ThreePoints, Direction = DocumentFormat.OpenXml.Drawing.LightRigDirectionValues.Top };
-        var rotation2 = new DocumentFormat.OpenXml.Drawing.Rotation(){ Latitude = 0, Longitude = 0, Revolution = 1200000 };
+        var lightRig1 = new DocumentFormat.OpenXml.Drawing.LightRig { Rig = DocumentFormat.OpenXml.Drawing.LightRigValues.ThreePoints, Direction = DocumentFormat.OpenXml.Drawing.LightRigDirectionValues.Top };
+        var rotation2 = new DocumentFormat.OpenXml.Drawing.Rotation { Latitude = 0, Longitude = 0, Revolution = 1200000 };
 
         lightRig1.Append(rotation2);
 
@@ -675,7 +675,7 @@ public class GeneratedEnrolledStudentsTable
         scene3DType1.Append(lightRig1);
 
         var shape3DType1 = new DocumentFormat.OpenXml.Drawing.Shape3DType();
-        var bevelTop1 = new DocumentFormat.OpenXml.Drawing.BevelTop(){ Width = 63500L, Height = 25400L };
+        var bevelTop1 = new DocumentFormat.OpenXml.Drawing.BevelTop { Width = 63500L, Height = 25400L };
 
         shape3DType1.Append(bevelTop1);
 
@@ -690,31 +690,31 @@ public class GeneratedEnrolledStudentsTable
         var backgroundFillStyleList1 = new DocumentFormat.OpenXml.Drawing.BackgroundFillStyleList();
 
         var solidFill5 = new DocumentFormat.OpenXml.Drawing.SolidFill();
-        var schemeColor11 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var schemeColor11 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
 
         solidFill5.Append(schemeColor11);
 
-        var gradientFill3 = new DocumentFormat.OpenXml.Drawing.GradientFill(){ RotateWithShape = true };
+        var gradientFill3 = new DocumentFormat.OpenXml.Drawing.GradientFill { RotateWithShape = true };
 
         var gradientStopList3 = new DocumentFormat.OpenXml.Drawing.GradientStopList();
 
-        var gradientStop7 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 0 };
+        var gradientStop7 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 0 };
 
-        var schemeColor12 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint4 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 40000 };
-        var saturationModulation8 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 350000 };
+        var schemeColor12 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint4 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 40000 };
+        var saturationModulation8 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 350000 };
 
         schemeColor12.Append(tint4);
         schemeColor12.Append(saturationModulation8);
 
         gradientStop7.Append(schemeColor12);
 
-        var gradientStop8 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 40000 };
+        var gradientStop8 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 40000 };
 
-        var schemeColor13 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint5 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 45000 };
-        var shade5 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 99000 };
-        var saturationModulation9 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 350000 };
+        var schemeColor13 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint5 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 45000 };
+        var shade5 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 99000 };
+        var saturationModulation9 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 350000 };
 
         schemeColor13.Append(tint5);
         schemeColor13.Append(shade5);
@@ -722,11 +722,11 @@ public class GeneratedEnrolledStudentsTable
 
         gradientStop8.Append(schemeColor13);
 
-        var gradientStop9 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 100000 };
+        var gradientStop9 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 100000 };
 
-        var schemeColor14 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade6 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 20000 };
-        var saturationModulation10 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 255000 };
+        var schemeColor14 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade6 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 20000 };
+        var saturationModulation10 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 255000 };
 
         schemeColor14.Append(shade6);
         schemeColor14.Append(saturationModulation10);
@@ -737,34 +737,34 @@ public class GeneratedEnrolledStudentsTable
         gradientStopList3.Append(gradientStop8);
         gradientStopList3.Append(gradientStop9);
 
-        var pathGradientFill1 = new DocumentFormat.OpenXml.Drawing.PathGradientFill(){ Path = DocumentFormat.OpenXml.Drawing.PathShadeValues.Circle };
-        var fillToRectangle1 = new DocumentFormat.OpenXml.Drawing.FillToRectangle(){ Left = 50000, Top = -80000, Right = 50000, Bottom = 180000 };
+        var pathGradientFill1 = new DocumentFormat.OpenXml.Drawing.PathGradientFill { Path = DocumentFormat.OpenXml.Drawing.PathShadeValues.Circle };
+        var fillToRectangle1 = new DocumentFormat.OpenXml.Drawing.FillToRectangle { Left = 50000, Top = -80000, Right = 50000, Bottom = 180000 };
 
         pathGradientFill1.Append(fillToRectangle1);
 
         gradientFill3.Append(gradientStopList3);
         gradientFill3.Append(pathGradientFill1);
 
-        var gradientFill4 = new DocumentFormat.OpenXml.Drawing.GradientFill(){ RotateWithShape = true };
+        var gradientFill4 = new DocumentFormat.OpenXml.Drawing.GradientFill { RotateWithShape = true };
 
         var gradientStopList4 = new DocumentFormat.OpenXml.Drawing.GradientStopList();
 
-        var gradientStop10 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 0 };
+        var gradientStop10 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 0 };
 
-        var schemeColor15 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var tint6 = new DocumentFormat.OpenXml.Drawing.Tint(){ Val = 80000 };
-        var saturationModulation11 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 300000 };
+        var schemeColor15 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var tint6 = new DocumentFormat.OpenXml.Drawing.Tint { Val = 80000 };
+        var saturationModulation11 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 300000 };
 
         schemeColor15.Append(tint6);
         schemeColor15.Append(saturationModulation11);
 
         gradientStop10.Append(schemeColor15);
 
-        var gradientStop11 = new DocumentFormat.OpenXml.Drawing.GradientStop(){ Position = 100000 };
+        var gradientStop11 = new DocumentFormat.OpenXml.Drawing.GradientStop { Position = 100000 };
 
-        var schemeColor16 = new DocumentFormat.OpenXml.Drawing.SchemeColor(){ Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
-        var shade7 = new DocumentFormat.OpenXml.Drawing.Shade(){ Val = 30000 };
-        var saturationModulation12 = new DocumentFormat.OpenXml.Drawing.SaturationModulation(){ Val = 200000 };
+        var schemeColor16 = new DocumentFormat.OpenXml.Drawing.SchemeColor { Val = DocumentFormat.OpenXml.Drawing.SchemeColorValues.PhColor };
+        var shade7 = new DocumentFormat.OpenXml.Drawing.Shade { Val = 30000 };
+        var saturationModulation12 = new DocumentFormat.OpenXml.Drawing.SaturationModulation { Val = 200000 };
 
         schemeColor16.Append(shade7);
         schemeColor16.Append(saturationModulation12);
@@ -774,8 +774,8 @@ public class GeneratedEnrolledStudentsTable
         gradientStopList4.Append(gradientStop10);
         gradientStopList4.Append(gradientStop11);
 
-        var pathGradientFill2 = new DocumentFormat.OpenXml.Drawing.PathGradientFill(){ Path = DocumentFormat.OpenXml.Drawing.PathShadeValues.Circle };
-        var fillToRectangle2 = new DocumentFormat.OpenXml.Drawing.FillToRectangle(){ Left = 50000, Top = 50000, Right = 50000, Bottom = 50000 };
+        var pathGradientFill2 = new DocumentFormat.OpenXml.Drawing.PathGradientFill { Path = DocumentFormat.OpenXml.Drawing.PathShadeValues.Circle };
+        var fillToRectangle2 = new DocumentFormat.OpenXml.Drawing.FillToRectangle { Left = 50000, Top = 50000, Right = 50000, Bottom = 50000 };
 
         pathGradientFill2.Append(fillToRectangle2);
 
@@ -809,22 +809,22 @@ public class GeneratedEnrolledStudentsTable
     {
         var worksheet1 = new Worksheet();
         worksheet1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-        var sheetDimension1 = new SheetDimension(){ Reference = "A2:C8" };
+        var sheetDimension1 = new SheetDimension { Reference = "A2:C8" };
 
         var sheetViews1 = new SheetViews();
 
-        var sheetView1 = new SheetView(){ TabSelected = true, ZoomScaleNormal = (UInt32Value)100U, WorkbookViewId = (UInt32Value)0U };
-        var selection1 = new Selection(){ ActiveCell = "C4", SequenceOfReferences = new ListValue<StringValue>() { InnerText = "C4" } };
+        var sheetView1 = new SheetView { TabSelected = true, ZoomScaleNormal = (UInt32Value)100U, WorkbookViewId = (UInt32Value)0U };
+        var selection1 = new Selection { ActiveCell = "C4", SequenceOfReferences = new ListValue<StringValue> { InnerText = "C4" } };
 
         sheetView1.Append(selection1);
 
         sheetViews1.Append(sheetView1);
-        var sheetFormatProperties1 = new SheetFormatProperties(){ DefaultColumnWidth = 9D, DefaultRowHeight = 14.4D };
+        var sheetFormatProperties1 = new SheetFormatProperties { DefaultColumnWidth = 9D, DefaultRowHeight = 14.4D };
 
         var columns1 = new Columns();
-        var column1 = new Column(){ Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 3.44140625D, CustomWidth = true };
-        var column2 = new Column(){ Min = (UInt32Value)3U, Max = (UInt32Value)3U, Width = 53.88671875D, CustomWidth = true };
-        var column3 = new Column(){ Min = (UInt32Value)4U, Max = (UInt32Value)4U, Width = 8.88671875D, CustomWidth = true };
+        var column1 = new Column { Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 3.44140625D, CustomWidth = true };
+        var column2 = new Column { Min = (UInt32Value)3U, Max = (UInt32Value)3U, Width = 53.88671875D, CustomWidth = true };
+        var column3 = new Column { Min = (UInt32Value)4U, Max = (UInt32Value)4U, Width = 8.88671875D, CustomWidth = true };
 
         columns1.Append(column1);
         columns1.Append(column2);
@@ -832,9 +832,9 @@ public class GeneratedEnrolledStudentsTable
 
         var sheetData1 = new SheetData();
 
-        var row1 = new Row(){ RowIndex = (UInt32Value)2U, Spans = new ListValue<StringValue>() { InnerText = "1:3" } };
+        var row1 = new Row { RowIndex = (UInt32Value)2U, Spans = new ListValue<StringValue> { InnerText = "1:3" } };
 
-        var cell1 = new Cell(){ CellReference = "C2", StyleIndex = (UInt32Value)1U, DataType = CellValues.SharedString };
+        var cell1 = new Cell { CellReference = "C2", StyleIndex = (UInt32Value)1U, DataType = CellValues.SharedString };
         var cellValue1 = new CellValue
         {
             Text = "0"
@@ -844,9 +844,9 @@ public class GeneratedEnrolledStudentsTable
 
         row1.Append(cell1);
 
-        var row2 = new Row(){ RowIndex = (UInt32Value)3U, Spans = new ListValue<StringValue>() { InnerText = "1:3" } };
+        var row2 = new Row { RowIndex = (UInt32Value)3U, Spans = new ListValue<StringValue> { InnerText = "1:3" } };
 
-        var cell2 = new Cell(){ CellReference = "B3", StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
+        var cell2 = new Cell { CellReference = "B3", StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
         var cellValue2 = new CellValue
         {
             Text = "1"
@@ -854,7 +854,7 @@ public class GeneratedEnrolledStudentsTable
 
         cell2.Append(cellValue2);
 
-        var cell3 = new Cell(){ CellReference = "C3", StyleIndex = (UInt32Value)6U, DataType = CellValues.String };
+        var cell3 = new Cell { CellReference = "C3", StyleIndex = (UInt32Value)6U, DataType = CellValues.String };
         var cellValue3 = new CellValue
         {
             Text = _model.GroupName
@@ -865,9 +865,9 @@ public class GeneratedEnrolledStudentsTable
         row2.Append(cell2);
         row2.Append(cell3);
 
-        var row3 = new Row(){ RowIndex = (UInt32Value)5U, Spans = new ListValue<StringValue>() { InnerText = "1:3" }, Height = 14.4D, CustomHeight = true };
+        var row3 = new Row { RowIndex = (UInt32Value)5U, Spans = new ListValue<StringValue> { InnerText = "1:3" }, Height = 14.4D, CustomHeight = true };
 
-        var cell4 = new Cell(){ CellReference = "B5", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+        var cell4 = new Cell { CellReference = "B5", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
         var cellValue4 = new CellValue
         {
             Text = "2"
@@ -875,7 +875,7 @@ public class GeneratedEnrolledStudentsTable
 
         cell4.Append(cellValue4);
 
-        var cell5 = new Cell(){ CellReference = "C5", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+        var cell5 = new Cell { CellReference = "C5", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
         var cellValue5 = new CellValue
         {
             Text = "3"
@@ -886,9 +886,9 @@ public class GeneratedEnrolledStudentsTable
         row3.Append(cell4);
         row3.Append(cell5);
 
-        var row4 = new Row(){ RowIndex = (UInt32Value)6U, Spans = new ListValue<StringValue>() { InnerText = "1:3" } };
-        var cell6 = new Cell(){ CellReference = "B6", StyleIndex = (UInt32Value)5U };
-        var cell7 = new Cell(){ CellReference = "C6", StyleIndex = (UInt32Value)5U };
+        var row4 = new Row { RowIndex = (UInt32Value)6U, Spans = new ListValue<StringValue> { InnerText = "1:3" } };
+        var cell6 = new Cell { CellReference = "B6", StyleIndex = (UInt32Value)5U };
+        var cell7 = new Cell { CellReference = "C6", StyleIndex = (UInt32Value)5U };
 
         row4.Append(cell6);
         row4.Append(cell7);
@@ -901,14 +901,14 @@ public class GeneratedEnrolledStudentsTable
 
         MakeEnrolledTable(sheetData1);
 
-        var mergeCells1 = new MergeCells(){ Count = (UInt32Value)2U };
-        var mergeCell1 = new MergeCell(){ Reference = "B5:B6" };
-        var mergeCell2 = new MergeCell(){ Reference = "C5:C6" };
+        var mergeCells1 = new MergeCells { Count = (UInt32Value)2U };
+        var mergeCell1 = new MergeCell { Reference = "B5:B6" };
+        var mergeCell2 = new MergeCell { Reference = "C5:C6" };
 
         mergeCells1.Append(mergeCell1);
         mergeCells1.Append(mergeCell2);
-        var pageMargins1 = new PageMargins(){ Left = 0.31527777777777799D, Right = 0.31527777777777799D, Top = 0.39374999999999999D, Bottom = 0.35416666666666702D, Header = 0.511811023622047D, Footer = 0.511811023622047D };
-        var pageSetup1 = new PageSetup(){ PaperSize = (UInt32Value)9U, Orientation = OrientationValues.Landscape, HorizontalDpi = (UInt32Value)300U, VerticalDpi = (UInt32Value)300U };
+        var pageMargins1 = new PageMargins { Left = 0.31527777777777799D, Right = 0.31527777777777799D, Top = 0.39374999999999999D, Bottom = 0.35416666666666702D, Header = 0.511811023622047D, Footer = 0.511811023622047D };
+        var pageSetup1 = new PageSetup { PaperSize = (UInt32Value)9U, Orientation = OrientationValues.Landscape, HorizontalDpi = (UInt32Value)300U, VerticalDpi = (UInt32Value)300U };
 
         worksheet1.Append(sheetDimension1);
         worksheet1.Append(sheetViews1);
@@ -927,12 +927,10 @@ public class GeneratedEnrolledStudentsTable
         var rowIndex = 7U;
         foreach (var student in _model.Students)
         {
-            var row = new Row()
-                { RowIndex = (UInt32Value)rowIndex, Spans = new ListValue<StringValue>() { InnerText = "1:3" } };
-            var cell1 = new Cell() { CellReference = $"A{rowIndex}", StyleIndex = (UInt32Value)3U };
+            var row = new Row { RowIndex = (UInt32Value)rowIndex, Spans = new ListValue<StringValue> { InnerText = "1:3" } };
+            var cell1 = new Cell { CellReference = $"A{rowIndex}", StyleIndex = (UInt32Value)3U };
 
-            var cell2 = new Cell()
-                { CellReference = $"B{rowIndex}", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
+            var cell2 = new Cell { CellReference = $"B{rowIndex}", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
             var cellValue2
                 = new CellValue
                 {
@@ -941,8 +939,7 @@ public class GeneratedEnrolledStudentsTable
 
             cell2.Append(cellValue2);
 
-            var cell3 = new Cell()
-                { CellReference = $"C{rowIndex}", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
+            var cell3 = new Cell { CellReference = $"C{rowIndex}", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
             var cellValue3 = new CellValue
             {
                 Text = student.FullName
@@ -962,7 +959,7 @@ public class GeneratedEnrolledStudentsTable
     // Generates content of sharedStringTablePart1.
     private void GenerateSharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1)
     {
-        var sharedStringTable1 = new SharedStringTable(){ Count = (UInt32Value)9U, UniqueCount = (UInt32Value)9U };
+        var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)9U, UniqueCount = (UInt32Value)9U };
 
         var sharedStringItem1 = new SharedStringItem();
         var text1 = new Text
@@ -1032,7 +1029,7 @@ public class GeneratedEnrolledStudentsTable
 
         var headingPairs1 = new DocumentFormat.OpenXml.ExtendedProperties.HeadingPairs();
 
-        var vTVector1 = new DocumentFormat.OpenXml.VariantTypes.VTVector(){ BaseType = DocumentFormat.OpenXml.VariantTypes.VectorBaseValues.Variant, Size = (UInt32Value)2U };
+        var vTVector1 = new DocumentFormat.OpenXml.VariantTypes.VTVector { BaseType = DocumentFormat.OpenXml.VariantTypes.VectorBaseValues.Variant, Size = (UInt32Value)2U };
 
         var variant1 = new DocumentFormat.OpenXml.VariantTypes.Variant();
         var vTLPSTR1 = new DocumentFormat.OpenXml.VariantTypes.VTLPSTR
@@ -1057,7 +1054,7 @@ public class GeneratedEnrolledStudentsTable
 
         var titlesOfParts1 = new DocumentFormat.OpenXml.ExtendedProperties.TitlesOfParts();
 
-        var vTVector2 = new DocumentFormat.OpenXml.VariantTypes.VTVector(){ BaseType = DocumentFormat.OpenXml.VariantTypes.VectorBaseValues.Lpstr, Size = (UInt32Value)1U };
+        var vTVector2 = new DocumentFormat.OpenXml.VariantTypes.VTVector { BaseType = DocumentFormat.OpenXml.VariantTypes.VectorBaseValues.Lpstr, Size = (UInt32Value)1U };
         var vTLPSTR2 = new DocumentFormat.OpenXml.VariantTypes.VTLPSTR
         {
             Text = "Лист1"

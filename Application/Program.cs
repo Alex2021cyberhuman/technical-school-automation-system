@@ -8,7 +8,6 @@ using Application.Specialities.Data;
 using Application.Startup;
 using Blazored.LocalStorage;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -61,7 +60,7 @@ var wwwrootPath = Path.GetFullPath("./wwwroot/");
 Directory.CreateDirectory(wwwrootPath);
 
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions()
+app.UseStaticFiles(new StaticFileOptions
 {
     RequestPath = "",
     FileProvider = new CompositeFileProvider(

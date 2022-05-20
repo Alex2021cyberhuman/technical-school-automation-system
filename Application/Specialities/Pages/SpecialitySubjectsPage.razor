@@ -1,0 +1,56 @@
+@page "/speciality/{specialityId:long}/subjects"
+@attribute [Authorize]
+@using Application.Specialities.Data
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<SpecialitiesDbContext> DbContextFactory
+
+@if (Speciality.Id != SpecialityId)
+{
+    <PageTitle>Не найдено!</PageTitle>
+    <h3>Ничего не найдено!</h3>
+}
+else
+{
+    <CreateSubjectModal Speciality="@Speciality"/>
+    <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по">
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Название">@context.Name</MudTd>
+            <MudTd DataLabel="Код">@context.Code</MudTd>
+            <MudTd></MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+
+@code
+{
+    [Parameter]
+    public long SpecialityId { get; set; }
+
+    public Speciality Speciality { get; set; } = new();
+
+    public List<Subject> Subjects { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var speciality = await context.Speciality.FirstOrDefaultAsync(x => x.Id == SpecialityId);
+        if (speciality is null)
+        {
+            return;
+        }
+        Speciality = speciality;
+        Subjects = await context.Subject.Where(x => x.SpecialityId == SpecialityId).ToListAsync();
+    }
+}

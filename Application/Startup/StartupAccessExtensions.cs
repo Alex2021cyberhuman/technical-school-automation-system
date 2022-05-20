@@ -62,6 +62,10 @@ public static class StartupAccessExtensions
             options.AddPolicy(PolicyIdentifiers.HeadOfAdmissionCommittee,
                 policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
                     .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director));
+            options.AddPolicy(PolicyIdentifiers.Administrators,
+                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
+                    .RequireRole(RoleIdentifiers.Administrator));
+
         });
         builder.Services.AddIdentityLocalization();
         builder.Services.AddIdentity<User, Role>(options =>

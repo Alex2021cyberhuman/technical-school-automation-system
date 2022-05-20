@@ -2,6 +2,7 @@
 using Application.Specialities.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Specialities.Data.Migrations
 {
     [DbContext(typeof(SpecialitiesDbContext))]
-    partial class SpecialitiesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220520135823_AssignSubjectsToSpecialities")]
+    partial class AssignSubjectsToSpecialities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

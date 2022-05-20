@@ -23,7 +23,7 @@ public static class TableExtensions
         var paragraphStyleId = new ParagraphStyleId { Val = "TableBody" };
         var widowControl = new WidowControl { Val = false };
         var spacingBetweenLines = new SpacingBetweenLines { Before = "0", After = "0" };
-        var justification = new Justification() { Val = JustificationValues.End };
+        var justification = new Justification { Val = JustificationValues.End };
 
         var paragraphMarkRunProperties = new ParagraphMarkRunProperties();
         var runFonts = new RunFonts { Ascii = "Times New Roman", HighAnsi = "Times New Roman" };
