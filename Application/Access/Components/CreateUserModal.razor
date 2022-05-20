@@ -38,7 +38,7 @@
                         <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
                         <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
                         <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
-                        <MyCheckboxGroup Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
+                        <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -60,7 +60,7 @@
 
     public bool Visible { get; set; }
 
-    public List<OptionItem<string>> AllRoles { get; set; } = new();
+    public Dictionary<string, OptionItem<string>> AllRoles { get; set; } = new();
 
     public CreateUserModal()
     {
@@ -83,7 +83,7 @@
     private async Task OnOpenAsync()
     {
         var roles = await RoleManager.Roles.ToListAsync();
-        AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, false)).ToList();
+        AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, false)).ToDictionary(x => x.Value);
         Visible = true;
     }
 

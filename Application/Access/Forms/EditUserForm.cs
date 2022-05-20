@@ -20,7 +20,7 @@ public class EditUserForm
     [Display(Name = "Роли")]
     [Required]
     [MinLength(1)]
-    public HashSet<string> RoleNames { get; set; } = new();
+    public List<string> RoleNames { get; set; } = new();
 
     [Display(Name = "Электронная почта")] public string Email { get; set; } = string.Empty;
 
@@ -38,5 +38,5 @@ public class EditUserForm
 
     public bool Lockout { get; set; }
     
-    public DateTime LockoutEnd { get; set; }
+    public DateTime? LockoutEnd { get; set; }
 }

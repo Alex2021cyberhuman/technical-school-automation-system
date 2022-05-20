@@ -38,13 +38,14 @@
                         <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
                         <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
                         <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
-                        <MyCheckboxGroup Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
+                        <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                         <MyInputCheckBox Label="Заблокировать" @bind-Value="Form.Lockout"/>
                         @if (Form.Lockout)
                         {
                             <MudDatePicker
                                 Label="Конец блокировки"
-                                Editable="true" @bind-Date="Form.LockoutEnd"
+                                Editable="true" 
+                                @bind-Date="Form.LockoutEnd"
                                 Mask="@(new DateMask("0000-00-00"))"
                                 DateFormat="yyyy-MM-dd"
                                 Placeholder="Конец блокировки"/>
@@ -60,8 +61,8 @@
     </div>
 }
 
-@code
-{
+@code {
+
     public string IdentityError { get; set; } = string.Empty;
 
     public EditUserForm Form { get; set; }
@@ -70,7 +71,7 @@
 
     public bool Visible { get; set; }
 
-    public List<OptionItem<string>> AllRoles { get; set; } = new();
+    public Dictionary<string, OptionItem<string>> AllRoles { get; set; } = new();
 
     [Parameter]
     public User User { get; set; } = new();
@@ -96,11 +97,12 @@
     private async Task OnOpenAsync()
     {
         var roles = await RoleManager.Roles.ToListAsync();
-        var userRoles = (await UserManager.GetRolesAsync(User)).ToHashSet();
-        AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, userRoles.Contains(x.Name))).ToList();
+        var userRoles = (await UserManager.GetRolesAsync(User)).ToList();
+        AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, userRoles.Contains(x.Name))).ToDictionary(x => x.Value);
         Form.Login = User.UserName;
         Form.Lockout = User.LockoutEnd.HasValue && User.LockoutEnd > DateTime.UtcNow;
         Form.LockoutEnd = Form.Lockout ? new DateTime(User.LockoutEnd!.Value.Ticks) : DateTime.Now;
+        Form.LockoutEnd = Form.LockoutEnd.Value.ToLocalTime();
         Form.Email = User.Email;
         Form.FirstName = User.FirstName;
         Form.FamilyName = User.FirstName;
@@ -114,15 +116,7 @@
         if (!Visible || !EditContext.Validate())
             return;
         var user = await UserManager.FindByIdAsync(User.Id.ToString());
-        if (Form.Lockout)
-        {
-            user.LockoutEnd = Form.LockoutEnd.ToUniversalTime();
-        }
-        else if (!Form.Lockout)
-        {
-            user.LockoutEnd = DateTimeOffset.MinValue;
-        }
-            
+        user.LockoutEnd = Form.Lockout ? Form.LockoutEnd!.Value.ToUniversalTime() : DateTime.UtcNow.AddDays(-1);
         user.UserName = Form.Login;
         user.Email = Form.Email;
         user.FirstName = Form.FirstName;
@@ -154,4 +148,5 @@
         }
         OnCancel();
     }
+
 }
