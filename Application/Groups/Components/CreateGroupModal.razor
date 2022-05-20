@@ -35,7 +35,8 @@
     </div>
 }
 
-@code {
+@code
+{
 
     public bool ModalVisible { get; set; }
 
@@ -43,7 +44,7 @@
 
     public EditContext EditContext { get; set; }
 
-    public List<MyInputRadioGroup<long>.ValueRadioItem> SpecialityRadioItems { get; set; } = new();
+    public List<ValueRadioItem<long>> SpecialityRadioItems { get; set; } = new();
 
     [Parameter]
     public EventCallback<AfterCreateEventArgs> OnAfterCreate { get; set; }

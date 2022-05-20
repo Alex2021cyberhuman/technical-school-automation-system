@@ -8,6 +8,6 @@ public class LoginForm
 
     [Required]
     [DataType(DataType.Password)]
-    [Display(Name = "Логин")]
+    [Display(Name = "Пароль")]
     public string Password { get; set; } = string.Empty;
 }

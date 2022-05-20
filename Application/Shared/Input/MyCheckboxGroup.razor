@@ -26,7 +26,7 @@
 @code {
 
     [Parameter]
-    public Dictionary<TCheck, OptionItem> Options { get; set; } = new();
+    public Dictionary<TCheck, OptionItem<TCheck>> Options { get; set; } = new();
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
@@ -35,22 +35,6 @@
     {
         Options[optionValue].OptionChecked = (bool)(args ?? false);
         CurrentValue = Options.Values.Where(x => x.OptionChecked).Select(x => x.Value).ToList();
-    }
-
-    public class OptionItem
-    {
-        public OptionItem(string label, TCheck value, bool optionChecked)
-        {
-            Label = label;
-            Value = value;
-            OptionChecked = optionChecked;
-        }
-
-        public string Label { get; set; }
-
-        public TCheck Value { get; set; }
-
-        public bool OptionChecked { get; set; }
     }
 
     protected override bool TryParseValueFromString(

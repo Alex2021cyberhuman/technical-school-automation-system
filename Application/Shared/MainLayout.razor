@@ -9,16 +9,16 @@
     </div>
 
     <main>
-        @* <div class="top-row px-4"> *@
-        @*     @if (CurrentUser.Identity?.IsAuthenticated ?? false) *@
-        @*     { *@
-        @*         <span>Вы вошли как @(CurrentUser.FindFirst(ClaimTypes.GivenName) ?? CurrentUser.FindFirst(ClaimTypes.Name))?.Value</span> *@
-        @*     } *@
-        @*     else *@
-        @*     { *@
-        @*         <a href="Access/Login" target="_blank">Вход</a> *@
-        @*     } *@
-        @* </div> *@
+        <div class="top-row px-4">
+            @if (CurrentUser.Identity?.IsAuthenticated ?? false)
+            {
+                <span>@(CurrentUser.FindFirst(ClaimTypes.GivenName) ?? CurrentUser.FindFirst(ClaimTypes.Name))?.Value</span>
+            }
+            else
+            {
+                <a href="Access/Login" target="_blank">Вход</a>
+            }
+        </div>
 
         <article class="content px-4">
             @Body

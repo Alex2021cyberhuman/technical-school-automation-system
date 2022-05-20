@@ -29,28 +29,10 @@
 @code {
 
     [Parameter]
-    public List<ValueRadioItem> RadioItems { get; set; } = new();
+    public List<ValueRadioItem<TValue>> RadioItems { get; set; } = new();
 
     [Parameter]
     public string Label { get; set; } = string.Empty;
-
-    public class ValueRadioItem
-    {
-        public ValueRadioItem(string label, TValue value)
-        {
-            Label = label;
-            Value = value;
-        }
-
-        public string Label { get; set; }
-
-        public TValue Value { get; set; }
-
-        public static implicit operator ValueRadioItem((string, TValue) tuple)
-        {
-            return new ValueRadioItem(tuple.Item1, tuple.Item2);
-        }
-    }
 
     protected override bool TryParseValueFromString(
         string? value,

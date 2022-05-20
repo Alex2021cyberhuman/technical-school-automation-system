@@ -7,12 +7,12 @@ using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Startup;
 using Blazored.LocalStorage;
-using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +36,7 @@ SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, bui
 AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 builder.AddAccess();
-builder.Services.Configure<RazorViewEngineOptions>(options =>
-{
-    options.PageViewLocationFormats.Add("/Access/Pages/{0}.cshtml");
-});
+builder.Services.AddMudServices();
 var app = builder.Build();
 
 app.UseResourceRequestLocalization();

@@ -1,11 +1,13 @@
 @inherits InputBase<bool>
 
-<div class="form-check">
-    <label>
-        <input @attributes="AdditionalAttributes" type="checkbox" value="@Value"
-               checked="@Value" @onchange="OnChange"/>
-        @Label
-    </label>
+<div class="form-control">
+    <div class="form-check">
+        <label>
+            <input @attributes="AdditionalAttributes" type="checkbox" value="@Value"
+                   checked="@Value" @onchange="OnChange"/>
+            @Label
+        </label>
+    </div>
 </div>
 
 @code {

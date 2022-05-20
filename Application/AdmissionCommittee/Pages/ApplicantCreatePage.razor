@@ -96,8 +96,8 @@
 
     public bool LocalStorageChecked { get; set; }
 
-    public Dictionary<long, MyCheckboxGroup<long>.OptionItem> SpecialityIdsOptions => Specialities.Values.Select(x =>
-        new MyCheckboxGroup<long>.OptionItem(
+    public Dictionary<long, OptionItem<long>> SpecialityIdsOptions => Specialities.Values.Select(x =>
+        new OptionItem<long>(
             $"{x.Code} {x.Name}",
             x.Id,
             Form.SelectedSpecialityIds.Contains(x.Id)))

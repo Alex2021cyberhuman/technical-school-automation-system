@@ -76,5 +76,15 @@
     <data name="NotRequested" xml:space="preserve">
         <value>Не запрошено на подпись</value>
     </data>
-
+    <data name="Director" xml:space="preserve">
+        <value>Директор</value>
+    </data>
+    <data name="Administrator" xml:space="preserve">
+        <value>Администратор</value>
+    </data>
+    <data name="AdmissionCommitteeMember" xml:space="preserve">
+        <value>
+            Член приемной коммисии
+        </value>
+    </data>
 </root>

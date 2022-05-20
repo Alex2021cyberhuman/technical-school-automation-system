@@ -1,5 +1,6 @@
 ﻿using Application.Access.Data;
 using Application.Access.Enums;
+using AspNetCore.Identity.Localization.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,9 +28,10 @@ public static class StartupAccessExtensions
         var password = app.Configuration["BaseUser:Password"];
         try
         {
-            await roleManager.CreateAsync(new Role(RoleIdentifiers.Administrator));
-            await roleManager.CreateAsync(new Role(RoleIdentifiers.Director));
-            await roleManager.CreateAsync(new Role(RoleIdentifiers.AdmissionCommitteeMember));
+            foreach (var role in RoleIdentifiers.Roles)
+            {
+                await roleManager.CreateAsync(new Role(role));
+            }
             var result = await userManager.CreateAsync(baseUser, password);
             baseUser = await userManager.FindByNameAsync(baseUser.UserName); 
             await userManager.AddToRolesAsync(baseUser, roles);
@@ -61,6 +63,7 @@ public static class StartupAccessExtensions
                 policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
                     .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director));
         });
+        builder.Services.AddIdentityLocalization();
         builder.Services.AddIdentity<User, Role>(options =>
             {
                 options.Password = new()
@@ -74,6 +77,7 @@ public static class StartupAccessExtensions
                     "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.SignIn.RequireConfirmedAccount = true;
             })
-            .AddEntityFrameworkStores<AccessDbContext>();
+            .AddEntityFrameworkStores<AccessDbContext>()
+            .AddIdentityErrorDescriber();
     }
 }

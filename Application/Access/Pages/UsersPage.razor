@@ -1,0 +1,106 @@
+@page "/manage/users"
+@using Application.Access.Data
+@using Application.Access.Forms
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@inject UserManager<User> UserManager
+@inject IDbContextFactory<AccessDbContext> DbContextFactory
+@inject IStringLocalizer StringLocalizer
+@inject ILogger<UsersPage> Logger
+
+<div class="row">
+    <div class="col-12 col-md-4">
+        <EditForm EditContext="FilterContext">
+            <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString" ValidationFor="() => Filter.SearchString"/>
+        </EditForm>
+    </div>
+    <div class="col-12 col-md-8">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>№</td>
+                <td>ФИО</td>
+                <td>Логин</td>
+                <td>Роли</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Users)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.FullName</td>
+                    <td>@item.UserName</td>
+                    <td>
+                        @foreach (var role in item.UserRoles)
+                        {
+                            @StringLocalizer[role.Role.Name]
+                        }
+                    </td>
+                    <td></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@code {
+
+    private UsersFilter Filter { get; set; }
+
+    private EditContext FilterContext { get; set; }
+
+    private List<User> Users { get; set; } = new();
+
+    private bool CreateModalVisible { get; set; }
+
+    public UsersPage()
+    {
+        Filter = new UsersFilter();
+        FilterContext = new EditContext(Filter);
+        FilterContext.OnFieldChanged += FilterContextOnOnFieldChanged;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Users = await GetUsersAsync(Filter);
+    }
+
+    private async Task<List<User>> GetUsersAsync(UsersFilter filter)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var query = context.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .OrderBy(x => x.UserName).AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(filter.SearchString))
+        {
+            query = query.Where(x => (x.FamilyName + " " + x.FirstName + " " + x.SurName + " " + x.UserName).Contains(filter.SearchString));
+        }
+        return await query.ToListAsync();
+    }
+
+    private async void FilterContextOnOnFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        try
+        {
+            Users = await GetUsersAsync(Filter);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "async void error");
+        }
+    }
+
+    private void Close()
+    {
+        FilterContext.OnFieldChanged -= FilterContextOnOnFieldChanged;
+    }
+
+
+}

@@ -1,0 +1,157 @@
+@using Application.Access.Forms
+@using Application.Access.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Localization
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<User> UserManager
+@inject IStringLocalizer StringLocalizer
+@inject RoleManager<Role> RoleManager
+
+<button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
+    Редактировать пользователя
+</button>
+
+@if (Visible)
+{
+    <PageTitle>Редактировать пользователя</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Редактировать пользователя</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        @if (!string.IsNullOrEmpty(IdentityError))
+                        {
+                            <p class="alert-danger">@IdentityError</p>
+                        }
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login" ValidationFor="() => Form.Login"/>
+                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email" ValidationFor="() => Form.Email"/>
+                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" ValidationFor="() => Form.FamilyName"/>
+                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" ValidationFor="() => Form.FirstName"/>
+                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
+                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
+                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
+                        <MyCheckboxGroup Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
+                        <MyInputCheckBox Label="Заблокировать" @bind-Value="Form.Lockout"/>
+                        @if (Form.Lockout)
+                        {
+                            <MudDatePicker
+                                Label="Конец блокировки"
+                                Editable="true" @bind-Date="Form.LockoutEnd"
+                                Mask="@(new DateMask("0000-00-00"))"
+                                DateFormat="yyyy-MM-dd"
+                                Placeholder="Конец блокировки"/>
+                        }
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Редактировать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    public string IdentityError { get; set; } = string.Empty;
+
+    public EditUserForm Form { get; set; }
+
+    public EditContext EditContext { get; set; }
+
+    public bool Visible { get; set; }
+
+    public List<OptionItem<string>> AllRoles { get; set; } = new();
+
+    [Parameter]
+    public User User { get; set; } = new();
+
+    public EditUserModal()
+    {
+        Form = new EditUserForm();
+        EditContext = new EditContext(Form);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private void OnCancel()
+    {
+        Visible = false;
+        Form = new EditUserForm();
+        EditContext = new EditContext(Form);
+    }
+
+    private async Task OnOpenAsync()
+    {
+        var roles = await RoleManager.Roles.ToListAsync();
+        var userRoles = (await UserManager.GetRolesAsync(User)).ToHashSet();
+        AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, userRoles.Contains(x.Name))).ToList();
+        Form.Login = User.UserName;
+        Form.Lockout = User.LockoutEnd.HasValue && User.LockoutEnd > DateTime.UtcNow;
+        Form.LockoutEnd = Form.Lockout ? new DateTime(User.LockoutEnd!.Value.Ticks) : DateTime.Now;
+        Form.Email = User.Email;
+        Form.FirstName = User.FirstName;
+        Form.FamilyName = User.FirstName;
+        Form.SurName = User.FirstName;
+        Form.RoleNames = userRoles;
+        Visible = true;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!Visible || !EditContext.Validate())
+            return;
+        var user = await UserManager.FindByIdAsync(User.Id.ToString());
+        if (Form.Lockout)
+        {
+            user.LockoutEnd = Form.LockoutEnd.ToUniversalTime();
+        }
+        else if (!Form.Lockout)
+        {
+            user.LockoutEnd = DateTimeOffset.MinValue;
+        }
+            
+        user.UserName = Form.Login;
+        user.Email = Form.Email;
+        user.FirstName = Form.FirstName;
+        user.FamilyName = Form.FirstName;
+        user.SurName = Form.FirstName;
+        var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
+        user.PasswordHash = userPasswordHash;
+        var result = await UserManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            IdentityError = result.GetErrorsString();
+            return;
+        }
+
+        var userRoles = (await UserManager.GetRolesAsync(User)).ToHashSet();
+        var removeFromRolesList = userRoles.Where(x => !Form.RoleNames.Contains(x));
+        var addToRolesList = Form.RoleNames.Where(x => !userRoles.Contains(x));
+        var removeResult = await UserManager.RemoveFromRolesAsync(user, removeFromRolesList);
+        if (!removeResult.Succeeded)
+        {
+            IdentityError = result.GetErrorsString();
+            return;
+        }
+        var addResult = await UserManager.AddToRolesAsync(user, addToRolesList);
+        if (!addResult.Succeeded)
+        {
+            IdentityError = result.GetErrorsString();
+            return;
+        }
+        OnCancel();
+    }
+}

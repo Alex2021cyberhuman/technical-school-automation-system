@@ -26,11 +26,11 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
             b.Property(u => u.NormalizedUserName).HasMaxLength(256);
             b.Property(u => u.Email).HasMaxLength(256);
             b.Property(u => u.NormalizedEmail).HasMaxLength(256);
-
+            
             b.HasMany<IdentityUserClaim<long>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
             b.HasMany<IdentityUserLogin<long>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
             b.HasMany<IdentityUserToken<long>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
-            b.HasMany<UserRole>().WithOne(x => x.User).HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany(x => x.UserRoles).WithOne(x => x.User).HasForeignKey(ur => ur.UserId).IsRequired();
         });
 
         builder.Entity<IdentityUserClaim<long>>(b =>
