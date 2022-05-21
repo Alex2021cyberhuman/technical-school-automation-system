@@ -4,6 +4,7 @@ using Application.Common.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Specialities.Services;
+using Application.Teachers.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

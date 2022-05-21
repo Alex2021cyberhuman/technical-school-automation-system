@@ -1,4 +1,4 @@
-namespace Application.Specialities.Data;
+namespace Application.Teachers.Data;
 
 public class ProofreadingTeacherDay
 {

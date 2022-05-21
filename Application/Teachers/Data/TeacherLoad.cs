@@ -1,7 +1,8 @@
 using Application.Access.Data;
 using Application.Groups.Data;
+using Application.Specialities.Data;
 
-namespace Application.Specialities.Data;
+namespace Application.Teachers.Data;
 
 public class TeacherLoad
 {
