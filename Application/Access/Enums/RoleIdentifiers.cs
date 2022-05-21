@@ -8,10 +8,16 @@ public static class RoleIdentifiers
 
     public const string AdmissionCommitteeMember = "AdmissionCommitteeMember";
 
+    public const string Teacher = "Teacher";
+
+    public const string AssociateDirector = "AssociateDirector";
+
     public static readonly IReadOnlyList<string> Roles = new[]
     {
         Administrator,
         Director,
-        AdmissionCommitteeMember
+        AdmissionCommitteeMember,
+        AssociateDirector,
+        Teacher
     };
 }

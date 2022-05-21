@@ -37,6 +37,6 @@ public class EditUserForm
     public string SurName { get; set; } = string.Empty;
 
     public bool Lockout { get; set; }
-    
+
     public DateTime? LockoutEnd { get; set; }
 }

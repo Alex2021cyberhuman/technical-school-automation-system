@@ -1,8 +1,9 @@
 @using Application.Specialities.Data
 @using Application.Specialities.Forms
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SpecialitiesDbContext> DbContextFactory
-    
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
     Удалить дисцеплину
 </button>

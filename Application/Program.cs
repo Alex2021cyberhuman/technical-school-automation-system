@@ -3,6 +3,7 @@ using Application.AdmissionCommittee.Data;
 using Application.AdmissionCommittee.Services.ApplicantsTable;
 using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 using Application.AdmissionCommittee.Services.StatementDocument;
+using Application.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Startup;
@@ -31,9 +32,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddSingleton<StatementDocumentCreator>();
 builder.Services.AddSingleton<ApplicantsTableCreator>();
 builder.Services.AddSingleton<EnrolledStudentsTableCreator>();
-SpecialitiesDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
-AdmissionCommitteeDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
-GroupsDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
+MainDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 builder.AddAccess();
 builder.Services.AddMudServices();
 var app = builder.Build();
@@ -79,11 +78,7 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 await using var scope = app.Services.CreateAsyncScope();
-await scope.ServiceProvider.InitializeSpecialitiesDbContextDevelopmentInstallationAsync();
 await app.InitializeAccessAsync();
-await scope.ServiceProvider.GetRequiredService<IDbContextFactory<AdmissionCommitteeDbContext>>().CreateDbContext()
-    .Database.MigrateAsync();
-await scope.ServiceProvider.GetRequiredService<IDbContextFactory<GroupsDbContext>>().CreateDbContext()
-    .Database.MigrateAsync();
+await scope.ServiceProvider.InitializeMainDbContextDevelopmentInstallationAsync();
 
 app.Run();

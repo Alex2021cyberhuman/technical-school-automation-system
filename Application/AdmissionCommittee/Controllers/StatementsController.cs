@@ -1,4 +1,5 @@
 using Application.AdmissionCommittee.Data;
+using Application.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,10 @@ public class StatementsController : ControllerBase
 {
     private const string DocxMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-    private readonly IDbContextFactory<AdmissionCommitteeDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MainDbContext> _dbContextFactory;
     private readonly IConfiguration _configuration;
 
-    public StatementsController(IDbContextFactory<AdmissionCommitteeDbContext> dbContextFactory,
+    public StatementsController(IDbContextFactory<MainDbContext> dbContextFactory,
         IConfiguration configuration)
     {
         _dbContextFactory = dbContextFactory;

@@ -7,36 +7,36 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.Identity.Localization.Core" Version="1.0.0" />
-        <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
-        <PackageReference Include="EFCore.BulkExtensions" Version="6.4.4" />
-        <PackageReference Include="EFCore.NamingConventions" Version="6.0.0" />
-        <PackageReference Include="FluentValidation" Version="11.0.0" />
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+        <PackageReference Include="AspNetCore.Identity.Localization.Core" Version="1.0.0"/>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.0.3"/>
+        <PackageReference Include="EFCore.BulkExtensions" Version="6.4.4"/>
+        <PackageReference Include="EFCore.NamingConventions" Version="6.0.0"/>
+        <PackageReference Include="FluentValidation" Version="11.0.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-        <PackageReference Include="MR.EntityFrameworkCore.KeysetPagination" Version="1.0.1" />
-        <PackageReference Include="MudBlazor" Version="6.0.10" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-        <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
-        <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="MR.EntityFrameworkCore.KeysetPagination" Version="1.0.1"/>
+        <PackageReference Include="MudBlazor" Version="6.0.10"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1"/>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3"/>
+        <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="wwwroot\js\index.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\index.js"/>
     </ItemGroup>
 
 </Project>

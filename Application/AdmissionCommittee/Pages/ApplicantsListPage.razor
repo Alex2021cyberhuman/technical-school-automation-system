@@ -9,7 +9,8 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @using Application.Access.Enums
-@inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILogger<ApplicantCreatePage> Logger
 @inject IStringLocalizer StringLocalizer
 @inject NavigationManager NavigationManager
@@ -117,7 +118,7 @@
         await LoadApplicantsAsync();
     }
 
-    private static async Task<List<ValueRadioItem<int>>> GetStartYear(AdmissionCommitteeDbContext context)
+    private static async Task<List<ValueRadioItem<int>>> GetStartYear(MainDbContext context)
     {
         var startYear = (await context.Applicant.OrderBy(x => x.Submitted).Select(x => x.Submitted).FirstOrDefaultAsync())
             .Year;

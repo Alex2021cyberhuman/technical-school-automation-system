@@ -2,7 +2,8 @@
 @attribute [Authorize]
 @using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SpecialitiesDbContext> SpecialitiesDbContextFactory
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> MainDbContextFactory
 
 <table class="table">
     <thead>
@@ -29,7 +30,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await using var context = await SpecialitiesDbContextFactory.CreateDbContextAsync();
+        await using var context = await MainDbContextFactory.CreateDbContextAsync();
         Specialities = await context.Speciality.OrderBy(x => x.Code).AsNoTracking().ToListAsync();
     }
 }

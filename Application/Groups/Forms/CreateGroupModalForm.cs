@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Enums;
 using Application.Groups.Data;
 
 namespace Application.Groups.Forms;
@@ -11,6 +12,9 @@ public class CreateGroupModalForm
     public string Name { get; set; } = string.Empty;
 
     public long SpecialityId { get; set; }
+    public EducationForm EducationForm { get; set; }
+
+    public FinanceEducationType FinanceEducationType { get; set; }
 
     public Group ToGroup()
     {
@@ -18,7 +22,9 @@ public class CreateGroupModalForm
         {
             Name = Name,
             Created = DateTime.UtcNow,
-            SpecialityId = SpecialityId
+            SpecialityId = SpecialityId,
+            EducationForm = EducationForm,
+            FinanceEducationType = FinanceEducationType
         };
     }
 }

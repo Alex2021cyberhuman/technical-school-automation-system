@@ -8,7 +8,8 @@
 @using Application.Common.Enums
 @using Blazored.LocalStorage
 @using Application.Access.Enums
-@inject IDbContextFactory<AdmissionCommitteeDbContext> DbContextFactory
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILocalStorageService LocalStorageService
 @inject IConfiguration Configuration
 @inject StatementDocumentCreator StatementDocumentCreator

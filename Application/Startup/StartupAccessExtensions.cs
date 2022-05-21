@@ -28,12 +28,9 @@ public static class StartupAccessExtensions
         var password = app.Configuration["BaseUser:Password"];
         try
         {
-            foreach (var role in RoleIdentifiers.Roles)
-            {
-                await roleManager.CreateAsync(new Role(role));
-            }
+            foreach (var role in RoleIdentifiers.Roles) await roleManager.CreateAsync(new Role(role));
             var result = await userManager.CreateAsync(baseUser, password);
-            baseUser = await userManager.FindByNameAsync(baseUser.UserName); 
+            baseUser = await userManager.FindByNameAsync(baseUser.UserName);
             await userManager.AddToRolesAsync(baseUser, roles);
             if (result.Succeeded)
                 logger.LogInformation("BaseUser created {UserName} with roles {Roles}", baseUser.UserName, roles);
@@ -65,7 +62,13 @@ public static class StartupAccessExtensions
             options.AddPolicy(PolicyIdentifiers.Administrators,
                 policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
                     .RequireRole(RoleIdentifiers.Administrator));
-
+            options.AddPolicy(PolicyIdentifiers.Teachers,
+                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
+                    .RequireRole(RoleIdentifiers.Teacher));
+            options.AddPolicy(PolicyIdentifiers.Administration,
+                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
+                    .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director,
+                        RoleIdentifiers.AssociateDirector));
         });
         builder.Services.AddIdentityLocalization();
         builder.Services.AddIdentity<User, Role>(options =>

@@ -28,9 +28,7 @@ public class LoginModel : PageModel
 
     public class InputModel
     {
-        [Required]
-        [Display(Name = "Логин")]
-        public string Login { get; set; } = null!;
+        [Required] [Display(Name = "Логин")] public string Login { get; set; } = null!;
 
         [Required]
         [DataType(DataType.Password)]

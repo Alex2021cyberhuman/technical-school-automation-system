@@ -1,7 +1,8 @@
 @using Microsoft.EntityFrameworkCore
 @using Application.Groups.Data
 @using Application.AdmissionCommittee.Services.EnrolledStudentsTable
-@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject EnrolledStudentsTableCreator EnrolledStudentsTableCreator
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration

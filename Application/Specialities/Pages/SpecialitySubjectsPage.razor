@@ -1,8 +1,10 @@
 @page "/speciality/{specialityId:long}/subjects"
-@attribute [Authorize]
+@attribute [Authorize(Policy = PolicyIdentifiers.Administration)]
 @using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SpecialitiesDbContext> DbContextFactory
+@using Application.Access.Enums
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 
 @if (Speciality.Id != SpecialityId)
 {
@@ -11,8 +13,13 @@
 }
 else
 {
-    <CreateSubjectModal Speciality="@Speciality"/>
-    <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по">
+    <PageTitle>Специальность @Speciality.Code @Speciality.Name</PageTitle>
+    <h3>Специальность @Speciality.Code @Speciality.Name</h3>
+    <CreateSubjectModal Speciality="@Speciality" OnSubmit="RefreshAsync"/>
+    <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter">
+        <ToolBarContent>
+            <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
         <HeaderContent>
             <MudTh>
                 <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel>
@@ -26,7 +33,9 @@ else
         <RowTemplate>
             <MudTd DataLabel="Название">@context.Name</MudTd>
             <MudTd DataLabel="Код">@context.Code</MudTd>
-            <MudTd></MudTd>
+            <MudTd>
+                <EditSubjectModal Speciality="Speciality" Subject="@context" OnSubmit="RefreshAsync"/>
+            </MudTd>
         </RowTemplate>
     </MudTable>
 }
@@ -41,6 +50,8 @@ else
 
     public List<Subject> Subjects { get; set; } = new();
 
+    public string SearchString { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -51,6 +62,17 @@ else
             return;
         }
         Speciality = speciality;
+        Subjects = await context.Subject.Where(x => x.SpecialityId == SpecialityId).ToListAsync();
+    }
+
+    private bool Filter(Subject subject)
+    {
+        return string.IsNullOrWhiteSpace(SearchString) || subject.Code.Contains(SearchString) || subject.Name.Contains(SearchString);
+    }
+
+    private async Task RefreshAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
         Subjects = await context.Subject.Where(x => x.SpecialityId == SpecialityId).ToListAsync();
     }
 }

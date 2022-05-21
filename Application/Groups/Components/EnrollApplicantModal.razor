@@ -2,8 +2,9 @@
 @using Application.Groups.Data
 @using Application.AdmissionCommittee.Data
 @using Application.Common.Enums
+@using Application.Data
 @using Microsoft.Extensions.Localization
-@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IStringLocalizer StringLocalizer
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
     Добавить студентов в группу
@@ -97,6 +98,8 @@
             .Where(x => x.Student == null)
             .Where(x => x.ApplicantSpecialities.Any(speciality => speciality.SpecialityId == Group.SpecialityId))
             .Where(x => x.DirectorDecision == DirectorDecisionType.NotСonsidered)
+            .Where(x => x.EducationForm == Group.EducationForm)
+            .Where(x => x.FinanceEducationType == Group.FinanceEducationType)
             .OrderBy(x => x.FamilyName)
             .ThenBy(x => x.FirstName)
             .ThenBy(x => x.SurName)

@@ -2,7 +2,8 @@
 @using Application.Groups.Data
 @using System.Security.Claims
 @using Application.Access.Enums
-@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
     Список студентов
 </button>
@@ -49,7 +50,7 @@
     </div>
 }
 
-@code 
+@code
 {
     public bool ModalVisible { get; set; }
 

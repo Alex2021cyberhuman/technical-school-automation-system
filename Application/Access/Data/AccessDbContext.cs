@@ -26,7 +26,7 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
             b.Property(u => u.NormalizedUserName).HasMaxLength(256);
             b.Property(u => u.Email).HasMaxLength(256);
             b.Property(u => u.NormalizedEmail).HasMaxLength(256);
-            
+
             b.HasMany<IdentityUserClaim<long>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
             b.HasMany<IdentityUserLogin<long>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
             b.HasMany<IdentityUserToken<long>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
@@ -51,6 +51,12 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
             b.ToTable("user_token");
         });
 
+        builder.Entity<UserRole>(b =>
+        {
+            b.HasKey(r => new { r.UserId, r.RoleId });
+            b.ToTable("user_role");
+        });
+
         builder.Entity<Role>(b =>
         {
             b.HasKey(r => r.Id);
@@ -69,12 +75,6 @@ public class AccessDbContext : IdentityDbContext<User, Role, long, IdentityUserC
         {
             b.HasKey(rc => rc.Id);
             b.ToTable("role_claim");
-        });
-
-        builder.Entity<UserRole>(b =>
-        {
-            b.HasKey(r => new { r.UserId, r.RoleId });
-            b.ToTable("user_role");
         });
     }
 

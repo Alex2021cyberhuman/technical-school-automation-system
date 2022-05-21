@@ -83,8 +83,15 @@
         <value>Администратор</value>
     </data>
     <data name="AdmissionCommitteeMember" xml:space="preserve">
-        <value>
-            Член приемной коммисии
-        </value>
+        <value>Член приемной коммисии</value>
+    </data>
+    <data name="Teacher" xml:space="preserve">
+        <value>Учитель</value>
+    </data>
+    <data name="Workings" xml:space="preserve">
+        <value>Рабочая</value>
+    </data>
+    <data name="Vacancies" xml:space="preserve">
+        <value>Вакансия</value>
     </data>
 </root>

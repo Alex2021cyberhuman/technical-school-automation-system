@@ -3,7 +3,9 @@
 @using Microsoft.EntityFrameworkCore
 @using Application.Groups.Data
 @using DocumentFormat.OpenXml.Bibliography
-@inject IDbContextFactory<GroupsDbContext> DbContextFactory
+@using Application.Common.Enums
+@using Application.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
     Создать группу
 </button>
@@ -24,6 +26,8 @@
                     <EditForm EditContext="EditContext">
                         <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" ValidationFor="() => Form.Name"/>
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
+                        <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
+                        <MyEnumInputRadioGroup Label="Тип" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">

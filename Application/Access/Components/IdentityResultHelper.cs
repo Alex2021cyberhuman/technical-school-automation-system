@@ -7,16 +7,10 @@ public static class IdentityResultHelper
 {
     public static string GetErrorsString(this IdentityResult result, string title = "Не удалось выполнить операцию!")
     {
-        if (result.Succeeded)
-        {
-            return string.Empty;
-        }
+        if (result.Succeeded) return string.Empty;
 
         var errorMessageSb = new StringBuilder(title);
-        foreach (var identityError in result.Errors)
-        {
-            errorMessageSb.AppendLine(identityError.Description);
-        }
+        foreach (var identityError in result.Errors) errorMessageSb.AppendLine(identityError.Description);
 
         return errorMessageSb.ToString();
     }

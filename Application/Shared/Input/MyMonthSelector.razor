@@ -1,0 +1,40 @@
+@inherits MudSelect<int>
+
+<MudSelect T="int" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
+    @foreach (var month in MonthModel.Defaults)
+    {
+        <MudSelectItem Value="@month.Number">@month.Label</MudSelectItem>
+    }
+</MudSelect>
+
+@code
+{
+    public class MonthModel
+    {
+        private MonthModel(int number, string label)
+        {
+            Number = number;
+            Label = label;
+        }
+
+        public int Number { get; set; }
+
+        public string Label { get; set; } = string.Empty;
+
+        public static readonly List<MonthModel> Defaults = new()
+        {
+            new(1, "Январь"),
+            new(2, "Февраль"),
+            new(3, "Март"),
+            new(4, "Апрель"),
+            new(5, "Май"),
+            new(6, "Июнь"),
+            new(7, "Июль"),
+            new(8, "Август"),
+            new(9, "Сентябрь"),
+            new(10, "Октябрь"),
+            new(11, "Ноябрь"),
+            new(12, "Декабрь")
+        };
+    }
+}

@@ -1,0 +1,19 @@
+@inherits MudSelect<int>
+
+<MudSelect T="int" Label="Год" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
+    @foreach (var year in Years)
+    {
+        <MudSelectItem Value="@year">@year</MudSelectItem>
+    }
+</MudSelect>
+
+@code
+{
+    [Parameter]
+    public int MinimalYear { get; set; }
+
+    [Parameter]
+    public int MaximumYear { get; set; } = DateTime.Now.Year;
+
+    public IEnumerable<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1);
+}
