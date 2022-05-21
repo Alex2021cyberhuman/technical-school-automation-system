@@ -25,11 +25,7 @@
                         <ValidationSummary/>
                         <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" ValidationFor="() => Form.Name"/>
                         <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" ValidationFor="() => Form.Code"/>
-                        @foreach (var semester in Form.Semesters)
-                        {
-                            var label = $"Семестр №{semester.Number}";
-                            <MudNumericField Label="@label" @bind-Value="@semester.Hours" Min="0" Max="4380"/>
-                        }
+                        <MySemesterInput @bind-Value="Form.Semesters"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">

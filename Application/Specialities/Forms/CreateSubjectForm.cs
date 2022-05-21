@@ -1,3 +1,4 @@
+using Application.Shared.Input;
 using Application.Specialities.Data;
 
 namespace Application.Specialities.Forms;

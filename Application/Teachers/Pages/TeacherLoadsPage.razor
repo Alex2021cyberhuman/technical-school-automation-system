@@ -1,0 +1,41 @@
+@page "/load"
+@using Application.Access.Enums
+@using Application.Teachers.Data
+@attribute [Authorize(Policy = PolicyIdentifiers.Teachers)]
+<PageTitle>Нагрузка</PageTitle>
+<h3>Нагрузка</h3>
+
+<MudTable Items="@Loads" >
+    
+</MudTable>
+@* <PageTitle>Специальность @Speciality.Code @Speciality.Name</PageTitle> *@
+@*     <h3>Специальность @Speciality.Code @Speciality.Name</h3> *@
+@*     <CreateSubjectModal Speciality="@Speciality" OnSubmit="RefreshAsync"/> *@
+@*     <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter"> *@
+@*         <ToolBarContent> *@
+@*             <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField> *@
+@*         </ToolBarContent> *@
+@*         <HeaderContent> *@
+@*             <MudTh> *@
+@*                 <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel> *@
+@*             </MudTh> *@
+@*             <MudTh> *@
+@*                 <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel> *@
+@*             </MudTh> *@
+@*             <MudTh> *@
+@*             </MudTh> *@
+@*         </HeaderContent> *@
+@*         <RowTemplate> *@
+@*             <MudTd DataLabel="Название">@context.Name</MudTd> *@
+@*             <MudTd DataLabel="Код">@context.Code</MudTd> *@
+@*             <MudTd> *@
+@*                 <EditSubjectModal Speciality="Speciality" Subject="@context" OnSubmit="RefreshAsync"/> *@
+@*             </MudTd> *@
+@*         </RowTemplate> *@
+@*     </MudTable> *@
+@code {
+
+
+    public List<TeacherLoad> Loads { get; set; } = new();
+
+}

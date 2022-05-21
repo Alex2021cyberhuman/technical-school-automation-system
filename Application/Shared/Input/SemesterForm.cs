@@ -1,4 +1,4 @@
-namespace Application.Specialities.Forms;
+namespace Application.Shared.Input;
 
 public class SemesterForm
 {
