@@ -1,0 +1,75 @@
+@using Application.Specialities.Data
+@inherits MudBaseInput<Application.Specialities.Data.Subject>
+
+<MudField Label="Дисциплина" Variant="Variant.Text">
+    <MudText>@Value.Code @Value.Code</MudText>
+    <MudDivider Vertical="true" FlexItem="true"/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" StartIcon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)"/>
+    <MudPopover Open="@IsOpen" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+        <MudTable T="Subject" Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChanged">
+            <ToolBarContent>
+                <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Code">Код специальности</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Name">Название специальности</MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Название">@context.Name</MudTd>
+                <MudTd DataLabel="Код">@context.Code</MudTd>
+                <MudTd DataLabel="Название">@context.Speciality.Name</MudTd>
+                <MudTd DataLabel="Код">@context.Speciality.Code</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPopover>
+</MudField>
+
+@code
+{
+    [Parameter]
+    public IReadOnlyCollection<Subject> Subjects { get; set; } = new List<Subject>();
+
+    public string SearchString { get; set; } = string.Empty;
+
+    public bool IsOpen { get; set; }
+
+    public MudTable<Subject> MudTable { get; set; } = null!;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Value is not null || !Subjects.Any()) return;
+        Value = Subjects.First();
+        MudTable.SetSelectedItem(Value);
+    }
+
+    private void ToggleOpen()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    private bool Filter(Subject subject)
+    {
+        return string.IsNullOrWhiteSpace(SearchString) ||
+               subject.Code.Contains(SearchString) ||
+               subject.Name.Contains(SearchString) ||
+               subject.Speciality.Code.Contains(SearchString) ||
+               subject.Speciality.Name.Contains(SearchString);
+    }
+
+    private void OnSelectedItemChanged(Subject obj)
+    {
+        Value = obj;
+        ToggleOpen();
+    }
+}

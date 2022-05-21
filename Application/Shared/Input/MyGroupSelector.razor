@@ -1,0 +1,29 @@
+@using Application.Groups.Data
+@inherits MudSelect<Group>
+
+<MudSelect T="Group" Label="Группа" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="GetGroupSelect">
+    @foreach (var group in Groups)
+    {
+        <MudSelectItem Value="Groups"/>
+    }
+</MudSelect>
+
+@code
+{
+    [Parameter]
+    public IReadOnlyCollection<Group> Groups { get; set; } = new List<Group>();
+
+    private static string GetGroupSelect(Group arg)
+    {
+        return arg.Name;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Value is null && Groups.Any())
+        {
+            Value = Groups.First();
+        }
+    }
+}

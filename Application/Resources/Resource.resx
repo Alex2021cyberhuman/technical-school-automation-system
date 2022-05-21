@@ -94,4 +94,7 @@
     <data name="Vacancies" xml:space="preserve">
         <value>Вакансия</value>
     </data>
+    <data name="OutOfBudget" xml:space="preserve">
+        <value>Внебюджет</value>
+    </data>
 </root>

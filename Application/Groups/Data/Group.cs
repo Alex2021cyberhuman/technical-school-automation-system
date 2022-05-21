@@ -18,7 +18,7 @@ public class Group
 
     public EducationForm EducationForm { get; set; }
 
-    public FinanceEducationType FinanceEducationType { get; set; }
+    public FinanceEnrolmentType FinanceEnrolmentType { get; set; }
 
     [Required] [Range(0, 1000)] public int StudentsCount { get; set; }
 

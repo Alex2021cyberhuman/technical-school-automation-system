@@ -1,21 +1,23 @@
 @using Application.Specialities.Data
-@using Application.Specialities.Forms
 @using Microsoft.EntityFrameworkCore
 @using Application.Data
+@using Application.Teachers.Forms
+@using Application.Teachers.Data
+@using Group = Application.Groups.Data.Group
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
-    Изменить дисцеплину
+    Добавить нагрузку
 </button>
 
 @if (Visible)
 {
-    <PageTitle>Изменить дисцеплину</PageTitle>
+    <PageTitle>Добавить нагрузку</PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Изменить дисцеплину</h5>
+                    <h5 class="modal-title">Добавить нагрузку</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -24,14 +26,18 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" ValidationFor="() => Form.Name"/>
-                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" ValidationFor="() => Form.Code"/>
+                        <MySubjectSelector Subjects="Subjects" Required="true" ValueChanged="OnSubjectChangedAsync"/>
+                        <MyGroupSelector @bind-Value="Form.Group" Groups="Groups" Required="true"/>
+                        <MudField Label="Тип">
+                            <strong>@Form.Group?.FinanceEnrolmentType</strong>
+                        </MudField>
+                        <MyEnumSelector TValue="TeacherLoadKind" @bind-Value="Form.Kind" Label="Характер" Required="true"/>
                         <MySemesterInput @bind-Value="Form.Semesters"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Изменить дисцеплину</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Добавить нагрузку</button>
                 </div>
             </div>
         </div>
@@ -40,7 +46,7 @@
 
 @code
 {
-    public EditSubjectForm Form { get; set; }
+    public CreateTeacherLoadForm Form { get; set; }
 
     public EditContext EditContext { get; set; }
 
@@ -50,34 +56,35 @@
     public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
 
     [Parameter]
-    public Speciality Speciality { get; set; } = new();
+    public long CurrentUserId { get; set; }
 
-    [Parameter]
-    public Subject Subject { get; set; } = new();
+    public List<Group> Groups { get; set; } = new();
 
-    public EditSubjectModal()
+    public List<Subject> Subjects { get; set; } = new();
+
+    public CreateTeacherLoadModal()
     {
-        Form = new EditSubjectForm();
+        Form = new CreateTeacherLoadForm();
         EditContext = new EditContext(Form);
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Subjects = await context.GetSubjectsWithSpecialitiesAsync();
     }
 
     private void OnCancel()
     {
         Visible = false;
-        Form = new EditSubjectForm();
+        Form = new CreateTeacherLoadForm();
         EditContext = new EditContext(Form);
     }
 
     private void OnOpen()
     {
         Visible = true;
-        Form = EditSubjectForm.FromSubject(Subject);
-        EditContext = new EditContext(Form);
     }
 
     private async Task OnSubmitAsync()
@@ -85,14 +92,20 @@
         if (!Visible || !EditContext.Validate())
             return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var subject = await context.Subject.FirstOrDefaultAsync(x => x.Id == Subject.Id);
-        if (subject is null)
-        {
-            OnCancel();
-            return;
-        }
-        Form.ToSubject(subject);
+        var load = Form.ToTeacherLoad(CurrentUserId);
+        context.TeacherLoad.Add(load);
         await context.SaveChangesAsync();
+        OnCancel();
         await OnSubmit.InvokeAsync();
+    }
+
+    private async Task OnSubjectChangedAsync(Subject? subject)
+    {
+        Form.Subject = subject;
+        if (Form.Subject is null)
+            return;
+
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Groups = await context.GetGroupsBySubjectAsync(Form.Subject);
     }
 }

@@ -17,7 +17,7 @@
         <div class="modal-dialog my-large-modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Список студентов в группе</h5>
+                    <h5 class="modal-title">Список студентов в группе</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -99,7 +99,7 @@
             .Where(x => x.ApplicantSpecialities.Any(speciality => speciality.SpecialityId == Group.SpecialityId))
             .Where(x => x.DirectorDecision == DirectorDecisionType.NotСonsidered)
             .Where(x => x.EducationForm == Group.EducationForm)
-            .Where(x => x.FinanceEducationType == Group.FinanceEducationType)
+            .Where(x => Group.FinanceEnrolmentType == FinanceEnrolmentType.Budget ? x.FinanceEducationType == FinanceEducationType.Budget : x.FinanceEducationType != FinanceEducationType.Budget)
             .OrderBy(x => x.FamilyName)
             .ThenBy(x => x.FirstName)
             .ThenBy(x => x.SurName)

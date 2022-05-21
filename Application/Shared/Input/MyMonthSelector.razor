@@ -3,7 +3,7 @@
 <MudSelect T="int" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
     @foreach (var month in MonthModel.Defaults)
     {
-        <MudSelectItem Value="@month.Number">@month.Label</MudSelectItem>
+        <MudSelectItem Value="@month"/>
     }
 </MudSelect>
 
@@ -36,5 +36,10 @@
             new(11, "Ноябрь"),
             new(12, "Декабрь")
         };
+
+        public override string ToString()
+        {
+            return Label;
+        }
     }
 }

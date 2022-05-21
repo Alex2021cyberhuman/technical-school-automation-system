@@ -4,7 +4,7 @@ using Application.Groups.Data;
 
 namespace Application.Groups.Forms;
 
-public class CreateGroupModalForm
+public class CreateGroupForm
 {
     [Display(Name = "Название группы")]
     [Required]
@@ -14,7 +14,7 @@ public class CreateGroupModalForm
     public long SpecialityId { get; set; }
     public EducationForm EducationForm { get; set; }
 
-    public FinanceEducationType FinanceEducationType { get; set; }
+    public FinanceEnrolmentType FinanceEnrolmentType { get; set; }
 
     public Group ToGroup()
     {
@@ -24,7 +24,7 @@ public class CreateGroupModalForm
             Created = DateTime.UtcNow,
             SpecialityId = SpecialityId,
             EducationForm = EducationForm,
-            FinanceEducationType = FinanceEducationType
+            FinanceEnrolmentType = FinanceEnrolmentType
         };
     }
 }

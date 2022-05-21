@@ -1,41 +1,83 @@
 @page "/load"
 @using Application.Access.Enums
 @using Application.Teachers.Data
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.Extensions.Localization
+@using System.Security.Claims
+@using Application.Data
+@using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = PolicyIdentifiers.Teachers)]
+@inject IStringLocalizer StringLocalizer
+@inject IDbContextFactory<MainDbContext> DbContextFactory
 <PageTitle>Нагрузка</PageTitle>
 <h3>Нагрузка</h3>
 
-<MudTable Items="@Loads" >
-    
+<CreateTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync"/>
+<MudTable Items="@Loads" Hover="true" SortLabel="Сортировать по">
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Group.Name">Группа</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Subject.Name">Дисциплина</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Created">Создано</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            Тип
+        </MudTh>
+        <MudTh>
+            Характер
+        </MudTh>
+        <MudTh>
+        </MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Группа">
+            @context.Group.Name
+        </MudTd>
+        <MudTd DataLabel="Дисциплина">
+            @context.Subject.Name
+        </MudTd>
+        <MudTd DataLabel="Создано">
+            @context.Created.ToLocalTime()
+        </MudTd>
+        <MudTd DataLabel="Тип">
+            @StringLocalizer[context.Group.FinanceEnrolmentType.ToString()]
+        </MudTd>
+        <MudTd DataLabel="Характер">
+            @context.Kind
+        </MudTd>
+        <MudTd>
+            <EditTeacherLoadModal OnSubmit="RefreshAsync" TeacherLoad="@context" CurrentUserId="CurrentUserId"/>
+        </MudTd>
+    </RowTemplate>
 </MudTable>
-@* <PageTitle>Специальность @Speciality.Code @Speciality.Name</PageTitle> *@
-@*     <h3>Специальность @Speciality.Code @Speciality.Name</h3> *@
-@*     <CreateSubjectModal Speciality="@Speciality" OnSubmit="RefreshAsync"/> *@
-@*     <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter"> *@
-@*         <ToolBarContent> *@
-@*             <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField> *@
-@*         </ToolBarContent> *@
-@*         <HeaderContent> *@
-@*             <MudTh> *@
-@*                 <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel> *@
-@*             </MudTh> *@
-@*             <MudTh> *@
-@*                 <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel> *@
-@*             </MudTh> *@
-@*             <MudTh> *@
-@*             </MudTh> *@
-@*         </HeaderContent> *@
-@*         <RowTemplate> *@
-@*             <MudTd DataLabel="Название">@context.Name</MudTd> *@
-@*             <MudTd DataLabel="Код">@context.Code</MudTd> *@
-@*             <MudTd> *@
-@*                 <EditSubjectModal Speciality="Speciality" Subject="@context" OnSubmit="RefreshAsync"/> *@
-@*             </MudTd> *@
-@*         </RowTemplate> *@
-@*     </MudTable> *@
 @code {
 
 
     public List<TeacherLoad> Loads { get; set; } = new();
+
+    public long CurrentUserId => long.TryParse(CurrentUser?.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
+
+    public ClaimsPrincipal? CurrentUser { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await AuthenticationStateTask;
+        CurrentUser = state.User;
+        await RefreshAsync();
+    }
+
+    private async Task RefreshAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Loads = await context.GetTeacherLoadsAsync();
+    }
 
 }

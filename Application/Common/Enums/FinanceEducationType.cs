@@ -6,3 +6,9 @@ public enum FinanceEducationType
     LegalEntities,
     IndividualEntities
 }
+
+public enum FinanceEnrolmentType
+{
+    Budget,
+    OutOfBudget
+}

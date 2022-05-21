@@ -17,8 +17,7 @@ public class EditSubjectForm
         {
             Name = subject.Name,
             Code = subject.Code,
-            Semesters = subject.Semesters.Select(x => new SemesterForm { Number = x.Number, Hours = x.Hours })
-                .ToList()
+            Semesters = subject.Semesters.ToSemesterForms()
         };
         return form;
     }
@@ -27,7 +26,6 @@ public class EditSubjectForm
     {
         subject.Name = Name;
         subject.Code = Code;
-        subject.Semesters = subject.Semesters.Select(x => new Semester { Number = x.Number, Hours = x.Hours })
-            .ToList();
+        subject.Semesters = Semesters.ToSemesters();
     }
 }
