@@ -49,7 +49,7 @@
             @StringLocalizer[context.Group.FinanceEnrolmentType.ToString()]
         </MudTd>
         <MudTd DataLabel="Характер">
-            @context.Kind
+            @StringLocalizer[context.Kind.ToString()]
         </MudTd>
         <MudTd>
             <EditTeacherLoadModal OnSubmit="RefreshAsync" TeacherLoad="@context" CurrentUserId="CurrentUserId"/>

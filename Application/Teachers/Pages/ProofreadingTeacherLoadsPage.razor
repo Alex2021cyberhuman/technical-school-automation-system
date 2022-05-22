@@ -12,22 +12,22 @@
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ProofreadingTeacherLoadVacanciesCreator ProofreadingTeacherLoadVacanciesCreator
 @inject MonthProofreadingTeacherLoadsCreator MonthProofreadingTeacherLoadsCreator
-@inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 <PageTitle>Вычитка часов преподования</PageTitle>
 <h3>Вычитка часов преподования</h3>
 
 <CreateProofreadingTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync" GetAllUserLoadsAsync="GetAllUserLoadsAsync"/>
-<MudTable T="ProofreadingTeacherLoad" Hover="true" SortLabel="Сортировать по" Items="Loads" Filter="Filter">
+<MudTable T="ProofreadingTeacherLoad" Hover="true" SortLabel="Сортировать по" Items="Loads" Filter="Filter" Class="py-2">
     <ToolBarContent>
         <MyMonthSelector @bind-Value="SelectedMonth"/>
         <MyYearSelector @bind-Value="SelectedYear"/>
-        <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"/>
         <MudButtonGroup Color="Color.Primary">
-            <MudButton>Печать</MudButton>
+            <MudButton>Доп.</MudButton>
             <MudMenu Icon="@Icons.Material.Outlined.ArrowDropDown">
-                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTableAsync">Вакансии</MudMenuItem>
-                <MudMenuItem OnClick="CreateMonthProofreadingTeacherLoadVacanciesTable">Итог за месяц</MudMenuItem>
+                <MudMenuItem OnClick="Deselect">Все</MudMenuItem>
+                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTableAsync">Печать Вакансии</MudMenuItem>
+                <MudMenuItem OnClick="CreateMonthProofreadingTeacherLoadVacanciesTable">Печать Итог за месяц</MudMenuItem>
             </MudMenu>
         </MudButtonGroup>
     </ToolBarContent>
@@ -73,7 +73,7 @@
             @StringLocalizer[context.TeacherLoad.Group.FinanceEnrolmentType.ToString()]
         </MudTd>
         <MudTd DataLabel="Характер">
-            @context.TeacherLoad.Kind
+            @StringLocalizer[context.TeacherLoad.Kind.ToString()]
         </MudTd>
         <MudTd DataLabel="Характер">
             @context.Month
@@ -147,36 +147,47 @@
 
     private async Task CreateProofreadingTeacherLoadVacanciesTableAsync()
     {
-        if (SelectedMonth != default && SelectedYear != default)
+        if (SelectedMonth == default && SelectedYear == default)
         {
-            _ = await DialogService.ShowMessageBox(
-                "Неверный ввод",
-                "Выберите месяц и год");
+            return;
+        }
+        var loads = Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth).ToList();
+        if (!loads.Any())
+        {
             return;
         }
         var fileName = await ProofreadingTeacherLoadVacanciesCreator.CreatePackageAsync(
             SelectedMonth,
             SelectedYear,
             CurrentUser.FindFirstValue(ClaimTypes.GivenName) ?? CurrentUser.FindFirstValue(ClaimTypes.Name),
-            Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth));
-        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName);
+            loads);
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName, true);
     }
 
     private async Task CreateMonthProofreadingTeacherLoadVacanciesTable()
     {
-        if (SelectedMonth != default && SelectedYear != default)
+        if (SelectedMonth == default && SelectedYear == default)
         {
-            _ = await DialogService.ShowMessageBox(
-                "Неверный ввод",
-                "Выберите месяц и год");
+            return;
+        }
+        var loads = Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth).ToList();
+        if (!loads.Any())
+        {
             return;
         }
         var fileName = await MonthProofreadingTeacherLoadsCreator.CreatePackageAsync(
             SelectedMonth,
             SelectedYear,
             CurrentUser.FindFirstValue(ClaimTypes.GivenName) ?? CurrentUser.FindFirstValue(ClaimTypes.Name),
-            Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth));
-        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName);
+            loads);
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName, true);
+    }
+
+    private void Deselect()
+    {
+        SelectedMonth = default;
+        SelectedYear = default;
+        SearchString = string.Empty;
     }
 
 }

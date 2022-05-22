@@ -959,10 +959,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
             TabSelected = true, ZoomScaleNormal = (UInt32Value)100U, ZoomScalePageLayoutView = (UInt32Value)60U,
             WorkbookViewId = (UInt32Value)0U
         };
-        var selection1 = new Selection
-            { ActiveCell = "AJ8", SequenceOfReferences = new ListValue<StringValue> { InnerText = "AJ8" } };
-
-        sheetView1.Append(selection1);
 
         sheetViews1.Append(sheetView1);
         var sheetFormatProperties1 = new SheetFormatProperties
@@ -1022,14 +1018,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell13 = new Cell { CellReference = "M1", StyleIndex = (UInt32Value)4U };
         var cell14 = new Cell { CellReference = "N1", StyleIndex = (UInt32Value)4U };
         var cell15 = new Cell { CellReference = "O1", StyleIndex = (UInt32Value)4U };
-        var cell16 = new Cell { CellReference = "P1", StyleIndex = (UInt32Value)4U };
-        var cell17 = new Cell { CellReference = "Q1", StyleIndex = (UInt32Value)4U };
-        var cell18 = new Cell { CellReference = "R1", StyleIndex = (UInt32Value)4U };
-        var cell19 = new Cell { CellReference = "S1", StyleIndex = (UInt32Value)4U };
-        var cell20 = new Cell { CellReference = "T1", StyleIndex = (UInt32Value)4U };
-        var cell21 = new Cell { CellReference = "U1", StyleIndex = (UInt32Value)4U };
-        var cell22 = new Cell { CellReference = "V1", StyleIndex = (UInt32Value)4U };
-        var cell23 = new Cell { CellReference = "W1", StyleIndex = (UInt32Value)4U };
 
         row1.Append(cell1);
         row1.Append(cell2);
@@ -1046,14 +1034,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         row1.Append(cell13);
         row1.Append(cell14);
         row1.Append(cell15);
-        row1.Append(cell16);
-        row1.Append(cell17);
-        row1.Append(cell18);
-        row1.Append(cell19);
-        row1.Append(cell20);
-        row1.Append(cell21);
-        row1.Append(cell22);
-        row1.Append(cell23);
 
         var row2 = new Row
         {
@@ -1063,10 +1043,10 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell24 = new Cell { CellReference = "A2", StyleIndex = (UInt32Value)4U };
 
         var cell25 = new Cell
-            { CellReference = "B2", StyleIndex = (UInt32Value)2U, DataType = CellValues.SharedString };
+            { CellReference = "B2", StyleIndex = (UInt32Value)2U, DataType = CellValues.String };
         var cellValue1 = new CellValue
         {
-            Text = "0"
+            Text = "Табель учета педагогической нагрузки"
         };
 
         cell25.Append(cellValue1);
@@ -1083,14 +1063,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell36 = new Cell { CellReference = "M2", StyleIndex = (UInt32Value)2U };
         var cell37 = new Cell { CellReference = "N2", StyleIndex = (UInt32Value)2U };
         var cell38 = new Cell { CellReference = "O2", StyleIndex = (UInt32Value)2U };
-        var cell39 = new Cell { CellReference = "P2", StyleIndex = (UInt32Value)4U };
-        var cell40 = new Cell { CellReference = "Q2", StyleIndex = (UInt32Value)4U };
-        var cell41 = new Cell { CellReference = "R2", StyleIndex = (UInt32Value)4U };
-        var cell42 = new Cell { CellReference = "S2", StyleIndex = (UInt32Value)4U };
-        var cell43 = new Cell { CellReference = "T2", StyleIndex = (UInt32Value)4U };
-        var cell44 = new Cell { CellReference = "U2", StyleIndex = (UInt32Value)4U };
-        var cell45 = new Cell { CellReference = "V2", StyleIndex = (UInt32Value)4U };
-        var cell46 = new Cell { CellReference = "W2", StyleIndex = (UInt32Value)4U };
 
         row2.Append(cell24);
         row2.Append(cell25);
@@ -1107,14 +1079,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         row2.Append(cell36);
         row2.Append(cell37);
         row2.Append(cell38);
-        row2.Append(cell39);
-        row2.Append(cell40);
-        row2.Append(cell41);
-        row2.Append(cell42);
-        row2.Append(cell43);
-        row2.Append(cell44);
-        row2.Append(cell45);
-        row2.Append(cell46);
 
         var row3 = new Row
         {
@@ -1124,10 +1088,10 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell47 = new Cell { CellReference = "A3", StyleIndex = (UInt32Value)4U };
 
         var cell48 = new Cell
-            { CellReference = "B3", StyleIndex = (UInt32Value)4U, DataType = CellValues.SharedString };
+            { CellReference = "B3", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
         var cellValue2 = new CellValue
         {
-            Text = "1"
+            Text = "Преподаватель"
         };
 
         cell48.Append(cellValue2);
@@ -1151,14 +1115,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell59 = new Cell { CellReference = "M3", StyleIndex = (UInt32Value)1U };
         var cell60 = new Cell { CellReference = "N3", StyleIndex = (UInt32Value)1U };
         var cell61 = new Cell { CellReference = "O3", StyleIndex = (UInt32Value)1U };
-        var cell62 = new Cell { CellReference = "P3", StyleIndex = (UInt32Value)4U };
-        var cell63 = new Cell { CellReference = "Q3", StyleIndex = (UInt32Value)4U };
-        var cell64 = new Cell { CellReference = "R3", StyleIndex = (UInt32Value)4U };
-        var cell65 = new Cell { CellReference = "S3", StyleIndex = (UInt32Value)4U };
-        var cell66 = new Cell { CellReference = "T3", StyleIndex = (UInt32Value)4U };
-        var cell67 = new Cell { CellReference = "U3", StyleIndex = (UInt32Value)4U };
-        var cell68 = new Cell { CellReference = "V3", StyleIndex = (UInt32Value)4U };
-        var cell69 = new Cell { CellReference = "W3", StyleIndex = (UInt32Value)4U };
 
         row3.Append(cell47);
         row3.Append(cell48);
@@ -1175,14 +1131,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         row3.Append(cell59);
         row3.Append(cell60);
         row3.Append(cell61);
-        row3.Append(cell62);
-        row3.Append(cell63);
-        row3.Append(cell64);
-        row3.Append(cell65);
-        row3.Append(cell66);
-        row3.Append(cell67);
-        row3.Append(cell68);
-        row3.Append(cell69);
 
         var row4 = new Row
         {
@@ -1192,10 +1140,10 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell70 = new Cell { CellReference = "A4", StyleIndex = (UInt32Value)4U };
 
         var cell71 = new Cell
-            { CellReference = "B4", StyleIndex = (UInt32Value)4U, DataType = CellValues.SharedString };
+            { CellReference = "B4", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
         var cellValue4 = new CellValue
         {
-            Text = "3"
+            Text = "Год"
         };
 
         cell71.Append(cellValue4);
@@ -1203,7 +1151,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell72 = new Cell { CellReference = "C4", StyleIndex = (UInt32Value)1U, DataType = CellValues.String };
         var cellValue5 = new CellValue
         {
-            Text = _model.Month
+            Text = _model.Year.ToString()
         };
 
         cell72.Append(cellValue5);
@@ -1219,14 +1167,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell82 = new Cell { CellReference = "M4", StyleIndex = (UInt32Value)1U };
         var cell83 = new Cell { CellReference = "N4", StyleIndex = (UInt32Value)1U };
         var cell84 = new Cell { CellReference = "O4", StyleIndex = (UInt32Value)1U };
-        var cell85 = new Cell { CellReference = "P4", StyleIndex = (UInt32Value)4U };
-        var cell86 = new Cell { CellReference = "Q4", StyleIndex = (UInt32Value)4U };
-        var cell87 = new Cell { CellReference = "R4", StyleIndex = (UInt32Value)4U };
-        var cell88 = new Cell { CellReference = "S4", StyleIndex = (UInt32Value)4U };
-        var cell89 = new Cell { CellReference = "T4", StyleIndex = (UInt32Value)4U };
-        var cell90 = new Cell { CellReference = "U4", StyleIndex = (UInt32Value)4U };
-        var cell91 = new Cell { CellReference = "V4", StyleIndex = (UInt32Value)4U };
-        var cell92 = new Cell { CellReference = "W4", StyleIndex = (UInt32Value)4U };
 
         row4.Append(cell70);
         row4.Append(cell71);
@@ -1243,14 +1183,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         row4.Append(cell82);
         row4.Append(cell83);
         row4.Append(cell84);
-        row4.Append(cell85);
-        row4.Append(cell86);
-        row4.Append(cell87);
-        row4.Append(cell88);
-        row4.Append(cell89);
-        row4.Append(cell90);
-        row4.Append(cell91);
-        row4.Append(cell92);
 
         var row5 = new Row
         {
@@ -1260,10 +1192,10 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell93 = new Cell { CellReference = "A5", StyleIndex = (UInt32Value)4U };
 
         var cell94 = new Cell
-            { CellReference = "B5", StyleIndex = (UInt32Value)4U, DataType = CellValues.SharedString };
+            { CellReference = "B5", StyleIndex = (UInt32Value)4U, DataType = CellValues.String };
         var cellValue6 = new CellValue
         {
-            Text = "5"
+            Text = "Месяц"
         };
 
         cell94.Append(cellValue6);
@@ -1271,7 +1203,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell95 = new Cell { CellReference = "C5", StyleIndex = (UInt32Value)1U, DataType = CellValues.String };
         var cellValue7 = new CellValue
         {
-            Text = _model.Year.ToString()
+            Text = _model.Month
         };
 
         cell95.Append(cellValue7);
@@ -1287,14 +1219,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var cell105 = new Cell { CellReference = "M5", StyleIndex = (UInt32Value)1U };
         var cell106 = new Cell { CellReference = "N5", StyleIndex = (UInt32Value)1U };
         var cell107 = new Cell { CellReference = "O5", StyleIndex = (UInt32Value)1U };
-        var cell108 = new Cell { CellReference = "P5", StyleIndex = (UInt32Value)4U };
-        var cell109 = new Cell { CellReference = "Q5", StyleIndex = (UInt32Value)4U };
-        var cell110 = new Cell { CellReference = "R5", StyleIndex = (UInt32Value)4U };
-        var cell111 = new Cell { CellReference = "S5", StyleIndex = (UInt32Value)4U };
-        var cell112 = new Cell { CellReference = "T5", StyleIndex = (UInt32Value)4U };
-        var cell113 = new Cell { CellReference = "U5", StyleIndex = (UInt32Value)4U };
-        var cell114 = new Cell { CellReference = "V5", StyleIndex = (UInt32Value)4U };
-        var cell115 = new Cell { CellReference = "W5", StyleIndex = (UInt32Value)4U };
 
         row5.Append(cell93);
         row5.Append(cell94);
@@ -1311,354 +1235,78 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         row5.Append(cell105);
         row5.Append(cell106);
         row5.Append(cell107);
-        row5.Append(cell108);
-        row5.Append(cell109);
-        row5.Append(cell110);
-        row5.Append(cell111);
-        row5.Append(cell112);
-        row5.Append(cell113);
-        row5.Append(cell114);
-        row5.Append(cell115);
 
         var row6 = new Row
             { RowIndex = (UInt32Value)6U, Spans = new ListValue<StringValue> { InnerText = "1:36" }, Height = 31.5D };
 
         var cell116 = new Cell
-            { CellReference = "A6", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+            { CellReference = "A6", StyleIndex = (UInt32Value)5U, DataType = CellValues.String };
         var cellValue8 = new CellValue
         {
-            Text = "7"
+            Text = "№"
         };
 
         cell116.Append(cellValue8);
 
         var cell117 = new Cell
-            { CellReference = "B6", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+            { CellReference = "B6", StyleIndex = (UInt32Value)5U, DataType = CellValues.String };
         var cellValue9 = new CellValue
         {
-            Text = "8"
+            Text = "Наименование дисциплины"
         };
 
         cell117.Append(cellValue9);
 
         var cell118 = new Cell
-            { CellReference = "C6", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+            { CellReference = "C6", StyleIndex = (UInt32Value)5U, DataType = CellValues.String };
         var cellValue10 = new CellValue
         {
-            Text = "9"
+            Text = "Группа"
         };
 
         cell118.Append(cellValue10);
 
         var cell119 = new Cell
-            { CellReference = "D6", StyleIndex = (UInt32Value)5U, DataType = CellValues.SharedString };
+            { CellReference = "D6", StyleIndex = (UInt32Value)5U, DataType = CellValues.String };
         var cellValue11 = new CellValue
         {
-            Text = "17"
+            Text = "б или в/б"
         };
 
         cell119.Append(cellValue11);
-
-        var cell120 = new Cell { CellReference = "E6", StyleIndex = (UInt32Value)5U };
-        var cellValue12 = new CellValue
-        {
-            Text = "1"
-        };
-
-        cell120.Append(cellValue12);
-
-        var cell121 = new Cell { CellReference = "F6", StyleIndex = (UInt32Value)5U };
-        var cellValue13 = new CellValue
-        {
-            Text = "2"
-        };
-
-        cell121.Append(cellValue13);
-
-        var cell122 = new Cell { CellReference = "G6", StyleIndex = (UInt32Value)5U };
-        var cellValue14 = new CellValue
-        {
-            Text = "3"
-        };
-
-        cell122.Append(cellValue14);
-
-        var cell123 = new Cell { CellReference = "H6", StyleIndex = (UInt32Value)5U };
-        var cellValue15 = new CellValue
-        {
-            Text = "4"
-        };
-
-        cell123.Append(cellValue15);
-
-        var cell124 = new Cell { CellReference = "I6", StyleIndex = (UInt32Value)5U };
-        var cellValue16 = new CellValue
-        {
-            Text = "5"
-        };
-
-        cell124.Append(cellValue16);
-
-        var cell125 = new Cell { CellReference = "J6", StyleIndex = (UInt32Value)5U };
-        var cellValue17 = new CellValue
-        {
-            Text = "6"
-        };
-
-        cell125.Append(cellValue17);
-
-        var cell126 = new Cell { CellReference = "K6", StyleIndex = (UInt32Value)5U };
-        var cellValue18 = new CellValue
-        {
-            Text = "7"
-        };
-
-        cell126.Append(cellValue18);
-
-        var cell127 = new Cell { CellReference = "L6", StyleIndex = (UInt32Value)5U };
-        var cellValue19 = new CellValue
-        {
-            Text = "8"
-        };
-
-        cell127.Append(cellValue19);
-
-        var cell128 = new Cell { CellReference = "M6", StyleIndex = (UInt32Value)5U };
-        var cellValue20 = new CellValue
-        {
-            Text = "9"
-        };
-
-        cell128.Append(cellValue20);
-
-        var cell129 = new Cell { CellReference = "N6", StyleIndex = (UInt32Value)5U };
-        var cellValue21 = new CellValue
-        {
-            Text = "10"
-        };
-
-        cell129.Append(cellValue21);
-
-        var cell130 = new Cell { CellReference = "O6", StyleIndex = (UInt32Value)5U };
-        var cellValue22 = new CellValue
-        {
-            Text = "11"
-        };
-
-        cell130.Append(cellValue22);
-
-        var cell131 = new Cell { CellReference = "P6", StyleIndex = (UInt32Value)5U };
-        var cellValue23 = new CellValue
-        {
-            Text = "12"
-        };
-
-        cell131.Append(cellValue23);
-
-        var cell132 = new Cell { CellReference = "Q6", StyleIndex = (UInt32Value)5U };
-        var cellValue24 = new CellValue
-        {
-            Text = "13"
-        };
-
-        cell132.Append(cellValue24);
-
-        var cell133 = new Cell { CellReference = "R6", StyleIndex = (UInt32Value)5U };
-        var cellValue25 = new CellValue
-        {
-            Text = "14"
-        };
-
-        cell133.Append(cellValue25);
-
-        var cell134 = new Cell { CellReference = "S6", StyleIndex = (UInt32Value)5U };
-        var cellValue26 = new CellValue
-        {
-            Text = "15"
-        };
-
-        cell134.Append(cellValue26);
-
-        var cell135 = new Cell { CellReference = "T6", StyleIndex = (UInt32Value)5U };
-        var cellValue27 = new CellValue
-        {
-            Text = "16"
-        };
-
-        cell135.Append(cellValue27);
-
-        var cell136 = new Cell { CellReference = "U6", StyleIndex = (UInt32Value)5U };
-        var cellValue28 = new CellValue
-        {
-            Text = "17"
-        };
-
-        cell136.Append(cellValue28);
-
-        var cell137 = new Cell { CellReference = "V6", StyleIndex = (UInt32Value)5U };
-        var cellValue29 = new CellValue
-        {
-            Text = "18"
-        };
-
-        cell137.Append(cellValue29);
-
-        var cell138 = new Cell { CellReference = "W6", StyleIndex = (UInt32Value)5U };
-        var cellValue30 = new CellValue
-        {
-            Text = "19"
-        };
-
-        cell138.Append(cellValue30);
-
-        var cell139 = new Cell { CellReference = "X6", StyleIndex = (UInt32Value)5U };
-        var cellValue31 = new CellValue
-        {
-            Text = "20"
-        };
-
-        cell139.Append(cellValue31);
-
-        var cell140 = new Cell { CellReference = "Y6", StyleIndex = (UInt32Value)5U };
-        var cellValue32 = new CellValue
-        {
-            Text = "21"
-        };
-
-        cell140.Append(cellValue32);
-
-        var cell141 = new Cell { CellReference = "Z6", StyleIndex = (UInt32Value)5U };
-        var cellValue33 = new CellValue
-        {
-            Text = "22"
-        };
-
-        cell141.Append(cellValue33);
-
-        var cell142 = new Cell { CellReference = "AA6", StyleIndex = (UInt32Value)5U };
-        var cellValue34 = new CellValue
-        {
-            Text = "23"
-        };
-
-        cell142.Append(cellValue34);
-
-        var cell143 = new Cell { CellReference = "AB6", StyleIndex = (UInt32Value)5U };
-        var cellValue35 = new CellValue
-        {
-            Text = "24"
-        };
-
-        cell143.Append(cellValue35);
-
-        var cell144 = new Cell { CellReference = "AC6", StyleIndex = (UInt32Value)5U };
-        var cellValue36 = new CellValue
-        {
-            Text = "25"
-        };
-
-        cell144.Append(cellValue36);
-
-        var cell145 = new Cell { CellReference = "AD6", StyleIndex = (UInt32Value)5U };
-        var cellValue37 = new CellValue
-        {
-            Text = "26"
-        };
-
-        cell145.Append(cellValue37);
-
-        var cell146 = new Cell { CellReference = "AE6", StyleIndex = (UInt32Value)5U };
-        var cellValue38 = new CellValue
-        {
-            Text = "27"
-        };
-
-        cell146.Append(cellValue38);
-
-        var cell147 = new Cell { CellReference = "AF6", StyleIndex = (UInt32Value)5U };
-        var cellValue39 = new CellValue
-        {
-            Text = "28"
-        };
-
-        cell147.Append(cellValue39);
-
-        var cell148 = new Cell { CellReference = "AG6", StyleIndex = (UInt32Value)5U };
-        var cellValue40 = new CellValue
-        {
-            Text = "29"
-        };
-
-        cell148.Append(cellValue40);
-
-        var cell149 = new Cell { CellReference = "AH6", StyleIndex = (UInt32Value)5U };
-        var cellValue41 = new CellValue
-        {
-            Text = "30"
-        };
-
-        cell149.Append(cellValue41);
-
-        var cell150 = new Cell { CellReference = "AI6", StyleIndex = (UInt32Value)5U };
-        var cellValue42 = new CellValue
-        {
-            Text = "31"
-        };
-
-        cell150.Append(cellValue42);
-
-        var daysEnd = 5 + _model.DaysInMonthCount;
-        var cell151 = new Cell
-        {
-            CellReference = GetCellReference(6, daysEnd), StyleIndex = (UInt32Value)6U,
-            DataType = CellValues.SharedString
-        };
-        var cellValue43 = new CellValue
-        {
-            Text = "10"
-        };
-
-        cell151.Append(cellValue43);
 
         row6.Append(cell116);
         row6.Append(cell117);
         row6.Append(cell118);
         row6.Append(cell119);
-        row6.Append(cell120);
-        row6.Append(cell121);
-        row6.Append(cell122);
-        row6.Append(cell123);
-        row6.Append(cell124);
-        row6.Append(cell125);
-        row6.Append(cell126);
-        row6.Append(cell127);
-        row6.Append(cell128);
-        row6.Append(cell129);
-        row6.Append(cell130);
-        row6.Append(cell131);
-        row6.Append(cell132);
-        row6.Append(cell133);
-        row6.Append(cell134);
-        row6.Append(cell135);
-        row6.Append(cell136);
-        row6.Append(cell137);
-        row6.Append(cell138);
-        row6.Append(cell139);
-        row6.Append(cell140);
-        row6.Append(cell141);
-        row6.Append(cell142);
-        row6.Append(cell143);
-        row6.Append(cell144);
-        row6.Append(cell145);
-        row6.Append(cell146);
-        row6.Append(cell147);
-        row6.Append(cell148);
-        row6.Append(cell149);
-        row6.Append(cell150);
-        row6.Append(cell151);
 
+        for (var i = 1; i <= _model.DaysInMonthCount; i++)
+        {
+            var cellDay = new Cell
+            {
+                CellReference = GetCellReference(6, i + 4), StyleIndex = (UInt32Value)5U, DataType = CellValues.Number
+            };
+            var cellValueDay = new CellValue
+            {
+                Text = i.ToString()
+            };
+            cellDay.Append(cellValueDay);
+            row6.Append(cellDay);
+        }
 
-        AppendTableBody(sheetData1);
+        var cellSummary = new Cell
+        {
+            CellReference = GetCellReference(6, _model.DaysInMonthCount + 5), StyleIndex = (UInt32Value)5U,
+            DataType = CellValues.String
+        };
+        var cellValueSummary = new CellValue
+        {
+            Text = "Итого"
+        };
+
+        cellSummary.Append(cellValueSummary);
+
+        row6.Append(cellSummary);
 
         sheetData1.Append(row1);
         sheetData1.Append(row2);
@@ -1666,6 +1314,8 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         sheetData1.Append(row4);
         sheetData1.Append(row5);
         sheetData1.Append(row6);
+
+        AppendTableBody(sheetData1);
 
         var mergeCells1 = new MergeCells { Count = (UInt32Value)4U };
         var mergeCell1 = new MergeCell { Reference = "B2:O2" };
@@ -1720,11 +1370,11 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var s = "";
         while (n > 26)
         {
-            n = n / 26;
-            s += (char)(64 + n % 27);
+            s = new string((char)(64 + n % 26), 1) + s;
+            n /= 26;
         }
 
-        s += (char)(64 + n % 27);
+        s = new string((char)(64 + n % 26), 1) + s;
         var cellReference = $"{s}{rowIndex}";
         return cellReference;
     }
@@ -1804,13 +1454,11 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
                 {
                     Text = day.Hours.ToString()
                 };
+                cell.Append(cellValue);
+                row.Append(cell);
                 columnIndex++;
             }
-
-
-            cell.Append(cellValue);
-            row.Append(cell);
-
+            
             cell = new Cell
             {
                 CellReference = GetCellReference(rowIndex, daysEnd), StyleIndex = (UInt32Value)9U,
@@ -1828,6 +1476,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
             cell.Append(cellFormula);
             cell.Append(cellValue);
             row.Append(cell);
+            sheetData.Append(row);
             rowIndex++;
             number++;
         }
@@ -1846,11 +1495,15 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
     private void GenerateCalculationChainPart1Content(CalculationChainPart calculationChainPart1)
     {
         var calculationChain1 = new CalculationChain();
-        var calculationCell1 = new CalculationCell { CellReference = "AJ8", SheetId = 1 };
-        var calculationCell2 = new CalculationCell { CellReference = "AJ7" };
-
-        calculationChain1.Append(calculationCell1);
-        calculationChain1.Append(calculationCell2);
+        UInt32Value rowIndex = 7;
+        var summaryColumn = _model.DaysInMonthCount + 5;
+        foreach (var _ in _model.Items)
+        {
+            var calculationCell = new CalculationCell
+                { CellReference = GetCellReference(rowIndex, summaryColumn), SheetId = 1 };
+            calculationChain1.Append(calculationCell);
+            rowIndex++;
+        }
 
         calculationChainPart1.CalculationChain = calculationChain1;
     }
@@ -1858,106 +1511,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
     // Generates content of sharedStringTablePart1.
     private void GenerateSharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1)
     {
-        var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)18U, UniqueCount = (UInt32Value)18U };
-
-        var sharedStringItem1 = new SharedStringItem();
-        var text1 = new Text
-        {
-            Text = "Табель учета педагогической нагрузки"
-        };
-
-        sharedStringItem1.Append(text1);
-
-        var sharedStringItem2 = new SharedStringItem();
-        var text2 = new Text
-        {
-            Text = "Преподавателя"
-        };
-
-        sharedStringItem2.Append(text2);
-
-        var sharedStringItem4 = new SharedStringItem();
-        var text4 = new Text
-        {
-            Text = "Год"
-        };
-
-        sharedStringItem4.Append(text4);
-
-        var sharedStringItem5 = new SharedStringItem();
-        var text5 = new Text
-        {
-            Text = "$year"
-        };
-
-        sharedStringItem5.Append(text5);
-
-        var sharedStringItem6 = new SharedStringItem();
-        var text6 = new Text
-        {
-            Text = "Месяц"
-        };
-
-        sharedStringItem6.Append(text6);
-
-        var sharedStringItem7 = new SharedStringItem();
-        var text7 = new Text
-        {
-            Text = "$month"
-        };
-
-        sharedStringItem7.Append(text7);
-
-        var sharedStringItem8 = new SharedStringItem();
-        var text8 = new Text
-        {
-            Text = "№"
-        };
-
-        sharedStringItem8.Append(text8);
-
-        var sharedStringItem9 = new SharedStringItem();
-        var text9 = new Text
-        {
-            Text = "Наименование дисциплины"
-        };
-
-        sharedStringItem9.Append(text9);
-
-        var sharedStringItem10 = new SharedStringItem();
-        var text10 = new Text
-        {
-            Space = SpaceProcessingModeValues.Preserve,
-            Text = " Группа"
-        };
-
-        sharedStringItem10.Append(text10);
-
-        var sharedStringItem11 = new SharedStringItem();
-        var text11 = new Text
-        {
-            Text = "Итого"
-        };
-
-        var sharedStringItem18 = new SharedStringItem();
-        var text18 = new Text
-        {
-            Text = "б или в/б"
-        };
-
-        sharedStringItem18.Append(text18);
-
-        sharedStringTable1.Append(sharedStringItem1);
-        sharedStringTable1.Append(sharedStringItem2);
-        sharedStringTable1.Append(sharedStringItem4);
-        sharedStringTable1.Append(sharedStringItem5);
-        sharedStringTable1.Append(sharedStringItem6);
-        sharedStringTable1.Append(sharedStringItem7);
-        sharedStringTable1.Append(sharedStringItem8);
-        sharedStringTable1.Append(sharedStringItem9);
-        sharedStringTable1.Append(sharedStringItem10);
-        sharedStringTable1.Append(sharedStringItem11);
-        sharedStringTable1.Append(sharedStringItem18);
+        var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)0U, UniqueCount = (UInt32Value)0U };
 
         sharedStringTablePart1.SharedStringTable = sharedStringTable1;
     }

@@ -8,7 +8,7 @@
     <MudDivider Vertical="true" FlexItem="true"/>
     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" StartIcon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)"/>
     <MudPopover Open="@IsOpen" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
-        <MudTable T="TeacherLoad" Items="@TeacherLoads" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChanged">
+        <MudTable T="TeacherLoad" Items="@TeacherLoads" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChangedAsync">
             <ToolBarContent>
                 <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
@@ -72,7 +72,7 @@
         base.OnParametersSet();
         if (Value is not null || !TeacherLoads.Any()) return;
         Value = TeacherLoads.First();
-        MudTable.SetSelectedItem(Value);
+        MudTable?.SetSelectedItem(Value);
     }
 
     private void ToggleOpen()
@@ -90,9 +90,10 @@
                StringLocalizer[teacherLoad.Group.FinanceEnrolmentType.ToString()].ToString().Contains(SearchString);
     }
 
-    private void OnSelectedItemChanged(TeacherLoad obj)
+    private async void OnSelectedItemChangedAsync(TeacherLoad obj)
     {
         Value = obj;
         ToggleOpen();
+        await ValueChanged.InvokeAsync(Value);
     }
 }

@@ -2,28 +2,32 @@
 @inject MonthsService MonthsService
 @inherits MudSelect<int>
 
-<MudField>
-    <MudSelect T="int" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="ToStringFunc">
+<MudField Label="Месяц">
+    <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" ValueChanged="@ValueChanged" ToStringFunc="@ToStringMonth">
         @foreach (var month in Enumerable.Range(1, 12))
         {
             <MudSelectItem Value="@month"/>
         }
     </MudSelect>
-    @if (!Required)
-    {
-        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" OnClick="Deselect"/>
-    }
 </MudField>
 
 @code
 {
     private string ToStringMonth(int month)
     {
-        return month != default ? MonthsService.GetName(month) : "-";
+        return month != default ? MonthsService.GetName(month) : string.Empty;
     }
 
-    private void Deselect()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Value = default;
+        try
+        {
+            await base.OnAfterRenderAsync(firstRender);
+        }
+        catch (JSException e)
+        {
+    // NOOP
+        }
     }
+    
 }

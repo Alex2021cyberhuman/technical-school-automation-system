@@ -2,37 +2,55 @@
 @inherits MudBaseInput<Application.Specialities.Data.Subject>
 
 <MudField Label="Дисциплина" Variant="Variant.Text">
-    <MudText>@Value.Code @Value.Code</MudText>
+    <MudText>@Value.Name</MudText>
     <MudDivider Vertical="true" FlexItem="true"/>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" StartIcon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)"/>
-    <MudPopover Open="@IsOpen" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
-        <MudTable T="Subject" Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChanged">
-            <ToolBarContent>
-                <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh>
-                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Code">Код специальности</MudTableSortLabel>
-                </MudTh>
-                <MudTh>
-                    <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Name">Название специальности</MudTableSortLabel>
-                </MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Название">@context.Name</MudTd>
-                <MudTd DataLabel="Код">@context.Code</MudTd>
-                <MudTd DataLabel="Название">@context.Speciality.Name</MudTd>
-                <MudTd DataLabel="Код">@context.Speciality.Code</MudTd>
-            </RowTemplate>
-        </MudTable>
-    </MudPopover>
+    <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" Icon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Size="Size.Small"/>
 </MudField>
+@if (IsOpen)
+{
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document" style="max-width: 847px!important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Выбор дисциплины</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleOpen">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <MudTable T="Subject" Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChangedAsync">
+                        <ToolBarContent>
+                            <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                        </ToolBarContent>
+                        <HeaderContent>
+                            <MudTh>
+                                <MudTableSortLabel T="Subject" SortBy="subject => subject.Code">Шифр</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Subject" SortBy="subject => subject.Name">Название</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Code">Код специальности</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Subject" SortBy="subject => subject.Speciality.Name">Название специальности</MudTableSortLabel>
+                            </MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Название">@context.Name</MudTd>
+                            <MudTd DataLabel="Код">@context.Code</MudTd>
+                            <MudTd DataLabel="Название">@context.Speciality.Name</MudTd>
+                            <MudTd DataLabel="Код">@context.Speciality.Code</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleOpen">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code
 {
@@ -43,14 +61,14 @@
 
     public bool IsOpen { get; set; }
 
-    public MudTable<Subject> MudTable { get; set; } = null!;
+    public MudTable<Subject>? MudTable { get; set; }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         if (Value is not null || !Subjects.Any()) return;
         Value = Subjects.First();
-        MudTable.SetSelectedItem(Value);
+        MudTable?.SetSelectedItem(Value);
     }
 
     private void ToggleOpen()
@@ -67,9 +85,11 @@
                subject.Speciality.Name.Contains(SearchString);
     }
 
-    private void OnSelectedItemChanged(Subject obj)
+    private async Task OnSelectedItemChangedAsync(Subject obj)
     {
         Value = obj;
         ToggleOpen();
+        await ValueChanged.InvokeAsync(Value);
     }
 }
+

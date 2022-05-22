@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.Access.Data;
+using Application.Access.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -20,6 +21,7 @@ public class MyUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Rol
             identity.AddClaim(new Claim(ClaimTypes.GivenName, user.FullName));
         }
 
+        // identity.AddClaim(new Claim(MyClaimTypes.Activated, user.Activated.Ticks.ToString()));
         return identity;
     }
 }

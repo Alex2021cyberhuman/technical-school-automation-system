@@ -14,5 +14,7 @@ public class User : IdentityUser<long>
 
     [MaxLength(200)] public string? SurName { get; set; }
 
+    // public DateTime Activated { get; set; } = DateTime.UtcNow;
+    
     public List<UserRole> UserRoles { get; set; } = null!;
 }

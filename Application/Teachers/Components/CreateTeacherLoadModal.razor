@@ -4,7 +4,9 @@
 @using Application.Groups.Data
 @using Application.Teachers.Forms
 @using Application.Teachers.Data
+@using Microsoft.Extensions.Localization
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+@inject IStringLocalizer StringLocalizer
 
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
     Добавить нагрузку
@@ -29,7 +31,7 @@
                         <MySubjectSelector Subjects="Subjects" Required="true" ValueChanged="OnSubjectChangedAsync"/>
                         <MyGroupSelector @bind-Value="Form.Group" Groups="Groups" Required="true"/>
                         <MudField Label="Тип">
-                            <strong>@Form.Group?.FinanceEnrolmentType</strong>
+                            <strong>@StringLocalizer[Form.Group?.FinanceEnrolmentType.ToString() ?? string.Empty]</strong>
                         </MudField>
                         <MyEnumSelector TValue="TeacherLoadKind" @bind-Value="Form.Kind" Label="Характер" Required="true"/>
                         <MySemesterInput @bind-Value="Form.Semesters"/>
@@ -99,7 +101,7 @@
         await OnSubmit.InvokeAsync();
     }
 
-    private async Task OnSubjectChangedAsync(Subject? subject)
+    private async Task OnSubjectChangedAsync(Subject subject)
     {
         Form.Subject = subject;
         if (Form.Subject is null)

@@ -12,15 +12,21 @@
 
 @code {
 
-    public TValue[] Items { get; set; }
+    public TValue[] Items { get; set; } = Array.Empty<TValue>();
 
-    public MyEnumSelector()
+    protected override void OnInitialized()
     {
+        base.OnInitialized();
         var enums = Enum.GetValues<TValue>();
         enums = enums.OrderBy(GetLocalizedString).ToArray();
         Items = enums;
         if (Required)
             Value = enums.First();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private string GetLocalizedString(TValue value)

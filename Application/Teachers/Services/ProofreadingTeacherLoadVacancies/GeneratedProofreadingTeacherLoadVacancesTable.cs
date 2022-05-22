@@ -937,7 +937,7 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
         var column2 = new Column
             { Min = (UInt32Value)4U, Max = (UInt32Value)5U, Width = 20.42578125D, CustomWidth = true };
         var column3 = new Column
-            { Min = (UInt32Value)6U, Max = (UInt32Value)6U, Width = 9.42578125D, CustomWidth = true };
+            { Min = (UInt32Value)6U, Max = (UInt32Value)6U, Width = 12D, CustomWidth = true };
 
         columns1.Append(column1);
         columns1.Append(column2);
@@ -973,10 +973,10 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
         var row2 = new Row
             { RowIndex = (UInt32Value)4U, Spans = new ListValue<StringValue> { InnerText = "1:7" }, Height = 15.75D };
 
-        var cell8 = new Cell { CellReference = "A4", StyleIndex = (UInt32Value)1U, DataType = CellValues.SharedString };
+        var cell8 = new Cell { CellReference = "A4", StyleIndex = (UInt32Value)1U, DataType = CellValues.String };
         var cellValue2 = new CellValue
         {
-            Text = "1"
+            Text = "ФИО"
         };
 
         cell8.Append(cellValue2);
@@ -984,37 +984,37 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
         var cell10 = new Cell { CellReference = "C4", StyleIndex = (UInt32Value)1U };
 
         var cell11 = new Cell
-            { CellReference = "D4", StyleIndex = (UInt32Value)3U, DataType = CellValues.SharedString };
+            { CellReference = "D4", StyleIndex = (UInt32Value)3U, DataType = CellValues.String };
         var cellValue3 = new CellValue
         {
-            Text = "2"
+            Text = "Предмет"
         };
 
         cell11.Append(cellValue3);
 
         var cell12 = new Cell
-            { CellReference = "E4", StyleIndex = (UInt32Value)3U, DataType = CellValues.SharedString };
+            { CellReference = "E4", StyleIndex = (UInt32Value)3U, DataType = CellValues.String };
         var cellValue4 = new CellValue
         {
-            Text = "3"
+            Text = "Группа"
         };
 
         cell12.Append(cellValue4);
 
         var cell13 = new Cell
-            { CellReference = "F4", StyleIndex = (UInt32Value)3U, DataType = CellValues.SharedString };
+            { CellReference = "F4", StyleIndex = (UInt32Value)3U, DataType = CellValues.String };
         var cellValue5 = new CellValue
         {
-            Text = "4"
+            Text = "Характер"
         };
 
         cell13.Append(cellValue5);
 
         var cell14 = new Cell
-            { CellReference = "G4", StyleIndex = (UInt32Value)3U, DataType = CellValues.SharedString };
+            { CellReference = "G4", StyleIndex = (UInt32Value)3U, DataType = CellValues.String };
         var cellValue6 = new CellValue
         {
-            Text = "5"
+            Text = "Часов"
         };
 
         cell14.Append(cellValue6);
@@ -1027,17 +1027,17 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
         row2.Append(cell13);
         row2.Append(cell14);
 
-        var mergeCells1 = new MergeCells { Count = (UInt32Value)4U };
-        AppendTableBody(sheetData1, mergeCells1);
-
         sheetData1.Append(row1);
         sheetData1.Append(row2);
-
+        
+        var mergeCells1 = new MergeCells { Count = (UInt32Value)4U };
         var mergeCell1 = new MergeCell { Reference = "A2:G2" };
         var mergeCell2 = new MergeCell { Reference = "A4:C4" };
-
         mergeCells1.Append(mergeCell1);
         mergeCells1.Append(mergeCell2);
+        AppendTableBody(sheetData1, mergeCells1);
+
+
         var pageMargins1 = new PageMargins
         {
             Left = 0.78749999999999998D, Right = 0.78749999999999998D, Top = 1.0249999999999999D,
@@ -1160,54 +1160,8 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
     // Generates content of sharedStringTablePart1.
     private void GenerateSharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1)
     {
-        var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)5U, UniqueCount = (UInt32Value)5U };
-
-        var sharedStringItem2 = new SharedStringItem();
-        var text2 = new Text
-        {
-            Text = "Фамилия"
-        };
-
-        sharedStringItem2.Append(text2);
-
-        var sharedStringItem3 = new SharedStringItem();
-        var text3 = new Text
-        {
-            Text = "Предмет"
-        };
-
-        sharedStringItem3.Append(text3);
-
-        var sharedStringItem4 = new SharedStringItem();
-        var text4 = new Text
-        {
-            Text = "Группа"
-        };
-
-        sharedStringItem4.Append(text4);
-
-        var sharedStringItem5 = new SharedStringItem();
-        var text5 = new Text
-        {
-            Text = "Характер"
-        };
-
-        sharedStringItem5.Append(text5);
-
-        var sharedStringItem6 = new SharedStringItem();
-        var text6 = new Text
-        {
-            Text = "Часов"
-        };
-
-        sharedStringItem6.Append(text6);
-
-        sharedStringTable1.Append(sharedStringItem2);
-        sharedStringTable1.Append(sharedStringItem3);
-        sharedStringTable1.Append(sharedStringItem4);
-        sharedStringTable1.Append(sharedStringItem5);
-        sharedStringTable1.Append(sharedStringItem6);
-
+        var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)0, UniqueCount = (UInt32Value)0 };
+        
         sharedStringTablePart1.SharedStringTable = sharedStringTable1;
     }
 

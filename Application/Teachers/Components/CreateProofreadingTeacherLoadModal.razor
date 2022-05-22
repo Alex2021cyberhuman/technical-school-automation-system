@@ -2,7 +2,6 @@
 @using Application.Data
 @using Application.Teachers.Forms
 @using Application.Teachers.Data
-@using Microsoft.Build.Framework
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
@@ -42,9 +41,9 @@
 
 @code
 {
-    public CreateProofreadingTeacherLoadForm Form { get; set; }
+    public CreateProofreadingTeacherLoadForm Form { get; set; } = null!;
 
-    public EditContext EditContext { get; set; }
+    public EditContext EditContext { get; set; } = null!;
 
     public bool Visible { get; set; }
 
@@ -55,28 +54,20 @@
     public long CurrentUserId { get; set; }
 
     [Parameter]
-    [Required]
     public Func<Task<List<TeacherLoad>>> GetAllUserLoadsAsync { get; set; } = null!;
 
     public List<TeacherLoad> AllUserLoads { get; set; } = new();
 
-    public CreateProofreadingTeacherLoadModal()
-    {
-        Form = new CreateProofreadingTeacherLoadForm();
-        EditContext = new EditContext(Form);
-    }
-
     private void OnCancel()
     {
         Visible = false;
-        Form = new CreateProofreadingTeacherLoadForm();
-        EditContext = new EditContext(Form);
     }
 
     private async Task OnOpenAsync()
     {
-        await using var context = await DbContextFactory.CreateDbContextAsync();
         AllUserLoads = await GetAllUserLoadsAsync();
+        Form = new CreateProofreadingTeacherLoadForm();
+        EditContext = new EditContext(Form);
         Visible = true;
     }
 

@@ -4,7 +4,7 @@
 <MudSelect T="Group" Label="Группа" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="GetGroupSelect">
     @foreach (var group in Groups)
     {
-        <MudSelectItem Value="Groups"/>
+        <MudSelectItem Value="group"/>
     }
 </MudSelect>
 
@@ -15,15 +15,28 @@
 
     private static string GetGroupSelect(Group arg)
     {
-        return arg.Name;
+        return arg?.Name ?? string.Empty;
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            await base.OnAfterRenderAsync(firstRender);
+        }
+        catch (JSException e)
+        {
+            // NOOP
+        }
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
+        await base.OnParametersSetAsync();
         if (Value is null && Groups.Any())
         {
             Value = Groups.First();
+            await ValueChanged.InvokeAsync(Value);
         }
     }
 }

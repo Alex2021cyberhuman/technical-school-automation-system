@@ -15,7 +15,7 @@ public class ProofreadingTeacherDayForm
             .Select((number, index) => new ProofreadingTeacherDayForm
             {
                 Hours =
-                    proofreadingTeacherDayForms?.ElementAtOrDefault(index)?.Number ?? 0,
+                    proofreadingTeacherDayForms?.ElementAtOrDefault(index)?.Hours ?? 0,
                 Number = number
             })
             .ToList();
