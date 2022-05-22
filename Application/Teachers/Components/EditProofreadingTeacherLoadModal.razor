@@ -2,21 +2,21 @@
 @using Application.Data
 @using Application.Teachers.Forms
 @using Application.Teachers.Data
-@using Microsoft.Build.Framework
+@using System.ComponentModel.DataAnnotations
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
-    Вычитать часы преподавания
+    Довычитать часы преподавания
 </button>
 
 @if (Visible)
 {
-    <PageTitle>Вычитать часы преподавания</PageTitle>
+    <PageTitle>Довычитать часы преподавания</PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Вычитать часы преподавания</h5>
+                    <h5 class="modal-title">Довычитать часы преподавания</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Вычитать часы преподавания</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Довычитать часы преподавания</button>
                 </div>
             </div>
         </div>
@@ -42,9 +42,9 @@
 
 @code
 {
-    public CreateProofreadingTeacherLoadForm Form { get; set; }
+    public EditProofreadingTeacherLoadForm Form { get; set; } = null!;
 
-    public EditContext EditContext { get; set; }
+    public EditContext EditContext { get; set; } = null!;
 
     public bool Visible { get; set; }
 
@@ -60,17 +60,12 @@
     
     public List<TeacherLoad> AllUserLoads { get; set; } = new();
 
-    public CreateProofreadingTeacherLoadModal()
-    {
-        Form = new CreateProofreadingTeacherLoadForm();
-        EditContext = new EditContext(Form);
-    }
+    [Parameter]
+    public ProofreadingTeacherLoad ProofreadingTeacherLoad { get; set; } = null!;
 
     private void OnCancel()
     {
         Visible = false;
-        Form = new CreateProofreadingTeacherLoadForm();
-        EditContext = new EditContext(Form);
     }
 
     private async Task OnOpenAsync()
@@ -78,6 +73,8 @@
         await using var context = await DbContextFactory.CreateDbContextAsync();
         AllUserLoads = await GetAllUserLoadsAsync();
         Visible = true;
+        Form = new EditProofreadingTeacherLoadForm(ProofreadingTeacherLoad);
+        EditContext = new EditContext(Form);
     }
 
     private async Task OnSubmitAsync()
@@ -85,8 +82,13 @@
         if (!Visible || !EditContext.Validate())
             return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var load = Form.ToProofreadingTeacherLoad();
-        context.ProofreadingTeacherLoad.Add(load);
+        var load = await context.ProofreadingTeacherLoad.FirstOrDefaultAsync(x => x.Id == ProofreadingTeacherLoad.Id);
+        if (load is null)
+        {
+            OnCancel();
+            return;
+        }
+        Form.ToProofreadingTeacherLoad(load);
         await context.SaveChangesAsync();
         OnCancel();
         await OnSubmit.InvokeAsync();

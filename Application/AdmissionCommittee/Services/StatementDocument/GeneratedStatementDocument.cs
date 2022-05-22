@@ -78,11 +78,11 @@ public class GeneratedStatementDocument
         };
         var application1 = new Ap.Application
         {
-            Text = "LibreOffice/7.3.2.2$Windows_X86_64 LibreOffice_project/49f2b1bff42cfccbd8f788c8dc32c1c309559be0"
+            Text = "TechnicalSchoolAutomationSystem"
         };
         var applicationVersion1 = new Ap.ApplicationVersion
         {
-            Text = "15.0000"
+            Text = "0.1"
         };
         var pages1 = new Ap.Pages
         {

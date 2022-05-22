@@ -1,7 +1,7 @@
-@inherits MudSelect<int?>
+@inherits MudSelect<int>
 
 <MudField Label="Год">
-    <MudSelect T="int?" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
+    <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="GetYearString">
         @foreach (var year in Years)
         {
             <MudSelectItem Value="@year">@year</MudSelectItem>
@@ -9,7 +9,7 @@
     </MudSelect>
     @if (!Required)
     {
-        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" OnClick="Deselect"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" OnClick="Deselect"/>
     }
 </MudField>
 
@@ -26,7 +26,7 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        if (Required && Value is null)
+        if (Value == default)
         {
             Value = MaximumYear;
         }
@@ -34,6 +34,11 @@
 
     private void Deselect()
     {
-        Value = null;
+        Value = default;
+    }
+
+    private string GetYearString(int year)
+    {
+        return year == default ? "-" : year.ToString();
     }
 }

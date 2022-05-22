@@ -1,9 +1,9 @@
 @using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
 @using Application.Data
+@using Application.Groups.Data
 @using Application.Teachers.Forms
 @using Application.Teachers.Data
-@using Group = Application.Groups.Data.Group
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpen">

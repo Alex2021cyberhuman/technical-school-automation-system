@@ -1,43 +1,29 @@
-@inherits MudSelect<int?>
+@using Application.Common.Services
+@inject MonthsService MonthsService
+@inherits MudSelect<int>
 
 <MudField>
-    <MudSelect T="int?" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="ToStringFunc">
-        @foreach (var month in MonthNames.Keys.OrderBy(x => x))
+    <MudSelect T="int" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="ToStringFunc">
+        @foreach (var month in Enumerable.Range(1, 12))
         {
             <MudSelectItem Value="@month"/>
         }
     </MudSelect>
     @if (!Required)
     {
-        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" OnClick="Deselect"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" OnClick="Deselect"/>
     }
 </MudField>
 
 @code
 {
-    public static readonly Dictionary<int, string> MonthNames = new()
+    private string ToStringMonth(int month)
     {
-        { 1, "Январь" },
-        { 2, "Февраль" },
-        { 3, "Март" },
-        { 4, "Апрель" },
-        { 5, "Май" },
-        { 6, "Июнь" },
-        { 7, "Июль" },
-        { 8, "Август" },
-        { 9, "Сентябрь" },
-        { 10, "Октябрь" },
-        { 11, "Ноябрь" },
-        { 12, "Декабрь" }
-    };
-
-    private string ToStringMonth(int? month)
-    {
-        return month.HasValue ? MonthNames[month.Value] : "-";
+        return month != default ? MonthsService.GetName(month) : "-";
     }
 
     private void Deselect()
     {
-        Value = null;
+        Value = default;
     }
 }

@@ -1,31 +1,31 @@
-@using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
 @using Application.Data
 @using Application.Teachers.Data
+@using Application.Common.Services
 @inject IDbContextFactory<MainDbContext> DbContextFactory
-
+@inject MonthsService MonthsService
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
-    Удалить нагрузку
+    Удалить вычитку часов нагрузки
 </button>
 
 @if (Visible)
 {
-    <PageTitle>Удалить нагрузку</PageTitle>
+    <PageTitle>Удалить вычитку часов нагрузки</PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Удалить нагрузку</h5>
+                    <h5 class="modal-title">Удалить вычитку часов нагрузки</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="alert-danger">Вы действительно хотите удалить нагрузку @TeacherLoad.Group.Name @TeacherLoad.Subject.Code @TeacherLoad.Subject.Name?</p>
+                    <p class="alert-danger">Вы действительно хотите удалить вычитку часов нагрузки за @MonthsService.GetName(ProofreadingTeacherLoad.Month) @ProofreadingTeacherLoad.Year г. @ProofreadingTeacherLoad.TeacherLoad.Group.Name @ProofreadingTeacherLoad.TeacherLoad.Subject.Code @ProofreadingTeacherLoad.TeacherLoad.Subject.Name?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Удалить нагрузку</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Удалить вычитку часов нагрузки</button>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
     public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
 
     [Parameter]
-    public TeacherLoad TeacherLoad { get; set; } = null!;
+    public ProofreadingTeacherLoad ProofreadingTeacherLoad { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,13 +62,13 @@
         if (!Visible)
             return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var teacherLoad = await context.TeacherLoad.FirstOrDefaultAsync(x => x.Id == TeacherLoad.Id);
-        if (teacherLoad is null)
+        var proofreadingTeacherLoad = await context.ProofreadingTeacherLoad.FirstOrDefaultAsync(x => x.Id == ProofreadingTeacherLoad.Id);
+        if (proofreadingTeacherLoad is null)
         {
             OnCancel();
             return;
         }
-        context.TeacherLoad.Remove(teacherLoad);
+        context.ProofreadingTeacherLoad.Remove(proofreadingTeacherLoad);
         await context.SaveChangesAsync();
         await OnSubmit.InvokeAsync();
     }

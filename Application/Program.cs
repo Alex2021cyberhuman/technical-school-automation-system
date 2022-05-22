@@ -3,6 +3,7 @@ using Application.AdmissionCommittee.Data;
 using Application.AdmissionCommittee.Services.ApplicantsTable;
 using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 using Application.AdmissionCommittee.Services.StatementDocument;
+using Application.Common.Services;
 using Application.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;
@@ -34,6 +35,7 @@ builder.Services.AddSingleton<ApplicantsTableCreator>();
 builder.Services.AddSingleton<EnrolledStudentsTableCreator>();
 MainDbContext.AddToServices(builder.Services, builder.Configuration, builder.Environment);
 builder.AddAccess();
+builder.Services.AddSingleton<MonthsService>();
 builder.Services.AddMudServices();
 var app = builder.Build();
 
@@ -55,6 +57,9 @@ Directory.CreateDirectory(statementPath);
 var enrolledPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:EnrolledStudentsTablePath"]);
 Directory.CreateDirectory(enrolledPath);
 
+var proofreadingTeacherLoadVacanciesPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"]);
+Directory.CreateDirectory(proofreadingTeacherLoadVacanciesPath);
+
 var wwwrootPath = Path.GetFullPath("./wwwroot/");
 Directory.CreateDirectory(wwwrootPath);
 
@@ -66,7 +71,8 @@ app.UseStaticFiles(new StaticFileOptions
         new PhysicalFileProvider(wwwrootPath),
         new PhysicalFileProvider(applicantsTablePath),
         new PhysicalFileProvider(statementPath),
-        new PhysicalFileProvider(enrolledPath))
+        new PhysicalFileProvider(enrolledPath),
+        new PhysicalFileProvider(proofreadingTeacherLoadVacanciesPath))
 });
 app.UseRouting();
 app.UseAuthentication();

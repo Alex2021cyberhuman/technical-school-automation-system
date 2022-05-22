@@ -1,7 +1,6 @@
 @page "/proofreading"
 @using Application.Access.Enums
 @using Application.Teachers.Data
-@using Microsoft.AspNetCore.Authentication
 @using Microsoft.Extensions.Localization
 @using System.Security.Claims
 @using Application.Data
@@ -12,75 +11,75 @@
 <PageTitle>Вычитка часов преподования</PageTitle>
 <h3>Вычитка часов преподования</h3>
 
-<CreateProofreadingTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync"/>
-<MudTable Hover="true" SortLabel="Сортировать по" Items="Loads" Filter="Filter">
-    <ToolBarContent>
-        <MyMonthSelector @bind-Value="SelectedMonth"/>
-        <MyYearSelector @bind-Value="SelectedYear"/>
-        <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TeacherLoad.Group.Name">Группа</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TeacherLoad.Subject.Name">Дисциплина</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Created">Создано</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            Тип
-        </MudTh>
-        <MudTh>
-            Характер
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Month">Месяц</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Year">Год</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TotalHours">Итого</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-        </MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Группа">
-            @context.TeacherLoad.Group.Name
-        </MudTd>
-        <MudTd DataLabel="Дисциплина">
-            @context.TeacherLoad.Subject.Name
-        </MudTd>
-        <MudTd DataLabel="Создано">
-            @context.Created.ToLocalTime()
-        </MudTd>
-        <MudTd DataLabel="Тип">
-            @StringLocalizer[context.TeacherLoad.Group.FinanceEnrolmentType.ToString()]
-        </MudTd>
-        <MudTd DataLabel="Характер">
-            @context.TeacherLoad.Kind
-        </MudTd>
-        <MudTd DataLabel="Характер">
-            @context.Month
-        </MudTd>
-        <MudTd DataLabel="Характер">
-            @context.Year
-        </MudTd>
-        <MudTd DataLabel="Характер">
-            @context.TotalHours
-        </MudTd>
-        <MudTd>
-            @* <EditProofreadingTeacherLoadModal OnSubmit="RefreshAsync" ProofreadingTeacherLoad="@context" CurrentUserId="CurrentUserId"/> *@
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+@* <CreateProofreadingTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync" GetAllUserLoadsAsync="GetAllUserLoadsAsync"/> *@
+@* <MudTable T="ProofreadingTeacherLoad" Hover="true" SortLabel="Сортировать по" Items="Loads" Filter="Filter"> *@
+@*     <ToolBarContent> *@
+@*         <MyMonthSelector @bind-Value="SelectedMonth"/> *@
+@*         <MyYearSelector @bind-Value="SelectedYear"/> *@
+@*         <MudTextField T="string" @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField> *@
+@*     </ToolBarContent> *@
+@*     <HeaderContent> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TeacherLoad.Group.Name">Группа</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TeacherLoad.Subject.Name">Дисциплина</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Created">Создано</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             Тип *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             Характер *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Month">Месяц</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.Year">Год</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*             <MudTableSortLabel T="ProofreadingTeacherLoad" SortBy="load => load.TotalHours">Итого</MudTableSortLabel> *@
+@*         </MudTh> *@
+@*         <MudTh> *@
+@*         </MudTh> *@
+@*     </HeaderContent> *@
+@*     <RowTemplate> *@
+@*         <MudTd DataLabel="Группа"> *@
+@*             @context.TeacherLoad.Group.Name *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Дисциплина"> *@
+@*             @context.TeacherLoad.Subject.Name *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Создано"> *@
+@*             @context.Created.ToLocalTime() *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Тип"> *@
+@*             @StringLocalizer[context.TeacherLoad.Group.FinanceEnrolmentType.ToString()] *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Характер"> *@
+@*             @context.TeacherLoad.Kind *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Характер"> *@
+@*             @context.Month *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Характер"> *@
+@*             @context.Year *@
+@*         </MudTd> *@
+@*         <MudTd DataLabel="Характер"> *@
+@*             @context.TotalHours *@
+@*         </MudTd> *@
+@*         <MudTd> *@
+@*             <EditProofreadingTeacherLoadModal OnSubmit="RefreshAsync" CurrentUserId="CurrentUserId" ProofreadingTeacherLoad="@context" GetAllUserLoadsAsync="GetAllUserLoadsAsync)"/> *@
+@*             <DeleteProofreadingTeacherLoadModal OnSubmit="RefreshAsync" ProofreadingTeacherLoad="@context"/> *@
+@*         </MudTd> *@
+@*     </RowTemplate> *@
+@* </MudTable> *@
 
 @code {
-
-
+    
     public List<ProofreadingTeacherLoad> Loads { get; set; } = new();
 
     public long CurrentUserId => long.TryParse(CurrentUser?.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
@@ -96,13 +95,15 @@
 
     public int? SelectedYear { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        var state = await AuthenticationStateTask;
-        CurrentUser = state.User;
-        await RefreshAsync();
-    }
+    public List<TeacherLoad> AllUserLoads { get; set; } = new();
+
+    // protected override async Task OnI()
+    // {
+    //     await base.OnInitializedAsync();
+    //     var state = await AuthenticationStateTask;
+    //     CurrentUser = state.User;
+    //     await RefreshAsync();
+    // }
 
     private async Task RefreshAsync()
     {
@@ -120,6 +121,15 @@
                 load.TeacherLoad.Subject.Code.Contains(SearchString) ||
                 StringLocalizer[load.TeacherLoad.Kind.ToString()].ToString().Contains(SearchString) ||
                 StringLocalizer[load.TeacherLoad.Group.FinanceEnrolmentType.ToString()].ToString().Contains(SearchString));
+    }
+
+    private async Task<List<TeacherLoad>> GetAllUserLoadsAsync()
+    {
+        if (AllUserLoads.Any())
+            return AllUserLoads;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        AllUserLoads = await context.GetTeacherLoadsAsync(CurrentUserId);
+        return AllUserLoads;
     }
 
 }

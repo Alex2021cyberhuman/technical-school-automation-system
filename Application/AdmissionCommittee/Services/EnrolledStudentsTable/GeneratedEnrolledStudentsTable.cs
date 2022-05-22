@@ -1016,7 +1016,7 @@ public class GeneratedEnrolledStudentsTable
         };
         var application1 = new DocumentFormat.OpenXml.ExtendedProperties.Application
         {
-            Text = "Microsoft Excel"
+            Text = "TechnicalSchoolAutomationSystem"
         };
         var documentSecurity1 = new DocumentFormat.OpenXml.ExtendedProperties.DocumentSecurity
         {
@@ -1057,7 +1057,7 @@ public class GeneratedEnrolledStudentsTable
         var vTVector2 = new DocumentFormat.OpenXml.VariantTypes.VTVector { BaseType = DocumentFormat.OpenXml.VariantTypes.VectorBaseValues.Lpstr, Size = (UInt32Value)1U };
         var vTLPSTR2 = new DocumentFormat.OpenXml.VariantTypes.VTLPSTR
         {
-            Text = "Лист1"
+            Text = "Данные"
         };
 
         vTVector2.Append(vTLPSTR2);
@@ -1077,7 +1077,7 @@ public class GeneratedEnrolledStudentsTable
         };
         var applicationVersion1 = new DocumentFormat.OpenXml.ExtendedProperties.ApplicationVersion
         {
-            Text = "12.0000"
+            Text = "0.1"
         };
 
         properties1.Append(template1);
