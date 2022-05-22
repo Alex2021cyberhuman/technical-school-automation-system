@@ -1,0 +1,104 @@
+@using Application.Specialities.Data
+@using Microsoft.EntityFrameworkCore
+@using Application.Data
+@using Application.Teachers.Forms
+@using Application.Teachers.Data
+@using Group = Application.Groups.Data.Group
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+
+<button type="button" class="btn btn-primary" @onclick="OnOpen">
+    Вычитать часы преподавания
+</button>
+
+@if (Visible)
+{
+    <PageTitle>Вычитать часы преподавания</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Вычитать часы преподавания</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Вычитать часы преподавания</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    public CreateTeacherLoadForm Form { get; set; }
+
+    public EditContext EditContext { get; set; }
+
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
+
+    [Parameter]
+    public long CurrentUserId { get; set; }
+
+    public List<Group> Groups { get; set; } = new();
+
+    public List<Subject> Subjects { get; set; } = new();
+
+    public CreateProofreadingTeacherLoadModal()
+    {
+        Form = new CreateTeacherLoadForm();
+        EditContext = new EditContext(Form);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Subjects = await context.GetSubjectsWithSpecialitiesAsync();
+    }
+
+    private void OnCancel()
+    {
+        Visible = false;
+        Form = new CreateTeacherLoadForm();
+        EditContext = new EditContext(Form);
+    }
+
+    private void OnOpen()
+    {
+        Visible = true;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!Visible || !EditContext.Validate())
+            return;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var load = Form.ToTeacherLoad(CurrentUserId);
+        context.TeacherLoad.Add(load);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnSubmit.InvokeAsync();
+    }
+
+    private async Task OnSubjectChangedAsync(Subject? subject)
+    {
+        Form.Subject = subject;
+        if (Form.Subject is null)
+            return;
+
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Groups = await context.GetGroupsBySubjectAsync(Form.Subject);
+    }
+}

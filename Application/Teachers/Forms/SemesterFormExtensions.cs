@@ -1,6 +1,6 @@
 using Application.Specialities.Data;
 
-namespace Application.Shared.Input;
+namespace Application.Teachers.Forms;
 
 public static class SemesterFormExtensions
 {

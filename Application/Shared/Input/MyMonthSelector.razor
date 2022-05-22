@@ -1,45 +1,44 @@
-@inherits MudSelect<int>
+@inherits MudSelect<int?>
 
-<MudSelect T="int" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
-    @foreach (var month in MonthModel.Defaults)
+<MudField>
+    <MudSelect T="int?" Label="Месяц" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="ToStringFunc">
+        @foreach (var month in MonthNames.Keys.OrderBy(x => x))
+        {
+            <MudSelectItem Value="@month"/>
+        }
+    </MudSelect>
+    @if (!Required)
     {
-        <MudSelectItem Value="@month"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" OnClick="Deselect"/>
+        
     }
-</MudSelect>
+</MudField>
 
 @code
 {
-    public class MonthModel
+    public static readonly Dictionary<int, string> MonthNames = new()
     {
-        private MonthModel(int number, string label)
-        {
-            Number = number;
-            Label = label;
-        }
+        { 1, "Январь" },
+        { 2, "Февраль" },
+        { 3, "Март" },
+        { 4, "Апрель" },
+        { 5, "Май" },
+        { 6, "Июнь" },
+        { 7, "Июль" },
+        { 8, "Август" },
+        { 9, "Сентябрь" },
+        { 10, "Октябрь" },
+        { 11, "Ноябрь" },
+        { 12, "Декабрь" },
+    };
 
-        public int Number { get; set; }
+    private string ToStringFunc(int? month)
+    {
+        return month.HasValue ? MonthNames[month.Value] : "-";
+    }
 
-        public string Label { get; set; } = string.Empty;
-
-        public static readonly List<MonthModel> Defaults = new()
-        {
-            new(1, "Январь"),
-            new(2, "Февраль"),
-            new(3, "Март"),
-            new(4, "Апрель"),
-            new(5, "Май"),
-            new(6, "Июнь"),
-            new(7, "Июль"),
-            new(8, "Август"),
-            new(9, "Сентябрь"),
-            new(10, "Октябрь"),
-            new(11, "Ноябрь"),
-            new(12, "Декабрь")
-        };
-
-        public override string ToString()
-        {
-            return Label;
-        }
+    private void Deselect()
+    {
+        Value = null;
     }
 }

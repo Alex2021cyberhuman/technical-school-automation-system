@@ -24,12 +24,34 @@ public static class TeacherQueryableExtensions
             .ToListAsync();
     }
 
-    public static async Task<List<TeacherLoad>> GetTeacherLoadsAsync(this MainDbContext context)
+    public static async Task<List<TeacherLoad>> GetTeacherLoadsAsync(this MainDbContext context, long currentUserId)
     {
         return await context.TeacherLoad.AsNoTracking()
             .Include(x => x.Group)
             .Include(x => x.Subject)
             .OrderByDescending(x => x.Created)
+            .Where(x => x.TeacherId == currentUserId)
             .ToListAsync();
+    }
+    
+    public static async Task<List<ProofreadingTeacherLoad>> GetProofreadingTeacherLoadsAsync(this MainDbContext context, long currentUserId)
+    {
+        return await context.ProofreadingTeacherLoad.AsNoTracking()
+            .Include(x => x.TeacherLoad)
+            .ThenInclude(x => x.Group)
+            .Include(x => x.TeacherLoad)
+            .ThenInclude(x => x.Subject)
+            .OrderByDescending(x => x.Created)
+            .Where(x => x.TeacherLoad.TeacherId == currentUserId)
+            .ToListAsync();
+    }
+
+    public static async Task<List<ProofreadingTeacherLoad>> GetProofreadingTeacherLoadsAsync(this MainDbContext context, 
+        long currentUserId, 
+        string searchString,
+        int selectedMonth,
+        int selectedYear)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -25,7 +25,7 @@
                 <div class="modal-body">
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
-                        <ValidationMessage TValue="CreateGroupForm"/>
+                        <ValidationSummary/>
                         <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" ValidationFor="() => Form.Name"/>
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
                         <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>

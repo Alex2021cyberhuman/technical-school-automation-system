@@ -13,7 +13,10 @@
 <h3>Нагрузка</h3>
 
 <CreateTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync"/>
-<MudTable Items="@Loads" Hover="true" SortLabel="Сортировать по">
+<MudTable Items="@Loads" Hover="true" SortLabel="Сортировать по" Filter="Filter">
+    <ToolBarContent>
+        <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>
             <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Group.Name">Группа</MudTableSortLabel>
@@ -54,6 +57,7 @@
         </MudTd>
     </RowTemplate>
 </MudTable>
+
 @code {
 
 
@@ -66,6 +70,8 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
+    public string SearchString { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -77,7 +83,17 @@
     private async Task RefreshAsync()
     {
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        Loads = await context.GetTeacherLoadsAsync();
+        Loads = await context.GetTeacherLoadsAsync(CurrentUserId);
+    }
+
+    public bool Filter(TeacherLoad teacherLoad)
+    {
+        return string.IsNullOrWhiteSpace(SearchString) ||
+               teacherLoad.Group.Name.Contains(SearchString) ||
+               teacherLoad.Subject.Name.Contains(SearchString) ||
+               teacherLoad.Subject.Code.Contains(SearchString) ||
+               StringLocalizer[teacherLoad.Kind.ToString()].ToString().Contains(SearchString) ||
+               StringLocalizer[teacherLoad.Group.FinanceEnrolmentType.ToString()].ToString().Contains(SearchString);
     }
 
 }

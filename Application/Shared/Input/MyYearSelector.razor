@@ -1,11 +1,17 @@
-@inherits MudSelect<int>
+@inherits MudSelect<int?>
 
-<MudSelect T="int" Label="Год" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
-    @foreach (var year in Years)
+<MudField Label="Год">
+    <MudSelect T="int?" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value">
+        @foreach (var year in Years)
+        {
+            <MudSelectItem Value="@year">@year</MudSelectItem>
+        }
+    </MudSelect>
+    @if (!Required)
     {
-        <MudSelectItem Value="@year">@year</MudSelectItem>
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" OnClick="Deselect"/>
     }
-</MudSelect>
+</MudField>
 
 @code
 {
@@ -15,5 +21,19 @@
     [Parameter]
     public int MaximumYear { get; set; } = DateTime.Now.Year;
 
-    public IEnumerable<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1);
+    public List<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1).ToList();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Required && Value is null)
+        {
+            Value = MaximumYear;
+        }
+    }
+
+    private void Deselect()
+    {
+        Value = null;
+    }
 }
