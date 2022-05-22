@@ -5,20 +5,20 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Teachers.Services.ProofreadingTeacherLoadVacancies;
 
-public class ProofreadingTeacherLoadVacanciesService
+public class ProofreadingTeacherLoadVacanciesCreator
 {
     private readonly MonthsService _monthsService;
     private readonly IStringLocalizer _stringLocalizer;
     private readonly IConfiguration _configuration;
     
-    public ProofreadingTeacherLoadVacanciesService(MonthsService monthsService, IStringLocalizer stringLocalizer, IConfiguration configuration)
+    public ProofreadingTeacherLoadVacanciesCreator(MonthsService monthsService, IStringLocalizer stringLocalizer, IConfiguration configuration)
     {
         _monthsService = monthsService;
         _stringLocalizer = stringLocalizer;
         _configuration = configuration;
     }
 
-    public async Task<long> CreatePackageAsync(int month,
+    public async Task<string> CreatePackageAsync(int month,
         int year,
         string teacherFamilyName,
         IEnumerable<ProofreadingTeacherLoad> proofreadingTeacherLoads)
@@ -43,6 +43,6 @@ public class ProofreadingTeacherLoadVacanciesService
         var fullFileName = Path.Combine(basePath, fileName);
         var table = new GeneratedProofreadingTeacherLoadVacanciesTable(model);
         var size = await table.CreateAsync(fullFileName);
-        return size;
+        return fileName;
     }
 }

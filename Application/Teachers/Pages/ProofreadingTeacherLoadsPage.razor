@@ -4,10 +4,14 @@
 @using Microsoft.Extensions.Localization
 @using System.Security.Claims
 @using Application.Data
+@using Application.Teachers.Services.ProofreadingTeacherLoadVacancies
 @using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = PolicyIdentifiers.Teachers)]
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+@inject ProofreadingTeacherLoadVacanciesCreator ProofreadingTeacherLoadVacanciesCreator
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 <PageTitle>Вычитка часов преподования</PageTitle>
 <h3>Вычитка часов преподования</h3>
 
@@ -17,6 +21,12 @@
         <MyMonthSelector @bind-Value="SelectedMonth"/>
         <MyYearSelector @bind-Value="SelectedYear"/>
         <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudButtonGroup Color="Color.Primary">
+            <MudButton>Печать</MudButton>
+            <MudMenu Icon="@Icons.Material.Outlined.ArrowDropDown">
+                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTable"></MudMenuItem>
+            </MudMenu>
+        </MudButtonGroup>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>
@@ -79,7 +89,7 @@
 </MudTable>
 
 @code {
-    
+
     public List<ProofreadingTeacherLoad> Loads { get; set; } = new();
 
     public long CurrentUserId => long.TryParse(CurrentUser?.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
@@ -130,6 +140,22 @@
         await using var context = await DbContextFactory.CreateDbContextAsync();
         AllUserLoads = await context.GetTeacherLoadsAsync(CurrentUserId);
         return AllUserLoads;
+    }
+
+    private async Task CreateProofreadingTeacherLoadVacanciesTable()
+    {
+        if (SelectedMonth != default && SelectedYear != default)
+        {
+            _ = await DialogService.ShowMessageBox(
+                "Неверный ввод",
+                "Выберите месяц и год");
+        }
+        var fileName = await ProofreadingTeacherLoadVacanciesCreator.CreatePackageAsync(
+            SelectedMonth,
+            SelectedYear,
+            CurrentUser.FindFirstValue(ClaimTypes.GivenName) ?? CurrentUser.FindFirstValue(ClaimTypes.Name),
+            Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth));
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName);
     }
 
 }
