@@ -24,25 +24,25 @@
     <MyInputComponent Label="Фамилия" ValidationFor="@(() => Form.FamilyName)" @bind-Value="@Form.FamilyName" Placeholder="Фамилия"/>
     <MyInputComponent Label="Имя" ValidationFor="@(() => Form.FirstName)" @bind-Value="@Form.FirstName" Placeholder="Имя"/>
     <MyInputComponent Label="Отчество" ValidationFor="@(() => Form.SurName)" @bind-Value="@Form.SurName" Placeholder="Отчество"/>
-    <InputDate @bind-Value="@Form.DateOfBirth" placeholder="Дата рождения"/>
+    <MudDatePicker @bind-Value="@Form.DateOfBirth" Label="Дата рождения"/>
     <MyInputComponent Label="Тип документа удостоверяющего личность" ValidationFor="@(() => Form.PassportType)" @bind-Value="@Form.PassportType" Placeholder="Тип паспорта"/>
     <MyInputComponent Label="Серия" ValidationFor="@(() => Form.PassportSerial)" @bind-Value="@Form.PassportSerial" Placeholder="Серия паспорта"/>
     <MyInputComponent Label="Номер" ValidationFor="@(() => Form.PassportNumber)" @bind-Value="@Form.PassportNumber" Placeholder="Номер паспорта"/>
     <MyInputComponent Label="Кем выдан" ValidationFor="@(() => Form.PassportIssuer)" @bind-Value="@Form.PassportIssuer" Placeholder="Кем выдан"/>
     <MyInputComponent Label="Код отделения (если есть)" Placeholder="Код отделения (если есть)" ValidationFor="@(() => Form.PassportIssuerCode)" @bind-Value="@Form.PassportIssuerCode"/>
-    <InputDate @bind-Value="@Form.PassportIssueDate" placeholder="Дата выдачи"/>
+    <MudDatePicker @bind-Value="@Form.PassportIssueDate" Label="Дата выдачи"/>
     <MyInputComponent Label="Место жительства" ValidationFor="@(() => Form.Address)" @bind-Value="@Form.Address" Placeholder="Место жительства"/>
     <MyInputComponent Label="Почтовый индекс" ValidationFor="@(() => Form.PostalCode)" @bind-Value="@Form.PostalCode" Placeholder="Почтовый индекс"/>
     <MyInputComponent Label="Мобильный телефон" ValidationFor="@(() => Form.Phone)" @bind-Value="@Form.Phone" Placeholder="Мобильный телефон"/>
     <MyInputComponent Label="Дополнительные сведения" ValidationFor="@(() => Form.Description)" @bind-Value="@Form.Description" Placeholder="Дополнительные сведения"/>
-    <InputNumber @bind-Value="@Form.LanguageRating" placeholder="Баллы по русскому языку"/>
-    <InputNumber @bind-Value="@Form.MathRating" placeholder="Баллы по математике"/>
-    <InputNumber @bind-Value="@Form.AverageAttestRating" placeholder="Средний бал по атестату"/>
+    <MudNumericField Min="0" Max="100" @bind-Value="@Form.LanguageRating" Label="Баллы по русскому языку"/>
+    <MudNumericField Min="0" Max="100" @bind-Value="@Form.MathRating" Label="Баллы по математике"/>
+    <MudNumericField Min="0" Max="5" @bind-Value="@Form.AverageAttestRating" Label="Средний бал по аттестату"/>
     <MyEnumInputRadioGroup Label="Тип базового обучения" @bind-Value="@Form.EducationType" TValue="EducationType"/>
     <MyInputComponent Label="Учебное заведение" ValidationFor="@(() => Form.EducationDescription)" @bind-Value="@Form.EducationDescription" Placeholder="Учебное заведение"/>
     <MyInputComponent Label="Серия документа об образовании" ValidationFor="@(() => Form.EducationDocumentSerial)" @bind-Value="@Form.EducationDocumentSerial" Placeholder="Серия документа об образовании"/>
     <MyInputComponent Label="Номер документа об образовании" ValidationFor="@(() => Form.EducationDocumentNumber)" @bind-Value="@Form.EducationDocumentNumber" Placeholder="Номер документа об образовании"/>
-    <InputDate @bind-Value="@Form.EducationDocumentIssued" placeholder="Дата выдачи документа об образовании"/>
+    <MudDatePicker @bind-Value="@Form.EducationDocumentIssued" Label="Дата выдачи документа об образовании"/>
     <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
     <MyInputCheckBox Label="Первый раз в техникуме" @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
     <MyInputCheckBox Label="Нужно общежитие" @bind-Value="@Form.NeedDormitory"/>

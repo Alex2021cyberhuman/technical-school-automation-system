@@ -78,7 +78,7 @@ public class ApplicantForm
     [Display(Name = "Баллы по математике")]
     public decimal MathRating { get; set; } = 50;
 
-    [Display(Name = "Средний бал по атестату")]
+    [Display(Name = "Средний бал по аттестату")]
     public decimal AverageAttestRating { get; set; } = 3;
 
     [Display(Name = "Тип базового образования")]
