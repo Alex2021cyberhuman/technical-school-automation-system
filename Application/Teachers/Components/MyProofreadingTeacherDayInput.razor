@@ -1,0 +1,36 @@
+@using Application.Teachers.Forms
+@inherits MudBaseInput<List<Application.Teachers.Forms.ProofreadingTeacherDayForm>>
+<MudField Label="Часы в день">
+    <div class="row justify-content-between">
+        @foreach (var day in Value)
+        {
+            var label = $"{day.Number}";
+            <div class="col-sm-4 col-lg-1">
+                <MudNumericField Label="@label" @bind-Value="@day.Hours" Min="0" Max="24"/>
+            </div>
+        }
+    </div>
+</MudField>
+<ValidationSummary/>
+
+@code
+{
+    [Parameter]
+    public int Month { get; set; }
+
+    [Parameter]
+    public int Year { get; set; }
+
+    private (int Year, int Month) CurrentYearMonthTuple { get; set; } = (-1, -1);
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        var (month, year) = CurrentYearMonthTuple;
+        if (Month == month && Year == year)
+        {
+            return;
+        }
+        Value = ProofreadingTeacherDayForm.GetZeroHourDaysByMonth(Month, Year, Value);
+    }
+}

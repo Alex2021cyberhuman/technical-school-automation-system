@@ -3,10 +3,11 @@
 @using Application.Data
 @using Application.Teachers.Forms
 @using Application.Teachers.Data
+@using DocumentFormat.OpenXml.Spreadsheet
 @using Group = Application.Groups.Data.Group
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
-<button type="button" class="btn btn-primary" @onclick="OnOpen">
+<button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
     Вычитать часы преподавания
 </button>
 
@@ -26,6 +27,10 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
+                        <MyMonthSelector @bind-Value="Form.Month" Required="true"/>
+                        <MyYearSelector @bind-Value="Form.Year" Required="true"/>
+                        <MyTeacherLoadInput @bind-Value="Form.TeacherLoad" TeacherLoads="AllUserLoads"/>
+                        <MyProofreadingTeacherDayInput Year="Form.Year" Month="Form.Month" @bind-Value="Form.Days"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -39,7 +44,7 @@
 
 @code
 {
-    public CreateTeacherLoadForm Form { get; set; }
+    public CreateProofreadingTeacherLoadForm Form { get; set; }
 
     public EditContext EditContext { get; set; }
 
@@ -51,32 +56,25 @@
     [Parameter]
     public long CurrentUserId { get; set; }
 
-    public List<Group> Groups { get; set; } = new();
-
-    public List<Subject> Subjects { get; set; } = new();
+    public List<TeacherLoad> AllUserLoads { get; set; } = new();
 
     public CreateProofreadingTeacherLoadModal()
     {
-        Form = new CreateTeacherLoadForm();
+        Form = new CreateProofreadingTeacherLoadForm();
         EditContext = new EditContext(Form);
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        await using var context = await DbContextFactory.CreateDbContextAsync();
-        Subjects = await context.GetSubjectsWithSpecialitiesAsync();
     }
 
     private void OnCancel()
     {
         Visible = false;
-        Form = new CreateTeacherLoadForm();
+        Form = new CreateProofreadingTeacherLoadForm();
         EditContext = new EditContext(Form);
     }
 
-    private void OnOpen()
+    private async Task OnOpenAsync()
     {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        AllUserLoads = await context.GetTeacherLoadsAsync(CurrentUserId);
         Visible = true;
     }
 
@@ -85,20 +83,10 @@
         if (!Visible || !EditContext.Validate())
             return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var load = Form.ToTeacherLoad(CurrentUserId);
-        context.TeacherLoad.Add(load);
+        var load = Form.ToProofreadingTeacherLoad();
+        context.ProofreadingTeacherLoad.Add(load);
         await context.SaveChangesAsync();
         OnCancel();
         await OnSubmit.InvokeAsync();
-    }
-
-    private async Task OnSubjectChangedAsync(Subject? subject)
-    {
-        Form.Subject = subject;
-        if (Form.Subject is null)
-            return;
-
-        await using var context = await DbContextFactory.CreateDbContextAsync();
-        Groups = await context.GetGroupsBySubjectAsync(Form.Subject);
     }
 }

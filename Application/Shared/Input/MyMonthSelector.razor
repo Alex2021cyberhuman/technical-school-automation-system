@@ -10,7 +10,6 @@
     @if (!Required)
     {
         <MudIconButton Icon="@Icons.Material.Filled.Cancel" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" OnClick="Deselect"/>
-        
     }
 </MudField>
 
@@ -29,10 +28,10 @@
         { 9, "Сентябрь" },
         { 10, "Октябрь" },
         { 11, "Ноябрь" },
-        { 12, "Декабрь" },
+        { 12, "Декабрь" }
     };
 
-    private string ToStringFunc(int? month)
+    private string ToStringMonth(int? month)
     {
         return month.HasValue ? MonthNames[month.Value] : "-";
     }

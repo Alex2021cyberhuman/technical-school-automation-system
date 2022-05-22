@@ -1,0 +1,98 @@
+@using Application.Specialities.Data
+@using Application.Teachers.Data
+@using Microsoft.Extensions.Localization
+@inherits MudBaseInput<TeacherLoad>
+@inject IStringLocalizer StringLocalizer
+<MudField Label="Дисциплина" Variant="Variant.Text">
+    <MudText>@Value.Group.Name @Value.Subject.Code @Value.Subject.Name</MudText>
+    <MudDivider Vertical="true" FlexItem="true"/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" StartIcon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)"/>
+    <MudPopover Open="@IsOpen" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+        <MudTable T="TeacherLoad" Items="@TeacherLoads" Hover="true" SortLabel="Сортировать по" Filter="Filter" @ref="MudTable" SelectedItemChanged="OnSelectedItemChanged">
+            <ToolBarContent>
+                <MudTextField @bind-Value="SearchString" Placeholder="Поиск нагрузки" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Group.Name">Группа</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Subject.Name">Дисциплина</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel T="TeacherLoad" SortBy="load => load.Created">Создано</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    Тип
+                </MudTh>
+                <MudTh>
+                    Характер
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Группа">
+                    @context.Group.Name
+                </MudTd>
+                <MudTd DataLabel="Дисциплина">
+                    @context.Subject.Name
+                </MudTd>
+                <MudTd DataLabel="Создано">
+                    @context.Created.ToLocalTime()
+                </MudTd>
+                <MudTd DataLabel="Тип">
+                    @StringLocalizer[context.Group.FinanceEnrolmentType.ToString()]
+                </MudTd>
+                <MudTd DataLabel="Характер">
+                    @context.Kind
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPopover>
+</MudField>
+
+@code
+{
+    [Parameter]
+    public IReadOnlyCollection<TeacherLoad> TeacherLoads { get; set; } = new List<TeacherLoad>();
+
+    public string SearchString { get; set; } = string.Empty;
+
+    public bool IsOpen { get; set; }
+
+    public MudTable<TeacherLoad> MudTable { get; set; } = null!;
+
+    [Parameter]
+    public int Month { get; set; }
+
+    [Parameter]
+    public int Year { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Value is not null || !TeacherLoads.Any()) return;
+        Value = TeacherLoads.First();
+        MudTable.SetSelectedItem(Value);
+    }
+
+    private void ToggleOpen()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    private bool Filter(TeacherLoad teacherLoad)
+    {
+        return string.IsNullOrWhiteSpace(SearchString) ||
+               teacherLoad.Group.Name.Contains(SearchString) ||
+               teacherLoad.Subject.Name.Contains(SearchString) ||
+               teacherLoad.Subject.Code.Contains(SearchString) ||
+               StringLocalizer[teacherLoad.Kind.ToString()].ToString().Contains(SearchString) ||
+               StringLocalizer[teacherLoad.Group.FinanceEnrolmentType.ToString()].ToString().Contains(SearchString);
+    }
+
+    private void OnSelectedItemChanged(TeacherLoad obj)
+    {
+        Value = obj;
+        ToggleOpen();
+    }
+}

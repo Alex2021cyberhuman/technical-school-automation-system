@@ -73,7 +73,7 @@
             @context.TotalHours
         </MudTd>
         <MudTd>
-            <EditProofreadingTeacherLoadModal OnSubmit="RefreshAsync" ProofreadingTeacherLoad="@context" CurrentUserId="CurrentUserId"/>
+            @* <EditProofreadingTeacherLoadModal OnSubmit="RefreshAsync" ProofreadingTeacherLoad="@context" CurrentUserId="CurrentUserId"/> *@
         </MudTd>
     </RowTemplate>
 </MudTable>
@@ -103,7 +103,7 @@
         CurrentUser = state.User;
         await RefreshAsync();
     }
-    
+
     private async Task RefreshAsync()
     {
         await using var context = await DbContextFactory.CreateDbContextAsync();

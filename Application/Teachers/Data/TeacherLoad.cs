@@ -23,7 +23,7 @@ public class TeacherLoad
     public TeacherLoadKind Kind { get; set; }
 
     public DateTime Created { get; set; } = DateTime.UtcNow;
-    
+
     public List<Semester> Semesters { get; set; } = null!;
 
     public List<ProofreadingTeacherLoad> ProofreadingTeacherLoads { get; set; } = new();
