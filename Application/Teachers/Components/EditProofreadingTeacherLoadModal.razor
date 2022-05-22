@@ -55,7 +55,6 @@
     public long CurrentUserId { get; set; }
 
     [Parameter]
-    [Required]
     public Func<Task<List<TeacherLoad>>> GetAllUserLoadsAsync { get; set; } = null!;
     
     public List<TeacherLoad> AllUserLoads { get; set; } = new();

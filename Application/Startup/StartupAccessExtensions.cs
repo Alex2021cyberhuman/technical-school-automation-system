@@ -1,5 +1,6 @@
 ﻿using Application.Access.Data;
 using Application.Access.Enums;
+using Application.Access.Services;
 using AspNetCore.Identity.Localization.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,7 @@ public static class StartupAccessExtensions
                     "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.SignIn.RequireConfirmedAccount = true;
             })
+            .AddClaimsPrincipalFactory<MyUserClaimsPrincipalFactory>()
             .AddEntityFrameworkStores<AccessDbContext>()
             .AddIdentityErrorDescriber();
     }
