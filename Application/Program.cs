@@ -57,7 +57,8 @@ Directory.CreateDirectory(statementPath);
 var enrolledPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:EnrolledStudentsTablePath"]);
 Directory.CreateDirectory(enrolledPath);
 
-var proofreadingTeacherLoadVacanciesPath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"]);
+var proofreadingTeacherLoadVacanciesPath =
+    Path.GetFullPath(builder.Configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"]);
 Directory.CreateDirectory(proofreadingTeacherLoadVacanciesPath);
 
 var wwwrootPath = Path.GetFullPath("./wwwroot/");

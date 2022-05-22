@@ -7,7 +7,7 @@ public class ProofreadingTeacherLoadVacanciesModel
     public int Year { get; set; }
 
     public List<ItemModel> Items { get; set; } = new();
-    
+
     public class ItemModel
     {
         public string TeacherFamilyName { get; set; } = string.Empty;

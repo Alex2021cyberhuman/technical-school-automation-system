@@ -7,7 +7,8 @@ namespace Application.Access.Services;
 
 public class MyUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Role>
 {
-    public MyUserClaimsPrincipalFactory(UserManager<User> userManager, RoleManager<Role> roleManager, IOptions<IdentityOptions> options) : base(userManager, roleManager, options)
+    public MyUserClaimsPrincipalFactory(UserManager<User> userManager, RoleManager<Role> roleManager,
+        IOptions<IdentityOptions> options) : base(userManager, roleManager, options)
     {
     }
 
