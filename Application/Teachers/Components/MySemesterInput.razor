@@ -1,13 +1,11 @@
 @inherits MudBaseInput<List<Application.Teachers.Forms.SemesterForm>>
-<MudField Label="Часы в семестр">
-    <div class="row justify-content-between">
-        @foreach (var semester in Value)
-        {
-            var label = $"Семестр №{semester.Number}";
-            <div class="col-sm-12 col-lg-4">
-                <MudNumericField Label="@label" @bind-Value="@semester.Hours" Min="0" Max="5000"/>
-            </div>
-        }
-    </div>
-</MudField>
-<ValidationSummary/>
+<MudInputLabel>Часы по семестрам</MudInputLabel>
+<div class="row justify-content-between">
+    @foreach (var semester in Value)
+    {
+        var label = $"Семестр №{semester.Number}";
+        <div class="col-sm-12 col-lg-4">
+            <MudNumericField Label="@label" @bind-Value="@semester.Hours" Min="0" Max="5000"/>
+        </div>
+    }
+</div>

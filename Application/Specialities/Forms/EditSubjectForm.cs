@@ -17,7 +17,9 @@ public class EditSubjectForm
         {
             Name = subject.Name,
             Code = subject.Code,
-            Semesters = subject.Semesters.ToSemesterForms()
+            Semesters = subject.Semesters.Any()
+                ? subject.Semesters.ToSemesterForms()
+                : SemesterForm.EightZeroHourSemesters
         };
         return form;
     }
