@@ -334,9 +334,9 @@ namespace Application.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("education_form");
 
-                    b.Property<int>("FinanceEducationType")
+                    b.Property<int>("FinanceEnrolmentType")
                         .HasColumnType("integer")
-                        .HasColumnName("finance_education_type");
+                        .HasColumnName("finance_enrolment_type");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -412,39 +412,6 @@ namespace Application.Data.Migrations
                     b.ToTable("student", (string)null);
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.ProofreadingTeacherLoad", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Month")
-                        .HasColumnType("integer")
-                        .HasColumnName("month");
-
-                    b.Property<long>("TeacherLoadId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("teacher_load_id");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("integer")
-                        .HasColumnName("year");
-
-                    b.HasKey("Id")
-                        .HasName("pk_proofreading_teacher_load");
-
-                    b.HasIndex("TeacherLoadId")
-                        .HasDatabaseName("ix_proofreading_teacher_load_teacher_load_id");
-
-                    b.HasIndex("Year", "Month")
-                        .HasDatabaseName("ix_proofreading_teacher_load_year_month");
-
-                    b.ToTable("proofreading_teacher_load", (string)null);
-                });
-
             modelBuilder.Entity("Application.Specialities.Data.Speciality", b =>
                 {
                     b.Property<long>("Id")
@@ -510,7 +477,7 @@ namespace Application.Data.Migrations
                     b.ToTable("subject", (string)null);
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.TeacherLoad", b =>
+            modelBuilder.Entity("Application.Teachers.Data.ProofreadingTeacherLoad", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -518,6 +485,51 @@ namespace Application.Data.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("integer")
+                        .HasColumnName("month");
+
+                    b.Property<long>("TeacherLoadId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("teacher_load_id");
+
+                    b.Property<int>("TotalHours")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_hours");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer")
+                        .HasColumnName("year");
+
+                    b.HasKey("Id")
+                        .HasName("pk_proofreading_teacher_load");
+
+                    b.HasIndex("TeacherLoadId")
+                        .HasDatabaseName("ix_proofreading_teacher_load_teacher_load_id");
+
+                    b.HasIndex("Year", "Month")
+                        .HasDatabaseName("ix_proofreading_teacher_load_year_month");
+
+                    b.ToTable("proofreading_teacher_load", (string)null);
+                });
+
+            modelBuilder.Entity("Application.Teachers.Data.TeacherLoad", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint")
@@ -924,51 +936,6 @@ namespace Application.Data.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.ProofreadingTeacherLoad", b =>
-                {
-                    b.HasOne("Application.Specialities.Data.TeacherLoad", "TeacherLoad")
-                        .WithMany("ProofreadingTeacherLoads")
-                        .HasForeignKey("TeacherLoadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_proofreading_teacher_load_teacher_load_teacher_load_id");
-
-                    b.OwnsMany("Application.Specialities.Data.ProofreadingTeacherDay", "Days", b1 =>
-                        {
-                            b1.Property<long>("ProofreadingTeacherLoadId")
-                                .HasColumnType("bigint")
-                                .HasColumnName("proofreading_teacher_load_id");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasColumnName("id");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("Hours")
-                                .HasColumnType("integer")
-                                .HasColumnName("hours");
-
-                            b1.Property<int>("Number")
-                                .HasColumnType("integer")
-                                .HasColumnName("number");
-
-                            b1.HasKey("ProofreadingTeacherLoadId", "Id")
-                                .HasName("pk_proofreading_teacher_day");
-
-                            b1.ToTable("proofreading_teacher_day", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProofreadingTeacherLoadId")
-                                .HasConstraintName("fk_proofreading_teacher_day_proofreading_teacher_load_proofrea");
-                        });
-
-                    b.Navigation("Days");
-
-                    b.Navigation("TeacherLoad");
-                });
-
             modelBuilder.Entity("Application.Specialities.Data.Subject", b =>
                 {
                     b.HasOne("Application.Specialities.Data.Speciality", "Speciality")
@@ -1014,7 +981,52 @@ namespace Application.Data.Migrations
                     b.Navigation("Speciality");
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.TeacherLoad", b =>
+            modelBuilder.Entity("Application.Teachers.Data.ProofreadingTeacherLoad", b =>
+                {
+                    b.HasOne("Application.Teachers.Data.TeacherLoad", "TeacherLoad")
+                        .WithMany("ProofreadingTeacherLoads")
+                        .HasForeignKey("TeacherLoadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_proofreading_teacher_load_teacher_load_teacher_load_id");
+
+                    b.OwnsMany("Application.Teachers.Data.ProofreadingTeacherDay", "Days", b1 =>
+                        {
+                            b1.Property<long>("ProofreadingTeacherLoadId")
+                                .HasColumnType("bigint")
+                                .HasColumnName("proofreading_teacher_load_id");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasColumnName("id");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("Hours")
+                                .HasColumnType("integer")
+                                .HasColumnName("hours");
+
+                            b1.Property<int>("Number")
+                                .HasColumnType("integer")
+                                .HasColumnName("number");
+
+                            b1.HasKey("ProofreadingTeacherLoadId", "Id")
+                                .HasName("pk_proofreading_teacher_day");
+
+                            b1.ToTable("proofreading_teacher_day", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProofreadingTeacherLoadId")
+                                .HasConstraintName("fk_proofreading_teacher_day_proofreading_teacher_load_proofrea");
+                        });
+
+                    b.Navigation("Days");
+
+                    b.Navigation("TeacherLoad");
+                });
+
+            modelBuilder.Entity("Application.Teachers.Data.TeacherLoad", b =>
                 {
                     b.HasOne("Application.Groups.Data.Group", "Group")
                         .WithMany()
@@ -1099,7 +1111,7 @@ namespace Application.Data.Migrations
                     b.Navigation("Subjects");
                 });
 
-            modelBuilder.Entity("Application.Specialities.Data.TeacherLoad", b =>
+            modelBuilder.Entity("Application.Teachers.Data.TeacherLoad", b =>
                 {
                     b.Navigation("ProofreadingTeacherLoads");
                 });

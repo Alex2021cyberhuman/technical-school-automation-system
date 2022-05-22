@@ -49,7 +49,7 @@ public class MonthProofreadingTeacherLoadsCreator
         };
         var fileName =
             $"Вычитка_Часов_Преподавания_{Regex.Replace(teacher.Trim(), @"\s", string.Empty)}_За_{monthName}_{year}_г_{Path.GetRandomFileName()}.xlsx";
-        var basePath = _configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"];
+        var basePath = _configuration["AdmissionCommittee:MonthProofreadingTeacherLoadsPath"];
         var fullFileName = Path.Combine(basePath, fileName);
         var table = new GeneratedMonthProofreadingTeacherLoadsTable(model);
         var size = await table.CreateAsync(fullFileName);

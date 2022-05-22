@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Application.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -119,7 +119,7 @@ namespace Application.Data.Migrations
                     created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     speciality_id = table.Column<long>(type: "bigint", nullable: false),
                     education_form = table.Column<int>(type: "integer", nullable: false),
-                    finance_education_type = table.Column<int>(type: "integer", nullable: false),
+                    finance_enrolment_type = table.Column<int>(type: "integer", nullable: false),
                     students_count = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -214,7 +214,8 @@ namespace Application.Data.Migrations
                     subject_id = table.Column<long>(type: "bigint", nullable: false),
                     group_id = table.Column<long>(type: "bigint", nullable: false),
                     teacher_id = table.Column<long>(type: "bigint", nullable: false),
-                    kind = table.Column<int>(type: "integer", nullable: false)
+                    kind = table.Column<int>(type: "integer", nullable: false),
+                    created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,9 +246,11 @@ namespace Application.Data.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     teacher_load_id = table.Column<long>(type: "bigint", nullable: false),
                     month = table.Column<int>(type: "integer", nullable: false),
-                    year = table.Column<int>(type: "integer", nullable: false)
+                    year = table.Column<int>(type: "integer", nullable: false),
+                    total_hours = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

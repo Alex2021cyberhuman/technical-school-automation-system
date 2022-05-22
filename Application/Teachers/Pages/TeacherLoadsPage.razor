@@ -53,7 +53,7 @@
         </MudTd>
         <MudTd>
             <EditTeacherLoadModal OnSubmit="RefreshAsync" TeacherLoad="@context" CurrentUserId="CurrentUserId"/>
-            <DeleteTeacherLoadModal ></DeleteTeacherLoadModal>
+            <DeleteTeacherLoadModal OnSubmit="RefreshAsync" TeacherLoad="@context"/>
         </MudTd>
     </RowTemplate>
 </MudTable>

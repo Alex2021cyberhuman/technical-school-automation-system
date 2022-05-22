@@ -62,6 +62,10 @@ var proofreadingTeacherLoadVacanciesPath =
     Path.GetFullPath(builder.Configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"]);
 Directory.CreateDirectory(proofreadingTeacherLoadVacanciesPath);
 
+var monthProofreadingTeacherLoadsPath =
+    Path.GetFullPath(builder.Configuration["AdmissionCommittee:MonthProofreadingTeacherLoadsPath"]);
+Directory.CreateDirectory(monthProofreadingTeacherLoadsPath);
+
 var wwwrootPath = Path.GetFullPath("./wwwroot/");
 Directory.CreateDirectory(wwwrootPath);
 
@@ -74,7 +78,8 @@ app.UseStaticFiles(new StaticFileOptions
         new PhysicalFileProvider(applicantsTablePath),
         new PhysicalFileProvider(statementPath),
         new PhysicalFileProvider(enrolledPath),
-        new PhysicalFileProvider(proofreadingTeacherLoadVacanciesPath))
+        new PhysicalFileProvider(proofreadingTeacherLoadVacanciesPath),
+        new PhysicalFileProvider(monthProofreadingTeacherLoadsPath))
 });
 app.UseRouting();
 app.UseAuthentication();

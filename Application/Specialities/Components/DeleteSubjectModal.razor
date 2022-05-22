@@ -39,9 +39,6 @@
     public EventCallback OnSubmit { get; set; } = EventCallback.Empty;
 
     [Parameter]
-    public Speciality Speciality { get; set; } = new();
-
-    [Parameter]
     public Subject Subject { get; set; } = new();
 
     protected override async Task OnInitializedAsync()

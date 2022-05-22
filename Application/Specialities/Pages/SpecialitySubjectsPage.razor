@@ -34,7 +34,8 @@ else
             <MudTd DataLabel="Название">@context.Name</MudTd>
             <MudTd DataLabel="Код">@context.Code</MudTd>
             <MudTd>
-                <EditSubjectModal Speciality="Speciality" Subject="@context" OnSubmit="RefreshAsync"/>
+                <EditSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
+                <DeleteSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
             </MudTd>
         </RowTemplate>
     </MudTable>

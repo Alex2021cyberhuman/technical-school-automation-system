@@ -7,13 +7,35 @@ public static class DevelopmentSpecialitiesProvider
     public static List<Speciality> ProvideSpecialities()
     {
         var specialityId = 0;
+        var subjectId = 0;
         return new List<Speciality>
         {
             new()
             {
                 Id = ++specialityId,
                 Code = "09.02.07",
-                Name = "Информационные системы и программирование"
+                Name = "Информационные системы и программирование",
+                Subjects = new()
+                {
+                    new()
+                    {
+                        Id = ++subjectId,
+                        Code = "CODE1",
+                        Name = "Основы проектирования баз данных"
+                    },
+                    new()
+                    {
+                        Id = ++subjectId,
+                        Code = "CODE2",
+                        Name = "Математика"
+                    },
+                    new()
+                    {
+                        Id = ++subjectId,
+                        Code = "CODE3",
+                        Name = "Компьютерные сети"
+                    }
+                }
             },
             new()
             {

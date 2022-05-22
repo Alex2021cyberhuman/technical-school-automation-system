@@ -3,10 +3,8 @@
 @attribute [Authorize(Policy = PolicyIdentifiers.Administrators)]
 @using Application.Access.Data
 @using Application.Access.Forms
-@using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
-@inject UserManager<User> UserManager
 @inject IDbContextFactory<AccessDbContext> DbContextFactory
 @inject IStringLocalizer StringLocalizer
 @inject ILogger<UsersPage> Logger
@@ -39,7 +37,7 @@
                     <td>
                         @foreach (var role in item.UserRoles)
                         {
-                            @StringLocalizer[role.Role.Name]
+                            <span>@(StringLocalizer[role.Role.Name] + ", ")</span>
                         }
                     </td>
                     <td>
@@ -60,8 +58,6 @@
     private EditContext FilterContext { get; set; }
 
     private List<User> Users { get; set; } = new();
-
-    private bool CreateModalVisible { get; set; }
 
     public UsersPage()
     {
