@@ -4,12 +4,14 @@
 @using Microsoft.Extensions.Localization
 @using System.Security.Claims
 @using Application.Data
+@using Application.Teachers.Services.MonthProofreadingTeacherLoads
 @using Application.Teachers.Services.ProofreadingTeacherLoadVacancies
 @using Microsoft.EntityFrameworkCore
 @attribute [Authorize(Policy = PolicyIdentifiers.Teachers)]
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ProofreadingTeacherLoadVacanciesCreator ProofreadingTeacherLoadVacanciesCreator
+@inject MonthProofreadingTeacherLoadsCreator MonthProofreadingTeacherLoadsCreator
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 <PageTitle>Вычитка часов преподования</PageTitle>
@@ -24,8 +26,8 @@
         <MudButtonGroup Color="Color.Primary">
             <MudButton>Печать</MudButton>
             <MudMenu Icon="@Icons.Material.Outlined.ArrowDropDown">
-                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTable">Вакансии</MudMenuItem>
-                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTable">Итог за месяц</MudMenuItem>
+                <MudMenuItem OnClick="CreateProofreadingTeacherLoadVacanciesTableAsync">Вакансии</MudMenuItem>
+                <MudMenuItem OnClick="CreateMonthProofreadingTeacherLoadVacanciesTable">Итог за месяц</MudMenuItem>
             </MudMenu>
         </MudButtonGroup>
     </ToolBarContent>
@@ -143,15 +145,33 @@
         return AllUserLoads;
     }
 
-    private async Task CreateProofreadingTeacherLoadVacanciesTable()
+    private async Task CreateProofreadingTeacherLoadVacanciesTableAsync()
     {
         if (SelectedMonth != default && SelectedYear != default)
         {
             _ = await DialogService.ShowMessageBox(
                 "Неверный ввод",
                 "Выберите месяц и год");
+            return;
         }
         var fileName = await ProofreadingTeacherLoadVacanciesCreator.CreatePackageAsync(
+            SelectedMonth,
+            SelectedYear,
+            CurrentUser.FindFirstValue(ClaimTypes.GivenName) ?? CurrentUser.FindFirstValue(ClaimTypes.Name),
+            Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth));
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName);
+    }
+
+    private async Task CreateMonthProofreadingTeacherLoadVacanciesTable()
+    {
+        if (SelectedMonth != default && SelectedYear != default)
+        {
+            _ = await DialogService.ShowMessageBox(
+                "Неверный ввод",
+                "Выберите месяц и год");
+            return;
+        }
+        var fileName = await MonthProofreadingTeacherLoadsCreator.CreatePackageAsync(
             SelectedMonth,
             SelectedYear,
             CurrentUser.FindFirstValue(ClaimTypes.GivenName) ?? CurrentUser.FindFirstValue(ClaimTypes.Name),

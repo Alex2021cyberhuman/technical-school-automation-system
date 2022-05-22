@@ -23,7 +23,7 @@ public class MonthProofreadingTeacherLoadsCreator
 
     public async Task<string> CreatePackageAsync(int month,
         int year,
-        string teacherFamilyName,
+        string teacher,
         IEnumerable<ProofreadingTeacherLoad> proofreadingTeacherLoads)
     {
         var monthName = _monthsService.GetName(month);
@@ -33,7 +33,7 @@ public class MonthProofreadingTeacherLoadsCreator
             Year = year,
             Month = monthName,
             DaysInMonthCount = daysInMonthCount,
-            TeacherFullName = teacherFamilyName,
+            TeacherFullName = teacher,
             Items = proofreadingTeacherLoads.Select(x => new MonthProofreadingTeacherLoadsModel.ItemModel
             {
                 GroupName = x.TeacherLoad.Group.Name,
@@ -48,7 +48,7 @@ public class MonthProofreadingTeacherLoadsCreator
             }).ToList()
         };
         var fileName =
-            $"Вычитка_Часов_Преподавания_{Regex.Replace(teacherFamilyName.Trim(), @"\s", string.Empty)}_За_{monthName}_{year}_г_{Path.GetRandomFileName()}.xlsx";
+            $"Вычитка_Часов_Преподавания_{Regex.Replace(teacher.Trim(), @"\s", string.Empty)}_За_{monthName}_{year}_г_{Path.GetRandomFileName()}.xlsx";
         var basePath = _configuration["AdmissionCommittee:ProofreadingTeacherLoadVacanciesPath"];
         var fullFileName = Path.Combine(basePath, fileName);
         var table = new GeneratedMonthProofreadingTeacherLoadsTable(model);

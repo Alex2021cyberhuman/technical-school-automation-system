@@ -10,7 +10,7 @@ public class ProofreadingTeacherLoadVacanciesModel
 
     public class ItemModel
     {
-        public string TeacherFamilyName { get; set; } = string.Empty;
+        public string Teacher { get; set; } = string.Empty;
 
         public string SubjectName { get; set; } = string.Empty;
 
