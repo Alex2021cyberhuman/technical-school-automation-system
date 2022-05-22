@@ -1,7 +1,5 @@
 using Application.Groups.Data;
-using Application.Shared.Input;
 using Application.Specialities.Data;
-using Application.Teachers.Components;
 using Application.Teachers.Data;
 
 namespace Application.Teachers.Forms;

@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using Application.Common.Enums;
 using Application.Common.Services;
 using Application.Teachers.Data;
-using Application.Teachers.Services.ProofreadingTeacherLoadVacancies;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Teachers.Services.MonthProofreadingTeacherLoads;
@@ -40,7 +39,8 @@ public class MonthProofreadingTeacherLoadsCreator
                 SubjectName = x.TeacherLoad.Subject.Name,
                 Days = x.Days.OrderBy(proofreadingTeacherDay => proofreadingTeacherDay.Number)
                     .Take(daysInMonthCount)
-                    .Select(proofreadingTeacherDay => new MonthProofreadingTeacherLoadsModel.ItemDayModel { Hours = proofreadingTeacherDay.Hours }),
+                    .Select(proofreadingTeacherDay => new MonthProofreadingTeacherLoadsModel.ItemDayModel
+                        { Hours = proofreadingTeacherDay.Hours }),
                 FinanceEnrollmentType = x.TeacherLoad.Group.FinanceEnrolmentType == FinanceEnrolmentType.Budget
                     ? "б"
                     : "в/б",

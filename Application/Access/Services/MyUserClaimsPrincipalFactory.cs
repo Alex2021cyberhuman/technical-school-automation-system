@@ -15,7 +15,11 @@ public class MyUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Rol
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(User user)
     {
         var identity = await base.GenerateClaimsAsync(user);
-        identity.AddClaim(new Claim(ClaimTypes.GivenName, user.FullName));
+        if (!string.IsNullOrWhiteSpace(user.FullName))
+        {
+            identity.AddClaim(new Claim(ClaimTypes.GivenName, user.FullName));
+        }
+
         return identity;
     }
 }

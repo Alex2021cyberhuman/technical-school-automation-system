@@ -1,6 +1,4 @@
-using Application.Shared.Input;
 using Application.Specialities.Data;
-using Application.Teachers.Components;
 using Application.Teachers.Forms;
 
 namespace Application.Specialities.Forms;

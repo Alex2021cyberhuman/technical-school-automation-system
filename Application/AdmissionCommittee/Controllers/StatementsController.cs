@@ -1,4 +1,3 @@
-using Application.AdmissionCommittee.Data;
 using Application.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

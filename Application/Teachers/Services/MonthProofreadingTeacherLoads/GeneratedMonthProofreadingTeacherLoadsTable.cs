@@ -1,4 +1,3 @@
-using Application.Teachers.Services.ProofreadingTeacherLoadVacancies;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml;
@@ -1610,7 +1609,10 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
         var daysEnd = 5 + _model.DaysInMonthCount;
         var cell151 = new Cell
-            { CellReference = GetCellReference(6, daysEnd), StyleIndex = (UInt32Value)6U, DataType = CellValues.SharedString };
+        {
+            CellReference = GetCellReference(6, daysEnd), StyleIndex = (UInt32Value)6U,
+            DataType = CellValues.SharedString
+        };
         var cellValue43 = new CellValue
         {
             Text = "10"

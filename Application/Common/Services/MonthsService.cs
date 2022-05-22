@@ -1,5 +1,4 @@
 using System.Globalization;
-using Microsoft.Extensions.Localization;
 
 namespace Application.Common.Services;
 
