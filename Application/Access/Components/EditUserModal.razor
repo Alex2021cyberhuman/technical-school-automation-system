@@ -123,10 +123,26 @@
         user.UserName = Form.Login;
         user.Email = Form.Email;
         user.FirstName = Form.FirstName;
-        user.FamilyName = Form.FirstName;
-        user.SurName = Form.FirstName;
-        var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
-        user.PasswordHash = userPasswordHash;
+        user.FamilyName = Form.FamilyName;
+        user.SurName = Form.SurName;
+        user.EmailConfirmed = true;
+        user.LockoutEnabled = true;
+        if (!string.IsNullOrWhiteSpace(Form.Password) &&
+            UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, Form.Password) != PasswordVerificationResult.Success)
+        {
+            foreach (var userManagerPasswordValidator in UserManager.PasswordValidators)
+            {
+                var passwordResult = await userManagerPasswordValidator.ValidateAsync(UserManager, user, Form.Password);
+                if (!passwordResult.Succeeded)
+                {
+                    IdentityError = passwordResult.GetErrorsString();
+                    return;
+                }
+                
+            }
+            var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
+            user.PasswordHash = userPasswordHash;
+        }
         var result = await UserManager.UpdateAsync(user);
         if (!result.Succeeded)
         {

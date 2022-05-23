@@ -6,12 +6,10 @@ public class EditUserForm
 {
     [Required] [Display(Name = "Логин")] public string Login { get; set; } = string.Empty;
 
-    [Required]
     [DataType(DataType.Password)]
     [Display(Name = "Пароль")]
     public string Password { get; set; } = string.Empty;
 
-    [Required]
     [Compare(nameof(Password))]
     [DataType(DataType.Password)]
     [Display(Name = "Подтвердите пароль")]

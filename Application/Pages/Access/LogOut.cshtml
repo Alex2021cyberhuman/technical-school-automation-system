@@ -1,6 +1,7 @@
 ﻿@page "/Access/Logout"
+@using Application.Access.Data
 @attribute [IgnoreAntiforgeryToken]
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<User> SignInManager
 
 @functions {
 
@@ -11,7 +12,7 @@
             await SignInManager.SignOutAsync();
         }
 
-        return Redirect("~/");
+        return Redirect("/");
     }
 
 }

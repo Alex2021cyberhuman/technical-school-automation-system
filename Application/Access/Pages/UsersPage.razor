@@ -57,6 +57,8 @@
 
     private EditContext FilterContext { get; set; }
 
+    private List<User> AllUsers { get; set; } = new();
+
     private List<User> Users { get; set; } = new();
 
     public UsersPage()
@@ -69,20 +71,17 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Users = await GetUsersAsync(Filter);
+        AllUsers = await GetUsersAsync();
+        Users = AllUsers;
     }
 
-    private async Task<List<User>> GetUsersAsync(UsersFilter filter)
+    private async Task<List<User>> GetUsersAsync()
     {
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var query = context.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
             .OrderBy(x => x.UserName).AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(filter.SearchString))
-        {
-            query = query.Where(x => (x.FamilyName + " " + x.FirstName + " " + x.SurName + " " + x.UserName).Contains(filter.SearchString));
-        }
         return await query.ToListAsync();
     }
 
@@ -90,7 +89,7 @@
     {
         try
         {
-            Users = await GetUsersAsync(Filter);
+            FilterUsers();
         }
         catch (Exception exception)
         {
@@ -98,9 +97,26 @@
         }
     }
 
+    private void FilterUsers()
+    {
+        var enumerable = AllUsers.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(Filter.SearchString))
+        {
+            enumerable = enumerable.Where(x =>
+                x.FamilyName.Contains(Filter.SearchString) ||
+                x.FirstName.Contains(Filter.SearchString) ||
+                (x.SurName?.Contains(Filter.SearchString) ?? false) ||
+                x.UserName.Contains(Filter.SearchString) ||
+                x.UserRoles.Any(userRole => StringLocalizer[userRole.Role.Name].ToString().Contains(Filter.SearchString)));
+        }
+
+        Users = enumerable.ToList();
+    }
+
     private async Task RefreshAsync()
     {
-        Users = await GetUsersAsync(Filter);
+        AllUsers = await GetUsersAsync();
+        FilterUsers();
     }
 
 

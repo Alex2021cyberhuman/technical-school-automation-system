@@ -97,4 +97,7 @@
     <data name="OutOfBudget" xml:space="preserve">
         <value>Внебюджет</value>
     </data>
+    <data name="AssociateDirector" xml:space="preserve">
+        <value>Заместитель директора</value>
+    </data>
 </root>

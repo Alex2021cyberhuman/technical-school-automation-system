@@ -99,8 +99,10 @@
             UserName = Form.Login,
             Email = Form.Email,
             FirstName = Form.FirstName,
-            FamilyName = Form.FirstName,
-            SurName = Form.FirstName
+            FamilyName = Form.FamilyName,
+            SurName = Form.SurName,
+            EmailConfirmed = true,
+            LockoutEnabled = true
         };
         var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
         user.PasswordHash = userPasswordHash;

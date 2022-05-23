@@ -1,6 +1,5 @@
 ﻿@using System.Security.Claims
 @inherits LayoutComponentBase
-
 <PageTitle>Application</PageTitle>
 
 <div class="page">
@@ -13,10 +12,16 @@
             @if (CurrentUser.Identity?.IsAuthenticated ?? false)
             {
                 <span>@((CurrentUser.FindFirst(ClaimTypes.GivenName) ?? CurrentUser.FindFirst(ClaimTypes.Name))?.Value)</span>
+
+                <form action="/access/logout" method="post">
+
+                    <button type="submit" class="btn btn-primary">Выход</button>
+
+                </form>
             }
             else
             {
-                <a href="Access/Login" target="_blank">Вход</a>
+                <a href="/Access/Login" class="btn btn-primary">Вход</a>
             }
         </div>
 
