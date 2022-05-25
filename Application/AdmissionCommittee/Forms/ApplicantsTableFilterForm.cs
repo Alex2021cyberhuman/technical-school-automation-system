@@ -5,19 +5,27 @@ namespace Application.AdmissionCommittee.Forms;
 
 public class ApplicantsTableFilterForm
 {
-    public long SelectedSpecialityId { get; set; }
+    public long? SelectedSpecialityId { get; set; }
 
-    public List<ValueRadioItem<long>> SpecialityRadioItems { get; set; } = new();
+    public int SelectedYear { get; set; } = DateTime.Today.Year;
 
-    public int SelectedYear { get; set; }
+    public EducationForm? SelectedEducationForm { get; set; }
 
-    public List<ValueRadioItem<int>> YearRadioItems { get; set; } = new();
+    public FinanceEnrolmentType? SelectedFinanceEnrolmentType { get; set; }
 
-    public EducationForm SelectedEducationForm { get; set; } = EducationForm.FullTime;
+    public string? SearchString { get; set; }
 
-    public List<ValueRadioItem<EducationForm>> EducationForms { get; set; } = new();
+    public List<ValueRadioItem<long?>> SpecialityRadioItems { get; set; } = new();
 
-    public FinanceEducationType SelectedFinanceType { get; set; }
+    public DirectorDecisionType? SelectedDirectorDecisionType { get; set; }
 
-    public List<ValueRadioItem<FinanceEducationType>> FinanceTypes { get; set; } = new();
+    public void Reset()
+    {
+        SelectedSpecialityId = null;
+        SelectedYear = DateTime.Today.Year;
+        SelectedEducationForm = null;
+        SelectedFinanceEnrolmentType = null;
+        SearchString = null;
+        SelectedDirectorDecisionType = null;
+    }
 }

@@ -9,7 +9,7 @@ public class CreateTeacherLoadForm
 {
     public List<SemesterForm> Semesters { get; set; } = SemesterForm.EightZeroHourSemesters;
 
-    public TeacherLoadKind Kind { get; set; }
+    public TeacherLoadKind? Kind { get; set; } = TeacherLoadKind.Vacancies;
 
     [Required] public Group? Group { get; set; }
 
@@ -25,7 +25,7 @@ public class CreateTeacherLoadForm
             TeacherId = teacherId,
             SubjectId = Subject.Id,
             Semesters = Semesters.ToSemesters(),
-            Kind = Kind
+            Kind = Kind!.Value
         };
     }
 }

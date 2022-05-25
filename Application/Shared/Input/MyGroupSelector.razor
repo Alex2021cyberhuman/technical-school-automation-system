@@ -17,16 +17,16 @@
     {
         return arg?.Name ?? string.Empty;
     }
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
         {
             await base.OnAfterRenderAsync(firstRender);
         }
-        catch (JSException e)
+        catch (JSException)
         {
-            // NOOP
+    // NOOP
         }
     }
 

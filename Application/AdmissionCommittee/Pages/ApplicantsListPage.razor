@@ -10,86 +10,104 @@
 @using Microsoft.Extensions.Localization
 @using Application.Access.Enums
 @using Application.Data
+@using System.Security.Claims
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILogger<ApplicantCreatePage> Logger
 @inject IStringLocalizer StringLocalizer
 @inject NavigationManager NavigationManager
 @inject ApplicantsTableCreator ApplicantsTableCreator
 @inject IConfiguration Configuration
+@inject IDialogService DialogService
 <PageTitle>Данные абитуриентов</PageTitle>
 <h3>Абитуриенты</h3>
 
-<div class="row">
-    <div class="col-12 col-md-4">
+<div class="container">
+    <div class="row">
         <EditForm EditContext="FilterContext">
-            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedSpecialityId" RadioItems="ApplicantsTableFilterForm.SpecialityRadioItems" Label="Специальность"/>
-            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedYear" RadioItems="ApplicantsTableFilterForm.YearRadioItems" Label="Год"/>
-            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedEducationForm" RadioItems="ApplicantsTableFilterForm.EducationForms" Label="Форма обучения"/>
-            <MyInputRadioGroup @bind-Value="ApplicantsTableFilterForm.SelectedFinanceType" RadioItems="ApplicantsTableFilterForm.FinanceTypes" Label="Форма обучения"/>
+            <MyYearSelector @bind-Value="Filter.SelectedYear"/>
+            <MudTextField @bind-Value="Filter.SearchString"/>
+            <MyEnumSelector TValue="EducationForm" @bind-Value="@Filter.SelectedEducationForm" Label="Форма обучения"/>
+            <MyEnumSelector TValue="FinanceEnrolmentType" @bind-Value="@Filter.SelectedFinanceEnrolmentType" Label="Форма финансирования"/>
+            <MyEnumSelector TValue="DirectorDecisionType" @bind-Value="@Filter.SelectedDirectorDecisionType" Label="Решение директора"/>
+            <MyInputRadioGroup TValue="long?" @bind-Value="@Filter.SelectedSpecialityId" RadioItems="@Filter.SpecialityRadioItems" Label="Специальность"/>
+            <MudButton OnClick="() => Filter.Reset()">Все</MudButton>
         </EditForm>
         <button type="button" class="btn btn-primary" @onclick="OnDownloadApplicantsTableAsync">Скачать сводную таблицу из текущих данных</button>
+        <a href="/applicants/create" class="btn btn-secondary">На страницу заполнения данных</a>
     </div>
-    <div class="col-12 col-md-8">
-        <table class="table">
-            <thead>
-            <tr>
-                <td rowspan="2">№ п.п.</td>
-                <td rowspan="2">ФИО</td>
-                <td rowspan="2">Образование</td>
-                <td colspan="2">Результаты ГИА</td>
-                <td rowspan="2">Средний балл</td>
-                <td rowspan="2">Общая оценка</td>
-                <td rowspan="2">Примечание</td>
-                <td rowspan="2">Решение директора</td>
-                <td rowspan="2"></td>
-            </tr>
-            <tr>
-                <td>Русский Язык</td>
-                <td>Математика</td>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Applicants)
-            {
-                <tr>
-                    <th scope="row">@item.Id</th>
-                    <td>@item.FullName</td>
-                    <td>
-                        <div class="hint-information" data-name="Базовое образование: @item.EducationDescription, Год: @item.EducationDocumentIssued.Year.">
-                            @(StringLocalizer[item.EducationType.ToString()])
-                        </div>
-                    </td>
-                    <td>@item.LanguageRating</td>
-                    <td>@item.MathRating</td>
-                    <td>@item.AverageAttestRating</td>
-                    <td>@item.CommonScore</td>
-                    <td>@item.Description</td>
-                    <td>@(StringLocalizer[item.DirectorDecision.ToString()])</td>
-                    <td>
-                        <DownloadApplicantStatementButton ApplicantId="@item.Id"/>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+    <div class="row">
+        <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable">
+            <HeaderContent>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="Id">№</MudTableSortLabel>
+                </MudTd>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="FullName">ФИО</MudTableSortLabel>
+                </MudTd>
+                <MudTd>Образование</MudTd>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="MathRating">Баллы по математике</MudTableSortLabel>
+                </MudTd>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="LanguageRating">Баллы по русскому языку</MudTableSortLabel>
+                </MudTd>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="AverageAttestRating">Средний балл</MudTableSortLabel>
+                </MudTd>
+                <MudTd>
+                    <MudTableSortLabel T="Applicant" SortLabel="CommonScore">Общая оценка</MudTableSortLabel>
+                </MudTd>
+                <MudTd>Примечание</MudTd>
+                <MudTd>Решение директора</MudTd>
+                <MudTd></MudTd>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.FullName</MudTd>
+                <MudTd>
+                    <div class="hint-information" data-name="Базовое образование: @context.EducationDescription, Год: @context.EducationDocumentIssued.Year.">
+                        @(StringLocalizer[context.EducationType.ToString()])
+                    </div>
+                </MudTd>
+                <MudTd>@context.LanguageRating</MudTd>
+                <MudTd>@context.MathRating</MudTd>
+                <MudTd>@context.AverageAttestRating</MudTd>
+                <MudTd>@context.CommonScore</MudTd>
+                <MudTd>@context.Description</MudTd>
+                <MudTd>@(StringLocalizer[context.DirectorDecision.ToString()])</MudTd>
+                <MudTd>
+                    @if (CurrentUser.IsInRole(RoleIdentifiers.AssociateDirector) || CurrentUser.IsInRole(RoleIdentifiers.Director))
+                    {
+                        <MudIconButton Icon="@Icons.Filled.Delete" Title="Удалить" OnClick="@(async () => await DeleteApplicantAsync(context))"/>
+                    }
+                    <DownloadApplicantStatementButton ApplicantId="@context.Id"/>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new[] { 100 }"/>
+            </PagerContent>
+        </MudTable>
     </div>
 </div>
 
 @code {
 
-    public List<Applicant> Applicants { get; set; } = new();
-
-    public ApplicantsTableFilterForm ApplicantsTableFilterForm { get; set; } = new();
+    public ApplicantsTableFilterForm Filter { get; set; } = new();
 
     public EditContext FilterContext { get; set; }
 
-    public CancellationTokenSource EditCancellationTokenSource { get; set; } = new();
-
     public List<Speciality> Specialities { get; set; } = new();
+
+    public MudTable<Applicant>? ApplicantsTable { get; set; }
+
+    private ClaimsPrincipal CurrentUser { get; set; } = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     public ApplicantsListPage()
     {
-        FilterContext = new EditContext(ApplicantsTableFilterForm);
+        FilterContext = new EditContext(Filter);
         FilterContext.OnFieldChanged += ApplyFilterAsync;
     }
 
@@ -101,63 +119,18 @@
             .AsNoTracking()
             .ToListAsync();
 
-        ApplicantsTableFilterForm.SpecialityRadioItems = Specialities
-            .Select(x => new ValueRadioItem<long>($"{x.Code} {x.Name}", x.Id))
+        Filter.SpecialityRadioItems = Specialities
+            .Select(x => new ValueRadioItem<long?>($"{x.Code} {x.Name}", x.Id))
             .ToList();
-
-        ApplicantsTableFilterForm.SelectedSpecialityId = Specialities.First().Id;
-        var years = await GetStartYear(context);
-        ApplicantsTableFilterForm.YearRadioItems = years;
-        ApplicantsTableFilterForm.SelectedYear = years.First().Value;
-        ApplicantsTableFilterForm.EducationForms = Enum.GetValues<EducationForm>()
-            .Select(x => new ValueRadioItem<EducationForm>(StringLocalizer[x.ToString()], x))
-            .ToList();
-        ApplicantsTableFilterForm.EducationForms = Enum.GetValues<EducationForm>()
-            .Select(x => new ValueRadioItem<EducationForm>(StringLocalizer[x.ToString()], x))
-            .ToList();
-        await LoadApplicantsAsync();
-    }
-
-    private static async Task<List<ValueRadioItem<int>>> GetStartYear(MainDbContext context)
-    {
-        var startYear = (await context.Applicant.OrderBy(x => x.Submitted).Select(x => x.Submitted).FirstOrDefaultAsync())
-            .Year;
-        var currentYear = DateTime.Today.Year;
-        startYear = startYear == default ? currentYear : startYear;
-        var years = Enumerable.Range(
-            startYear,
-            currentYear - startYear + 1)
-            .Select(
-                x => new ValueRadioItem<int>(x.ToString(), x))
-            .ToList();
-        return years;
-    }
-
-    private async Task LoadApplicantsAsync(CancellationToken cancellationToken = default)
-    {
-        await using var context = await DbContextFactory.CreateDbContextAsync(cancellationToken);
-        Applicants = await context.Applicant
-            .Where(x =>
-                x.EducationForm == ApplicantsTableFilterForm.SelectedEducationForm &&
-                x.ApplicantSpecialities.Any(
-                    speciality => speciality.SpecialityId == ApplicantsTableFilterForm.SelectedSpecialityId) &&
-                x.Submitted.Year == ApplicantsTableFilterForm.SelectedYear)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
-        StateHasChanged();
+        CurrentUser = (await AuthenticationStateTask).User;
+        await (ApplicantsTable?.ReloadServerData() ?? Task.CompletedTask);
     }
 
     private async void ApplyFilterAsync(object? sender, FieldChangedEventArgs fieldChangedEventArgs)
     {
         try
         {
-            EditCancellationTokenSource.Cancel();
-            EditCancellationTokenSource = new CancellationTokenSource();
-            await LoadApplicantsAsync(EditCancellationTokenSource.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            Console.WriteLine();
+            await (ApplicantsTable?.ReloadServerData() ?? Task.CompletedTask);
         }
         catch (Exception exception)
         {
@@ -167,12 +140,60 @@
 
     private async Task OnDownloadApplicantsTableAsync()
     {
+        if (ApplicantsTable is null || ApplicantsTable.TotalItems <= 0)
+        {
+            return;
+        }
         var basePath = Configuration["AdmissionCommittee:ApplicantsTablePath"];
         var fileName = $"Сводная_Абитуриентов_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.xlsx";
         var fullFileName = Path.Combine(basePath, fileName);
-        var model = new ApplicantsTableModel(Applicants, Specialities.First(x => x.Id == ApplicantsTableFilterForm.SelectedSpecialityId), StringLocalizer);
+        var model = new ApplicantsTableModel(ApplicantsTable.Items, Specialities.First(x => x.Id == Filter.SelectedSpecialityId), StringLocalizer);
         _ = await ApplicantsTableCreator.CreatePackageAsync(fullFileName, model);
         NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName, true);
+    }
+
+    private async Task<TableData<Applicant>> LoadApplicantsFromDatabase(TableState tableState)
+    {
+        var page = tableState.Page;
+        var pageSize = tableState.PageSize;
+        var sortDirection = tableState.SortDirection;
+        var sortLabel = tableState.SortLabel;
+        var (items, totalItems) = await DbContextFactory.LoadApplicantPagesAsync(sortLabel, sortDirection, page, pageSize, Filter);
+
+        var tableData = new TableData<Applicant>()
+        {
+            Items = items,
+            TotalItems = totalItems
+        };
+        return tableData;
+    }
+
+
+    private async Task DeleteApplicantAsync(Applicant applicant)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbApplicant = await context.Applicant
+            .Include(x => x.Student)
+            .ThenInclude(x => x!.Group)
+            .FirstOrDefaultAsync(x => x.Id == applicant.Id);
+        if (dbApplicant is null)
+        {
+            return;
+        }
+
+        if (dbApplicant.Student != null)
+        {
+            _ = await DialogService.ShowMessageBox("Удаление", $"Невозможно удалить данные зачисленного студента группы {dbApplicant.Student.Group.Name} {dbApplicant.FullName}! Сначала должно идти отчисление на странице этой группы.");
+        }
+
+        var deleteApplicant = await DialogService.ShowMessageBox("Удаление", $"Вы хотите удалить данные абитуриента {dbApplicant.FullName}?", "Да", "Нет");
+        if (!deleteApplicant.HasValue || !deleteApplicant.Value)
+        {
+            return;
+        }
+        context.Remove(dbApplicant);
+        await context.SaveChangesAsync();
+        await (ApplicantsTable?.ReloadServerData() ?? Task.CompletedTask);
     }
 
 }

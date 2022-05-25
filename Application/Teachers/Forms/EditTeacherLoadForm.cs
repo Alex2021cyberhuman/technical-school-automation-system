@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Teachers.Data;
@@ -16,7 +17,7 @@ public class EditTeacherLoadForm
 
     public List<SemesterForm> Semesters { get; set; }
 
-    public TeacherLoadKind Kind { get; set; }
+    [Required] public TeacherLoadKind? Kind { get; set; }
 
     public Group Group { get; set; }
 
@@ -27,6 +28,6 @@ public class EditTeacherLoadForm
         teacherLoad.GroupId = Group.Id;
         teacherLoad.SubjectId = Subject.Id;
         teacherLoad.Semesters = Semesters.ToSemesters();
-        teacherLoad.Kind = Kind;
+        teacherLoad.Kind = Kind!.Value;
     }
 }

@@ -4,7 +4,7 @@ using Application.Groups.Data;
 
 namespace Application.Groups.Forms;
 
-public class CreateGroupForm
+public class CreateGroupForm : IValidatableObject
 {
     [Display(Name = "Название группы")]
     [Required]
@@ -12,9 +12,18 @@ public class CreateGroupForm
     public string Name { get; set; } = string.Empty;
 
     public long SpecialityId { get; set; }
+
     public EducationForm EducationForm { get; set; }
 
     public FinanceEnrolmentType FinanceEnrolmentType { get; set; }
+
+    [Display(Name = "Год выпуска")]
+    [Required]
+    public int GraduationYear { get; set; }
+
+    [Display(Name = "Год набора")]
+    [Required]
+    public int EnrollmentYear { get; set; }
 
     public Group ToGroup()
     {
@@ -24,7 +33,15 @@ public class CreateGroupForm
             Created = DateTime.UtcNow,
             SpecialityId = SpecialityId,
             EducationForm = EducationForm,
-            FinanceEnrolmentType = FinanceEnrolmentType
+            FinanceEnrolmentType = FinanceEnrolmentType,
+            GraduationYear = GraduationYear,
+            EnrollmentYear = EnrollmentYear
         };
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (GraduationYear < EnrollmentYear)
+            yield return new ValidationResult("Год выпуска указан не верно", new[] { nameof(GraduationYear) });
     }
 }

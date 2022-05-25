@@ -1458,7 +1458,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
                 row.Append(cell);
                 columnIndex++;
             }
-            
+
             cell = new Cell
             {
                 CellReference = GetCellReference(rowIndex, daysEnd), StyleIndex = (UInt32Value)9U,

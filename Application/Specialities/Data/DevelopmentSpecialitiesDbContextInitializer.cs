@@ -12,10 +12,7 @@ public static class DevelopmentMainDbContextInitializer
         var factory = services.GetRequiredService<IDbContextFactory<MainDbContext>>();
         await MigrateAsync(factory);
         var environment = services.GetRequiredService<IHostEnvironment>();
-        if (environment.IsDevelopment())
-        {
-            await UploadSpecialitiesAsync(factory);
-        }
+        if (environment.IsDevelopment()) await UploadSpecialitiesAsync(factory);
     }
 
     private static async Task MigrateAsync(IDbContextFactory<MainDbContext> factory)

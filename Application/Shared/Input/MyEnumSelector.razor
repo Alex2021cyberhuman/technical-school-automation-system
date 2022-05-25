@@ -1,9 +1,9 @@
 @using Microsoft.Extensions.Localization
 @typeparam TValue where TValue : struct, Enum
-@inherits MudBaseInput<TValue>
+@inherits MudBaseInput<TValue?>
 @inject IStringLocalizer StringLocalizer
 
-<MudSelect T="TValue" Label="@Label" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" Required="@Required" ToStringFunc="GetLocalizedString">
+<MudSelect T="TValue" Label="@Label" AnchorOrigin="Origin.BottomCenter" ValueChanged="CallbackAsync" Required="@Required" ToStringFunc="GetLocalizedString">
     @foreach (var item in Items)
     {
         <MudSelectItem Value="@item"/>
@@ -32,6 +32,12 @@
     private string GetLocalizedString(TValue value)
     {
         return StringLocalizer[value.ToString()];
+    }
+
+    private async Task CallbackAsync(TValue value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
     }
 
 }

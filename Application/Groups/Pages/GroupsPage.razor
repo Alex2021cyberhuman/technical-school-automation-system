@@ -14,32 +14,25 @@
     <div class="col-12 col-md-4">
     </div>
     <div class="col-12 col-md-8">
-        <table class="table">
-            <thead>
-            <tr>
-                <td>№ п.п.</td>
-                <td>Название</td>
-                <td>Количество студентов</td>
-                <td></td>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Groups)
-            {
-                <tr>
-                    <th scope="row">@item.Id</th>
-                    <td>@item.Name</td>
-                    <td>@item.StudentsCount</td>
-                    <td>
-                        <div class="btn-group">
-                            <GroupStudentsModal Group="item" StudentsAdded="() => OnStudentsAddedAsync(item.Id)"/>
-                            <GroupDownloadEnrolledStudentsButton Group="item"/>
-                        </div>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+        <MudTable Items="Groups" Hover="true" SortLabel="Сортировать по" Filter="Filter">
+            <HeaderContent>
+                <MudTh>№ п.п.</MudTh>
+                <MudTh>Название</MudTh>
+                <MudTh>Количество студентов</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Id</MudTd>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>@context.StudentsCount</MudTd>
+                <MudTd>
+                    <div class="btn-group">
+                        <GroupStudentsModal Group="context" StudentListChanged="() => OnStudentsAddedAsync(context.Id)"/>
+                        <GroupDownloadEnrolledStudentsButton Group="context"/>
+                    </div>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
     </div>
 </div>
 
@@ -78,6 +71,11 @@
         group.StudentsCount = await context.Student.CountAsync(x => x.GroupId == groupId);
         await context.SaveChangesAsync();
         Groups[Groups.FindIndex(x => x.Id == groupId)] = group;
+    }
+
+    private bool Filter(Group group)
+    {
+        return true;
     }
 
 }

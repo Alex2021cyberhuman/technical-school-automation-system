@@ -30,6 +30,8 @@
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
                         <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
                         <MyEnumInputRadioGroup Label="Тип" @bind-Value="@Form.FinanceEnrolmentType" TValue="FinanceEnrolmentType"/>
+                        <MyYearSelector Label="Год набора" @bind-Value="@Form.EnrollmentYear"/>
+                        <MyYearSelector Label="Год выпуска" @bind-Value="@Form.GraduationYear"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">

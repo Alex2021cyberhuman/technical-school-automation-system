@@ -2,10 +2,12 @@
 @using Application.Groups.Data
 @using System.Security.Claims
 @using Application.Access.Enums
+@using Application.Common.Enums
 @using Application.Data
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+@inject IDialogService DialogService
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
-    Список студентов
+    Студенты
 </button>
 
 @if (ModalVisible)
@@ -21,26 +23,30 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <MudTextField Label="Поиск студентов" @bind-Value="SearchString"/>
                     <EnrollApplicantModal Group="Group" StudentsAdded="OnStudentsAddedAsync"/>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <td>№ п.п.</td>
-                            <td>ФИО</td>
-                            <td>Дата рождения</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach (var item in Students)
-                        {
-                            <tr>
-                                <th scope="row">@item.Id</th>
-                                <td>@item.FullName</td>
-                                <td>@item.DateOfBirth.ToShortDateString()</td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
+                    <MudTable Items="Students" T="Student" Filter="Filter" SortLabel="Сортировать по">
+                        <HeaderContent>
+                            <MudTh>№</MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Student" SortBy="@(x => x.FullName)">ФИО</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Student" SortBy="@(x => x.DateOfBirth)">Дата рождения</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh></MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@context.Id</MudTd>
+                            <MudTd>@context.FullName</MudTd>
+                            <MudTd>@context.DateOfBirth.ToShortDateString()</MudTd>
+                            <MudTd>
+                                <MudButtonGroup>
+                                    <MudIconButton Icon="@Icons.Filled.Delete" Title="Исключить" OnClick="@(async () => await ExcludeAsync(@context))"/>
+                                </MudButtonGroup>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
@@ -60,7 +66,9 @@
     public Group Group { get; set; } = new();
 
     [Parameter]
-    public EventCallback StudentsAdded { get; set; } = EventCallback.Empty;
+    public EventCallback StudentListChanged { get; set; } = EventCallback.Empty;
+
+    public string? SearchString { get; set; }
 
     private async Task OnOpenAsync()
     {
@@ -89,7 +97,35 @@
     private async Task OnStudentsAddedAsync()
     {
         await LoadStudentsAsync();
-        await StudentsAdded.InvokeAsync();
+        await StudentListChanged.InvokeAsync();
     }
 
+    private bool Filter(Student student)
+    {
+        return string.IsNullOrWhiteSpace(SearchString) || student.FullName.Contains(SearchString, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private async Task ExcludeAsync(Student student)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbStudent = await context.Student.Include(x => x.Applicant).FirstOrDefaultAsync(x => x.Id == student.Id);
+
+        if (dbStudent is null)
+        {
+            await LoadStudentsAsync();
+            return;
+        }
+        var removeStudent = await DialogService.ShowMessageBox("Исключение", $"Вы действительно хотите исключить студента {student.FullName} из группы {Group.Name}? Вы сможете зачислить его повторно.", "Да", "Нет");
+        if (!removeStudent.HasValue || !removeStudent.Value)
+        {
+            return;
+        }
+        var applicant = dbStudent.Applicant;
+        applicant.DirectorDecision = DirectorDecisionType.NotEnroll;
+        applicant.Student = null;
+        context.Student.Remove(dbStudent);
+        await context.SaveChangesAsync();
+        await LoadStudentsAsync();
+        await StudentListChanged.InvokeAsync();
+    }
 }

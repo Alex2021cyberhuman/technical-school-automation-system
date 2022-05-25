@@ -22,5 +22,9 @@ public class Group
 
     [Required] [Range(0, 1000)] public int StudentsCount { get; set; }
 
+    public int GraduationYear { get; set; }
+
+    public int EnrollmentYear { get; set; }
+
     public List<Student> Students { get; set; } = null!;
 }

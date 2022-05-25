@@ -17,9 +17,7 @@ public class MyUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Rol
     {
         var identity = await base.GenerateClaimsAsync(user);
         if (!string.IsNullOrWhiteSpace(user.FullName))
-        {
             identity.AddClaim(new Claim(ClaimTypes.GivenName, user.FullName));
-        }
 
         // identity.AddClaim(new Claim(MyClaimTypes.Activated, user.Activated.Ticks.ToString()));
         return identity;

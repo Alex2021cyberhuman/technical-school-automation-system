@@ -1,6 +1,6 @@
 @inherits MudSelect<int>
 
-<MudField Label="Год">
+<MudField Label="@(string.IsNullOrWhiteSpace(Label) ? "Год" : Label)">
     <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" ValueChanged="ValueChanged" ToStringFunc="GetYearString">
         @foreach (var year in Years)
         {
@@ -17,7 +17,7 @@
     [Parameter]
     public int MaximumYear { get; set; } = DateTime.Now.Year;
 
-    public List<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1).ToList();
+    public List<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1).OrderByDescending(x => x).ToList();
 
     protected override void OnParametersSet()
     {
@@ -34,7 +34,7 @@
         {
             await base.OnAfterRenderAsync(firstRender);
         }
-        catch (JSException e)
+        catch (JSException)
         {
     // NOOP
         }

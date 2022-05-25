@@ -1029,7 +1029,7 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
 
         sheetData1.Append(row1);
         sheetData1.Append(row2);
-        
+
         var mergeCells1 = new MergeCells { Count = (UInt32Value)4U };
         var mergeCell1 = new MergeCell { Reference = "A2:G2" };
         var mergeCell2 = new MergeCell { Reference = "A4:C4" };
@@ -1161,7 +1161,7 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
     private void GenerateSharedStringTablePart1Content(SharedStringTablePart sharedStringTablePart1)
     {
         var sharedStringTable1 = new SharedStringTable { Count = (UInt32Value)0, UniqueCount = (UInt32Value)0 };
-        
+
         sharedStringTablePart1.SharedStringTable = sharedStringTable1;
     }
 

@@ -138,7 +138,6 @@
                     IdentityError = passwordResult.GetErrorsString();
                     return;
                 }
-                
             }
             var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
             user.PasswordHash = userPasswordHash;
