@@ -47,7 +47,7 @@ public static class ApplicantDataExtensions
 
         if (filter.SelectedDirectorDecisionType.HasValue)
             queryable = queryable.Where(x => x.DirectorDecision == filter.SelectedDirectorDecisionType);
-
+        sortLabel = string.IsNullOrEmpty(sortLabel) ? "FullName" : sortLabel;
         queryable = sortLabel switch
         {
             "Id" => queryable.OrderByDirection(sortDirection, x => x.Id),
@@ -66,10 +66,10 @@ public static class ApplicantDataExtensions
             "LanguageRating" => queryable.OrderByDirection(sortDirection, x => x.LanguageRating),
             "AverageAttestRating" => queryable.OrderByDirection(sortDirection, x => x.AverageAttestRating),
             "CommonScore" => queryable.OrderByDirection(sortDirection, x => x.CommonScore),
-            _ => throw new ArgumentOutOfRangeException(nameof(sortLabel))
+            _ => queryable
         };
 
-        queryable = queryable.Skip((page - 1) * pageSize).Take(pageSize);
+        queryable = queryable.Skip(page * pageSize).Take(pageSize);
 
         var items = await queryable.ToListAsync();
         var totalItems = items.Count;

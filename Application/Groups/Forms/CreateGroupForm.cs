@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Data;
 using Application.Common.Enums;
 using Application.Groups.Data;
 
@@ -7,8 +8,8 @@ namespace Application.Groups.Forms;
 public class CreateGroupForm : IValidatableObject
 {
     [Display(Name = "Название группы")]
-    [Required]
-    [MaxLength(100)]
+    [MyRequired]
+    [MyMaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
     public long SpecialityId { get; set; }
@@ -18,11 +19,11 @@ public class CreateGroupForm : IValidatableObject
     public FinanceEnrolmentType FinanceEnrolmentType { get; set; }
 
     [Display(Name = "Год выпуска")]
-    [Required]
+    [MyRequired]
     public int GraduationYear { get; set; }
 
     [Display(Name = "Год набора")]
-    [Required]
+    [MyRequired]
     public int EnrollmentYear { get; set; }
 
     public Group ToGroup()

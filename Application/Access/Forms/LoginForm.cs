@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Data;
 
 namespace Application.Access.Forms;
 
 public class LoginForm
 {
-    [Required] [Display(Name = "Логин")] public string Login { get; set; } = string.Empty;
+    [MyRequired] [Display(Name = "Логин")] public string Login { get; set; } = string.Empty;
 
-    [Required]
+    [MyRequired]
     [DataType(DataType.Password)]
     [Display(Name = "Пароль")]
     public string Password { get; set; } = string.Empty;

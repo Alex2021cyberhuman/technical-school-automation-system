@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Data;
 using Application.Teachers.Data;
 
 namespace Application.Teachers.Forms;
 
 public class CreateProofreadingTeacherLoadForm
 {
-    [Required] public TeacherLoad? TeacherLoad { get; set; }
+    [MyRequired] public TeacherLoad? TeacherLoad { get; set; }
 
     public int Year { get; set; } = DateTime.Today.Year;
 

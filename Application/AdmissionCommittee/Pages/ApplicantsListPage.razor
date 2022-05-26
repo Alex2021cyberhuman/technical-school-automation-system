@@ -24,16 +24,24 @@
 <div class="container">
     <div class="row">
         <EditForm EditContext="FilterContext">
-            <MyYearSelector @bind-Value="Filter.SelectedYear"/>
-            <MudTextField @bind-Value="Filter.SearchString"/>
-            <MyEnumSelector TValue="EducationForm" @bind-Value="@Filter.SelectedEducationForm" Label="Форма обучения"/>
-            <MyEnumSelector TValue="FinanceEnrolmentType" @bind-Value="@Filter.SelectedFinanceEnrolmentType" Label="Форма финансирования"/>
-            <MyEnumSelector TValue="DirectorDecisionType" @bind-Value="@Filter.SelectedDirectorDecisionType" Label="Решение директора"/>
-            <MyInputRadioGroup TValue="long?" @bind-Value="@Filter.SelectedSpecialityId" RadioItems="@Filter.SpecialityRadioItems" Label="Специальность"/>
-            <MudButton OnClick="() => Filter.Reset()">Все</MudButton>
+            <MudGrid>
+                <MudItem sm="6">
+                    <MyYearSelector @bind-Value="Filter.SelectedYear"/>
+                    <MudTextField @bind-Value="Filter.SearchString"/>
+                    <MyEnumSelector TValue="EducationForm" @bind-Value="@Filter.SelectedEducationForm" Label="Форма обучения"/>
+                    <MyEnumSelector TValue="FinanceEnrolmentType" @bind-Value="@Filter.SelectedFinanceEnrolmentType" Label="Форма финансирования"/>
+                    <MyEnumSelector TValue="DirectorDecisionType" @bind-Value="@Filter.SelectedDirectorDecisionType" Label="Решение директора"/>
+                </MudItem>
+                <MudItem sm="6">
+                    <MyInputRadioGroup TValue="long?" @bind-Value="@Filter.SelectedSpecialityId" RadioItems="@Filter.SpecialityRadioItems" Label="Специальность"/>
+                </MudItem>
+                <MudItem sm="12">
+                    <MudButton OnClick="() => Filter.Reset()">Все</MudButton>
+                    <MudIconButton Icon="@Icons.Filled.Print" Title="Скачать сводную таблицу из текущих данных" OnClick="OnDownloadApplicantsTableAsync"/>
+                    <MudIconButton Icon="@Icons.Filled.PlusOne" Title="На страницу заполнения данных" OnClick="@(() => NavigationManager.NavigateTo("/applicants/create"))"/>
+                </MudItem>
+            </MudGrid>
         </EditForm>
-        <button type="button" class="btn btn-primary" @onclick="OnDownloadApplicantsTableAsync">Скачать сводную таблицу из текущих данных</button>
-        <a href="/applicants/create" class="btn btn-secondary">На страницу заполнения данных</a>
     </div>
     <div class="row">
         <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable">

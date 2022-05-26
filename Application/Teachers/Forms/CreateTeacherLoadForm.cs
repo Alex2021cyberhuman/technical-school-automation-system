@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Teachers.Data;
@@ -11,9 +12,9 @@ public class CreateTeacherLoadForm
 
     public TeacherLoadKind? Kind { get; set; } = TeacherLoadKind.Vacancies;
 
-    [Required] public Group? Group { get; set; }
+    [MyRequired] public Group? Group { get; set; }
 
-    [Required] public Subject? Subject { get; set; }
+    [MyRequired] public Subject? Subject { get; set; }
 
     public TeacherLoad ToTeacherLoad(long teacherId)
     {

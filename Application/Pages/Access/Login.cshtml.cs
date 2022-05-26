@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Access.Data;
+using Application.Common.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ public class LoginModel : PageModel
 
     public class InputModel
     {
-        [Required] [Display(Name = "Логин")] public string Login { get; set; } = null!;
+        [MyRequired] [Display(Name = "Логин")] public string Login { get; set; } = null!;
 
-        [Required]
+        [MyRequired]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; } = null!;

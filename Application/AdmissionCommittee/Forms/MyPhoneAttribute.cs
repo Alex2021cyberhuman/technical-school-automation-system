@@ -14,7 +14,8 @@ public class MyPhoneAttribute : DataTypeAttribute
     {
         // Set DefaultErrorMessage not ErrorMessage, allowing user to set
         // ErrorMessageResourceType and ErrorMessageResourceName to use localized messages.
-        ErrorMessage = "{0} Не похож на номер телефона";
+        ErrorMessageResourceName = "PhoneAttribute_Invalid";
+        ErrorMessageResourceType = typeof(Resource);
     }
 
     public override bool IsValid(object? value)

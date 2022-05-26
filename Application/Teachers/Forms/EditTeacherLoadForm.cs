@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Common.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;
 using Application.Teachers.Data;
@@ -17,7 +18,7 @@ public class EditTeacherLoadForm
 
     public List<SemesterForm> Semesters { get; set; }
 
-    [Required] public TeacherLoadKind? Kind { get; set; }
+    [MyRequired] public TeacherLoadKind? Kind { get; set; }
 
     public Group Group { get; set; }
 

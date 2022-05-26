@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Application.AdmissionCommittee.Data;
+using Application.Common.Data;
 using Application.Common.Enums;
 using Application.Specialities.Data;
 
@@ -8,64 +9,64 @@ namespace Application.AdmissionCommittee.Forms;
 public class ApplicantForm
 {
     [Display(Name = "Фамилия")]
-    [MaxLength(200)]
-    [Required]
+    [MyMaxLength(200)]
+    [MyRequired]
     public string FamilyName { get; set; } = string.Empty;
 
     [Display(Name = "Имя")]
-    [MaxLength(200)]
-    [Required]
+    [MyMaxLength(200)]
+    [MyRequired]
     public string FirstName { get; set; } = string.Empty;
 
     [Display(Name = "Отчество")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string SurName { get; set; } = string.Empty;
 
     [Display(Name = "Дата рождения")]
-    [Required]
+    [MyRequired]
     public DateTime DateOfBirth { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Тип паспорта")]
-    [Required]
-    [MaxLength(20)]
+    [MyRequired]
+    [MyMaxLength(20)]
     public string PassportType { get; set; } = "Паспорт";
 
     [Display(Name = "Серия паспорта")]
-    [Required]
-    [MaxLength(20)]
+    [MyRequired]
+    [MyMaxLength(20)]
     public string PassportSerial { get; set; } = string.Empty;
 
     [Display(Name = "Номер паспорта")]
-    [Required]
-    [MaxLength(20)]
+    [MyRequired]
+    [MyMaxLength(20)]
     public string PassportNumber { get; set; } = string.Empty;
 
     [Display(Name = "Кем выдан паспорт")]
-    [Required]
-    [MaxLength(300)]
+    [MyRequired]
+    [MyMaxLength(300)]
     public string PassportIssuer { get; set; } = string.Empty;
 
     [Display(Name = "Код паспорта")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     public string PassportIssuerCode { get; set; } = string.Empty;
 
     [Display(Name = "Дата выдачи паспорта")]
-    [Required]
+    [MyRequired]
     public DateTime PassportIssueDate { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Место жительства")]
-    [Required]
-    [MaxLength(2000)]
+    [MyRequired]
+    [MyMaxLength(2000)]
     public string Address { get; set; } = string.Empty;
 
     [Display(Name = "Почтовый индекс")]
-    [MaxLength(20)]
-    [Required]
+    [MyMaxLength(20)]
+    [MyRequired]
     public string PostalCode { get; set; } = string.Empty;
 
     [Display(Name = "Мобильный телефон")]
-    [MaxLength(20)]
-    [Required]
+    [MyMaxLength(20)]
+    [MyRequired]
     [MyPhone]
     public string Phone { get; set; } = string.Empty;
 
@@ -84,23 +85,23 @@ public class ApplicantForm
     [Display(Name = "Тип базового образования")]
     public EducationType EducationType { get; set; } = EducationType.CommonMiddleSchool;
 
-    [Required]
-    [MaxLength(2000)]
+    [MyRequired]
+    [MyMaxLength(2000)]
     [Display(Name = "Учебное заведение")]
     public string EducationDescription { get; set; } = string.Empty;
 
     [Display(Name = "Серия документа об образовании")]
-    [MaxLength(200)]
-    [Required]
+    [MyMaxLength(200)]
+    [MyRequired]
     public string EducationDocumentSerial { get; set; } = string.Empty;
 
     [Display(Name = "Номер документа об образовании")]
-    [MaxLength(200)]
-    [Required]
+    [MyMaxLength(200)]
+    [MyRequired]
     public string EducationDocumentNumber { get; set; } = string.Empty;
 
     [Display(Name = "Дата выдачи документа об образовании")]
-    [Required]
+    [MyRequired]
     public DateTime EducationDocumentIssued { get; set; } = DateTime.UtcNow.Date;
 
     [Display(Name = "Форма обучения")] public EducationForm EducationForm { get; set; }
@@ -115,74 +116,74 @@ public class ApplicantForm
     [Display(Name = "Есть мать")] public bool HasMother { get; set; }
 
     [Display(Name = "Имя матери")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string MotherFirstName { get; set; } = string.Empty;
 
     [Display(Name = "Фамилия матери")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string MotherFamilyName { get; set; } = string.Empty;
 
     [Display(Name = "Отчество матери")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string MotherSurName { get; set; } = string.Empty;
 
     [Display(Name = "Описание работы матери")]
     public string MotherWorkDescription { get; set; } = string.Empty;
 
     [Display(Name = "Мобильный телефон матери")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string MotherMobilePhone { get; set; } = string.Empty;
 
     [Display(Name = "Рабочий телефон матери")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string MotherWorkPhone { get; set; } = string.Empty;
 
     [Display(Name = "Домашний телефон матери")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string MotherHomePhone { get; set; } = string.Empty;
 
     [Display(Name = "Есть отец")] public bool HasFather { get; set; }
 
     [Display(Name = "Имя отца")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string FatherFirstName { get; set; } = string.Empty;
 
     [Display(Name = "Фамилия отца")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string FatherFamilyName { get; set; } = string.Empty;
 
     [Display(Name = "Отчество отца")]
-    [MaxLength(200)]
+    [MyMaxLength(200)]
     public string FatherSurName { get; set; } = string.Empty;
 
     [Display(Name = "Описание работы отца")]
     public string FatherWorkDescription { get; set; } = string.Empty;
 
     [Display(Name = "Мобильный телефон отца")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string FatherMobilePhone { get; set; } = string.Empty;
 
     [Display(Name = "Рабочий телефон отца")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string FatherWorkPhone { get; set; } = string.Empty;
 
     [Display(Name = "Домашний телефон отца")]
-    [MaxLength(20)]
+    [MyMaxLength(20)]
     [MyPhone]
     public string FatherHomePhone { get; set; } = string.Empty;
 
     [Display(Name = "Описание работы")]
-    [MaxLength(2000)]
+    [MyMaxLength(2000)]
     public string DistanceApplicantWorkDescription { get; set; } = string.Empty;
 
-    [MinLength(1)]
-    [MaxLength(3)]
-    [Required]
+    [MyMinLength(1)]
+    [MyMaxLength(3)]
+    [MyRequired]
     [Display(Name = "Специальности")]
     public List<long> SelectedSpecialityIds { get; set; } = new();
 
