@@ -3,17 +3,20 @@
 
 <MudField Label="Дисциплина" Variant="Variant.Text">
     <MudText>@Value.Name</MudText>
-    <MudDivider Vertical="true" FlexItem="true"/>
-    <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpen" Icon="@(IsOpen ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Size="Size.Small"/>
+    @if (Value != null && ShowSemesters)
+    {
+        <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpenSemesterList" Icon="@(SubjectListVisible ? Icons.Filled.Close : Icons.Filled.Info)" Title="Список семестров" Size="Size.Small"/>
+    }
+    <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpenSubjectList" Icon="@(SubjectListVisible ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Title="Список дисциплин" Size="Size.Small"/>
 </MudField>
-@if (IsOpen)
+@if (SubjectListVisible)
 {
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document" style="max-width: 847px!important;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Выбор дисциплины</h5>
-                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleOpen">
+                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleOpenSubjectList">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -39,13 +42,47 @@
                         <RowTemplate>
                             <MudTd DataLabel="Название">@context.Name</MudTd>
                             <MudTd DataLabel="Код">@context.Code</MudTd>
-                            <MudTd DataLabel="Название">@context.Speciality.Name</MudTd>
-                            <MudTd DataLabel="Код">@context.Speciality.Code</MudTd>
+                            <MudTd DataLabel="Название специальности">@context.Speciality.Name</MudTd>
+                            <MudTd DataLabel="Код специальности">@context.Speciality.Code</MudTd>
                         </RowTemplate>
                     </MudTable>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ToggleOpen">Закрыть</button>
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleOpenSubjectList">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (Value != null && SemesterListVisible)
+{
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Выбор дисциплины</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleOpenSemesterList">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <MudField Label="Название специальности">@Value.Speciality.Name</MudField>
+                    <MudField Label="Код специальности">@Value.Speciality.Code</MudField>
+                    <MudField Label="Название">@Value.Name</MudField>
+                    <MudField Label="Код">@Value.Code</MudField>
+                    <MudInputLabel>Часы по семестрам</MudInputLabel>
+                    <div class="row justify-content-between">
+                        @foreach (var semester in Value.Semesters.OrderBy(x => x.Number))
+                        {
+                            var label = $"Семестр №{semester.Number}";
+                            <div class="col-sm-12 col-lg-4">
+                                <MudField Label="@label">@semester.Hours"</MudField>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleOpenSemesterList">Закрыть</button>
                 </div>
             </div>
         </div>
@@ -54,12 +91,18 @@
 
 @code
 {
+
+    [Parameter]
+    public bool ShowSemesters { get; set; }
+
     [Parameter]
     public IReadOnlyCollection<Subject> Subjects { get; set; } = new List<Subject>();
 
     public string SearchString { get; set; } = string.Empty;
 
-    public bool IsOpen { get; set; }
+    public bool SubjectListVisible { get; set; }
+
+    public bool SemesterListVisible { get; set; }
 
     public MudTable<Subject>? MudTable { get; set; }
 
@@ -71,9 +114,14 @@
         MudTable?.SetSelectedItem(Value);
     }
 
-    private void ToggleOpen()
+    private void ToggleOpenSubjectList()
     {
-        IsOpen = !IsOpen;
+        SubjectListVisible = !SubjectListVisible;
+    }
+
+    private void ToggleOpenSemesterList()
+    {
+        SemesterListVisible = !SemesterListVisible;
     }
 
     private bool Filter(Subject subject)
@@ -88,7 +136,8 @@
     private async Task OnSelectedItemChangedAsync(Subject obj)
     {
         Value = obj;
-        ToggleOpen();
+        ToggleOpenSubjectList();
         await ValueChanged.InvokeAsync(Value);
     }
+
 }

@@ -1,0 +1,111 @@
+@using System.ComponentModel.DataAnnotations
+@using Application.Data
+@using Application.Schedules.Data
+@using Application.Schedules.Forms
+@using Application.Specialities.Data
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer StringLocalizer
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+<MudButton
+    Variant="Variant.Outlined"
+    Color="Color.Primary"
+    OnClick="OnOpen">
+    @ClassSchedule.Subject.Name
+</MudButton>
+
+@if (Visible)
+{
+    <PageTitle>Добавить элемент расписания</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить элемент расписания</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <MudField Label="День недели">@StringLocalizer[ClassSchedule.DayOfWeek.ToString()]</MudField>
+                        <MudField Label="Номер урока">@ClassSchedule.Number</MudField>
+                        @if (CanChangeWeekSeparation)
+                        {
+                            <MyEnumSelector TValue="WeeksSeparationType" @bind-Value="Form.WeeksSeparation" Label="Недельное разделение"/>
+                        }
+                        else
+                        {
+                            <MudField Label="Недельное разделение">@Form.WeeksSeparation</MudField>
+                        }
+                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" />
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public bool CanChangeWeekSeparation { get; set; }
+
+    [Parameter]
+    public ClassSchedule ClassSchedule { get; set; } = null!;
+    
+    [Parameter]
+    public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
+    
+    [Parameter]
+    public EventCallback<ClassSchedule> OnClassScheduleEdited { get; set; }
+
+    public EditClassScheduleForm Form { get; set; } = null!;
+    
+    public EditContext EditContext { get; set; } = null!;
+    
+    public bool Visible { get; set; }
+    
+    private void OnOpen()
+    {
+        Form = new EditClassScheduleForm(ClassSchedule);
+        EditContext = new EditContext(Form);
+        Visible = true;
+    }
+
+    private void OnCancel()
+    {
+        Visible = false;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!Visible || !EditContext.Validate())
+            return;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbClassSchedule = await context.ClassSchedule.FirstOrDefaultAsync(x => x.Id == ClassSchedule.Id);
+        if (dbClassSchedule is null)
+        {
+            OnCancel();
+            return;
+        }
+        
+        dbClassSchedule.WeeksSeparation = Form.WeeksSeparation;
+        dbClassSchedule.SubjectId = Form.Subject.Id;
+        
+        ClassSchedule.WeeksSeparation = Form.WeeksSeparation;
+        ClassSchedule.SubjectId = Form.Subject.Id;
+        ClassSchedule.Subject = Form.Subject;
+        
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnClassScheduleEdited.InvokeAsync(ClassSchedule);
+    }
+
+}

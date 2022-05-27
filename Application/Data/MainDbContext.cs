@@ -2,6 +2,7 @@ using Application.Access.Data;
 using Application.AdmissionCommittee.Data;
 using Application.Common.Data;
 using Application.Groups.Data;
+using Application.Schedules.Data;
 using Application.Specialities.Data;
 using Application.Specialities.Services;
 using Application.Teachers.Data;
@@ -38,10 +39,31 @@ public class MainDbContext : DbContext, ISpecialitiesContext
 
     public DbSet<ApplicantSpeciality> ApplicantSpeciality => Set<ApplicantSpeciality>();
 
+    public DbSet<ClassSchedule> ClassSchedule => Set<ClassSchedule>();
+
+    public DbSet<Schedule> Schedule => Set<Schedule>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Schedule>(e =>
+        {
+            e.HasOne(x => x.Group)
+                .WithOne()
+                .HasForeignKey<Schedule>(x => x.Group);
+            e.HasMany(x => x.ClassSchedule)
+                .WithOne(x => x.Schedule)
+                .HasForeignKey(x => x.ScheduleId);
+        });
+
+        modelBuilder.Entity<ClassSchedule>(e =>
+        {
+            e.HasOne(x => x.Subject)
+                .WithMany()
+                .HasForeignKey(x => x.SubjectId);
+        });
+        
         modelBuilder.Entity<Applicant>(e =>
         {
             e.OwnsOne(x => x.Passport);

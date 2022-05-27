@@ -1,0 +1,283 @@
+@page "/schedule/manage"
+@using Microsoft.Extensions.Localization
+@using Application.Schedules.Data
+@using Application.Specialities.Data
+@using Application.Groups.Data
+@using Microsoft.EntityFrameworkCore
+@using Application.Data
+@inject IStringLocalizer StringLocalizer
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+<MudGrid>
+    <MudItem xs="2">
+        <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
+            @if (SelectedSpeciality is not null)
+            {
+                <MudListSubheader>
+                    Выбранная специальность:
+                    @SelectedSpeciality.Code @SelectedSpeciality.Name
+                </MudListSubheader>
+            }
+            @foreach (var speciality in Specialities)
+            {
+                <MudListItem Text="@speciality.Name" Value="@speciality"/>
+            }
+        </MudList>
+    </MudItem>
+    @if (SelectedSpeciality is not null)
+    {
+        <MudItem xs="2">
+            <MudList Clickable="true" SelectedValue="SelectedGroup" SelectedValueChanged="SelectGroupAsync">
+                @if (SelectedGroup is not null)
+                {
+                    <MudListSubheader>
+                        Выбранная группа:
+                        @SelectedGroup.Name
+                    </MudListSubheader>
+                }
+                @foreach (var group in Groups)
+                {
+                    <MudListItem Text="@group.Name" Value="@group"/>
+                }
+            </MudList>
+        </MudItem>
+        <MudItem xs="8">
+            @if (SelectedSchedule is not null)
+            {
+                <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
+                    @*конечное расписание для чтения*@
+                    <MudTabPanel Text="Расписание с заменами">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @*функции расписания*@
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    @*список замен в расписании*@
+                    <MudTabPanel Text="Замены">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @*функции расписания*@
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    @*таблица основного расписания*@
+                    <MudTabPanel Text="Основное расписание">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @*функции расписания*@
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudSimpleTable Bordered="true">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        @foreach (var dayOfWeek in DayOfWeeks)
+                                        {
+                                            <th colspan="2">@StringLocalizer[dayOfWeek.ToString()]</th>
+                                        }
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for (var i = 1; i <= MaxNumber; i++)
+                                    {
+                                        var classNumber = i;
+                                        <td>@classNumber</td>
+                                        @foreach (var dayOfWeek in DayOfWeeks)
+                                        {
+                                            var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
+                                            if (classSchedulesOfDayNumber is null || !classSchedulesOfDayNumber.Any())
+                                            {
+                                                <td colspan="2">
+                                                    <MyAddClassSchedule
+                                                        WeeksSeparation="WeeksSeparationType.All"
+                                                        CanChangeWeekSeparation="true"
+                                                        DayOfWeek="dayOfWeek"
+                                                        Number="classNumber"
+                                                        Schedule="SelectedSchedule"
+                                                        Subjects="Subjects"
+                                                        OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                                </td>
+                                            }
+                                            else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
+                                            {
+                                                var item = classSchedulesOfDayNumber.First();
+                                                <td colspan="2">
+                                                    <MyEditClassSchedule
+                                                        CanChangeWeekSeparation="true"
+                                                        ClassSchedule="item"
+                                                        Subjects="Subjects"
+                                                        OnClassScheduleEdited="OnClassScheduleEdited"/>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Odd);
+                                                var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Even);
+                                                <td>
+                                                    @if (oddItem is not null)
+                                                    {
+                                                        <MyEditClassSchedule
+                                                            CanChangeWeekSeparation="@(evenItem is null)"
+                                                            ClassSchedule="oddItem"
+                                                            Subjects="Subjects"
+                                                            OnClassScheduleEdited="OnClassScheduleEdited"/>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MyAddClassSchedule
+                                                            WeeksSeparation="WeeksSeparationType.Odd"
+                                                            CanChangeWeekSeparation="@(evenItem is null)"
+                                                            DayOfWeek="dayOfWeek"
+                                                            Number="classNumber"
+                                                            Schedule="SelectedSchedule"
+                                                            Subjects="Subjects"
+                                                            OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (evenItem is not null)
+                                                    {
+                                                        <MyEditClassSchedule
+                                                            CanChangeWeekSeparation="@(oddItem is null)"
+                                                            ClassSchedule="evenItem"
+                                                            Subjects="Subjects"
+                                                            OnClassScheduleEdited="OnClassScheduleEdited"/>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MyAddClassSchedule
+                                                            WeeksSeparation="WeeksSeparationType.Even"
+                                                            CanChangeWeekSeparation="@(oddItem is null)"
+                                                            DayOfWeek="dayOfWeek"
+                                                            Number="classNumber"
+                                                            Schedule="SelectedSchedule"
+                                                            Subjects="Subjects"
+                                                            OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                                    }
+                                                </td>
+                                            }
+                                        }
+                                    }
+                                    </tbody>
+                                </MudSimpleTable>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                </MudTabs>
+            }
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+
+    private Speciality? SelectedSpeciality { get; set; }
+
+    private List<Speciality> Specialities { get; set; } = new();
+
+    private List<Group> Groups { get; set; } = new();
+
+    private List<ClassSchedule> ClassSchedules { get; set; } = new();
+
+    private Dictionary<(int number, DayOfWeek dayOfWeek), List<ClassSchedule>> ClassScheduleCache { get; set; } = new();
+
+    private Schedule? SelectedSchedule { get; set; }
+
+    private Group? SelectedGroup { get; set; }
+
+    private List<Subject> Subjects { get; set; } = new();
+
+    private int MaxNumber { get; } = 8;
+
+    private DayOfWeek[] DayOfWeeks { get; } = {
+        DayOfWeek.Monday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Friday,
+        DayOfWeek.Saturday
+    };
+
+    private void OnClassScheduleCreated(ClassSchedule classSchedule)
+    {
+        ClassSchedules.Add(classSchedule);
+        var scheduleCell = (classSchedule.Number, classSchedule.DayOfWeek);
+        if (ClassScheduleCache.ContainsKey(scheduleCell))
+        {
+            ClassScheduleCache[scheduleCell].Add(classSchedule);
+        }
+        else
+        {
+            ClassScheduleCache[scheduleCell] = new()
+            {
+                classSchedule
+            };
+        }
+    }
+
+    private void OnClassScheduleEdited(ClassSchedule classSchedule)
+    {
+        //
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        Specialities = await context.Speciality
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
+
+    private async Task SelectSpecialityAsync(object obj)
+    {
+        if (obj is not Speciality speciality)
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var year = DateTime.Today.Year;
+        Groups = await context.Group
+            .AsNoTracking()
+            .Where(x => x.SpecialityId == speciality.Id)
+            .Where(x => x.GraduationYear >= year)
+            .OrderBy(x => x.EnrollmentYear)
+            .ThenBy(x => x.Name)
+            .ToListAsync();
+        Subjects = await context.Subject
+            .AsNoTracking()
+            .Where(x => x.SpecialityId == speciality.Id)
+            .Include(x => x.Semesters)
+            .ToListAsync();
+        SelectedSpeciality = speciality;
+    }
+
+    private async Task SelectGroupAsync(object obj)
+    {
+        if (obj is not Group group)
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var schedule = await context.Schedule.FirstOrDefaultAsync(x => x.GroupId == group.Id);
+        if (schedule is null)
+        {
+            schedule = new()
+            {
+                GroupId = group.Id
+            };
+            context.Add(schedule);
+            await context.SaveChangesAsync();
+        }
+
+        ClassSchedules = await context.ClassSchedule
+            .Where(x => x.ScheduleId == schedule.Id)
+            .OrderBy(x => x.Number)
+            .ThenBy(x => x.DayOfWeek).ToListAsync();
+        ClassScheduleCache = ClassSchedules
+            .GroupBy(x => (x.Number, x.DayOfWeek))
+            .ToDictionary(x => x.Key, x => x.ToList());
+        SelectedGroup = group;
+        SelectedSchedule = schedule;
+    }
+
+}
