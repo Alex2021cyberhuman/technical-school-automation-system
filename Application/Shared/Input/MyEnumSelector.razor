@@ -1,32 +1,45 @@
 @using Microsoft.Extensions.Localization
+@using System.Linq.Expressions
 @typeparam TValue where TValue : struct, Enum
 @inherits MudBaseInput<TValue?>
 @inject IStringLocalizer StringLocalizer
 
-<MudSelect T="TValue" Label="@Label" AnchorOrigin="Origin.BottomCenter" ValueChanged="CallbackAsync" Required="@Required" ToStringFunc="GetLocalizedString">
+<MudSelect T="TValue" Label="@(Value.HasValue ? Label : Label + " (все)")" Placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? Label : Placeholder)" AnchorOrigin="Origin.BottomCenter" ValueChanged="CallbackAsync" Required="@Required" ToStringFunc="GetLocalizedString">
     @foreach (var item in Items)
     {
         <MudSelectItem Value="@item"/>
     }
 </MudSelect>
 
-@code {
+@code
+{
+    [CascadingParameter]
+    EditContext? CascadedEditContext { get; set; }
 
     public TValue[] Items { get; set; } = Array.Empty<TValue>();
+
+    [Parameter]
+    public Expression<Func<TValue?>>? ValueExpression { get; set; }
+
+    private FieldIdentifier? Identifier { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         var enums = Enum.GetValues<TValue>();
-        enums = enums.OrderBy(GetLocalizedString).ToArray();
+        enums = enums.OrderBy(x => GetLocalizedString(x)).ToArray();
         Items = enums;
         if (Required)
             Value = enums.First();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnParametersSet()
     {
-        await base.OnAfterRenderAsync(firstRender);
+        base.OnParametersSet();
+        if (ValueExpression is not null)
+        {
+            Identifier = FieldIdentifier.Create(ValueExpression);
+        }
     }
 
     private string GetLocalizedString(TValue value)
@@ -38,6 +51,10 @@
     {
         Value = value;
         await ValueChanged.InvokeAsync(value);
+        if (Identifier.HasValue && CascadedEditContext is not null)
+        {
+            CascadedEditContext.NotifyFieldChanged(Identifier.Value);
+        }
     }
 
 }

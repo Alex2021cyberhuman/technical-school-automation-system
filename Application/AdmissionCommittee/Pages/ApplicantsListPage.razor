@@ -24,19 +24,22 @@
 <div class="container">
     <div class="row">
         <EditForm EditContext="FilterContext">
+            <DataAnnotationsValidator/>
             <MudGrid>
                 <MudItem sm="6">
                     <MyYearSelector @bind-Value="Filter.SelectedYear"/>
-                    <MudTextField @bind-Value="Filter.SearchString"/>
+                    <MudTextField Label="Поиск студентов" @bind-Value="Filter.SearchString" OnKeyUp="() => FilterContext.NotifyFieldChanged(FieldIdentifier.Create(() => Filter.SearchString))"/>
                     <MyEnumSelector TValue="EducationForm" @bind-Value="@Filter.SelectedEducationForm" Label="Форма обучения"/>
+                </MudItem>
+                <MudItem sm="6">
                     <MyEnumSelector TValue="FinanceEnrolmentType" @bind-Value="@Filter.SelectedFinanceEnrolmentType" Label="Форма финансирования"/>
                     <MyEnumSelector TValue="DirectorDecisionType" @bind-Value="@Filter.SelectedDirectorDecisionType" Label="Решение директора"/>
                 </MudItem>
-                <MudItem sm="6">
+                <MudItem sm="12">
                     <MyInputRadioGroup TValue="long?" @bind-Value="@Filter.SelectedSpecialityId" RadioItems="@Filter.SpecialityRadioItems" Label="Специальность"/>
                 </MudItem>
                 <MudItem sm="12">
-                    <MudButton OnClick="() => Filter.Reset()">Все</MudButton>
+                    <MudButton OnClick="ResetAsync">Все</MudButton>
                     <MudIconButton Icon="@Icons.Filled.Print" Title="Скачать сводную таблицу из текущих данных" OnClick="OnDownloadApplicantsTableAsync"/>
                     <MudIconButton Icon="@Icons.Filled.PlusOne" Title="На страницу заполнения данных" OnClick="@(() => NavigationManager.NavigateTo("/applicants/create"))"/>
                 </MudItem>
@@ -46,28 +49,28 @@
     <div class="row">
         <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable">
             <HeaderContent>
-                <MudTd>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="Id">№</MudTableSortLabel>
-                </MudTd>
-                <MudTd>
+                </MudTh>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="FullName">ФИО</MudTableSortLabel>
-                </MudTd>
-                <MudTd>Образование</MudTd>
-                <MudTd>
+                </MudTh>
+                <MudTh>Образование</MudTh>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="MathRating">Баллы по математике</MudTableSortLabel>
-                </MudTd>
-                <MudTd>
+                </MudTh>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="LanguageRating">Баллы по русскому языку</MudTableSortLabel>
-                </MudTd>
-                <MudTd>
+                </MudTh>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="AverageAttestRating">Средний балл</MudTableSortLabel>
-                </MudTd>
-                <MudTd>
+                </MudTh>
+                <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="CommonScore">Общая оценка</MudTableSortLabel>
-                </MudTd>
-                <MudTd>Примечание</MudTd>
-                <MudTd>Решение директора</MudTd>
-                <MudTd></MudTd>
+                </MudTh>
+                <MudTh>Примечание</MudTh>
+                <MudTh>Решение директора</MudTh>
+                <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>@context.Id</MudTd>
@@ -86,7 +89,15 @@
                 <MudTd>
                     @if (CurrentUser.IsInRole(RoleIdentifiers.AssociateDirector) || CurrentUser.IsInRole(RoleIdentifiers.Director))
                     {
-                        <MudIconButton Icon="@Icons.Filled.Delete" Title="Удалить" OnClick="@(async () => await DeleteApplicantAsync(context))"/>
+                        <MudIconButton Icon="@Icons.Filled.DeleteForever" Title="Удалить данные" OnClick="@(async () => await DeleteApplicantAsync(context))"/>
+                        if (context.DirectorDecision == DirectorDecisionType.NotСonsidered)
+                        {
+                            <MudIconButton Icon="@Icons.Filled.Cancel" Title="Пометить как не зачисляемого" OnClick="@(async () => await MarkAsAsync(context, DirectorDecisionType.NotEnroll, $"Вы хотите отклонить зачисление студента {context.FullName}?"))"/>
+                        }
+                        else if (context.DirectorDecision == DirectorDecisionType.NotEnroll)
+                        {
+                            <MudIconButton Icon="@Icons.Filled.Add" Title="Пометить как зачисляемого" OnClick="@(async () => await MarkAsAsync(context, DirectorDecisionType.NotСonsidered, $"Вы хотите продолжить зачисление студента {context.FullName}?"))"/>
+                        }
                     }
                     <DownloadApplicantStatementButton ApplicantId="@context.Id"/>
                 </MudTd>
@@ -102,7 +113,7 @@
 
     public ApplicantsTableFilterForm Filter { get; set; } = new();
 
-    public EditContext FilterContext { get; set; }
+    public EditContext FilterContext { get; set; } = null!;
 
     public List<Speciality> Specialities { get; set; } = new();
 
@@ -113,15 +124,14 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
-    public ApplicantsListPage()
-    {
-        FilterContext = new EditContext(Filter);
-        FilterContext.OnFieldChanged += ApplyFilterAsync;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        Filter = new ApplicantsTableFilterForm();
+        FilterContext = new EditContext(Filter);
+        FilterContext.OnFieldChanged += ApplyFilterAsync;
+
         await using var context = await DbContextFactory.CreateDbContextAsync();
         Specialities = await context.Speciality.OrderBy(x => x.Code).ThenBy(x => x.Name)
             .AsNoTracking()
@@ -201,6 +211,35 @@
         }
         context.Remove(dbApplicant);
         await context.SaveChangesAsync();
+        await (ApplicantsTable?.ReloadServerData() ?? Task.CompletedTask);
+    }
+
+    private async Task MarkAsAsync(Applicant applicant, DirectorDecisionType decision, string info)
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbApplicant = await context.Applicant
+            .Include(x => x.Student)
+            .ThenInclude(x => x!.Group)
+            .FirstOrDefaultAsync(x => x.Id == applicant.Id);
+        if (dbApplicant is null || dbApplicant.DirectorDecision == decision || dbApplicant.Student != null)
+        {
+            return;
+        }
+
+        var markApplicant = await DialogService.ShowMessageBox("Решение", info, "Да", "Нет");
+        if (!markApplicant.HasValue || !markApplicant.Value)
+        {
+            return;
+        }
+        applicant.DirectorDecision = decision;
+        dbApplicant.DirectorDecision = decision;
+        await context.SaveChangesAsync();
+    }
+
+    private async Task ResetAsync()
+    {
+        Filter.Reset();
+        StateHasChanged();
         await (ApplicantsTable?.ReloadServerData() ?? Task.CompletedTask);
     }
 

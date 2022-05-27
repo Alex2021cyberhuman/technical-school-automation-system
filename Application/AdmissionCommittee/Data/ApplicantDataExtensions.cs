@@ -21,13 +21,8 @@ public static class ApplicantDataExtensions
             .AsNoTracking();
         queryable = queryable
             .Where(x => x.Submitted.Year == filter.SelectedYear);
-        if (!string.IsNullOrWhiteSpace(filter.SearchString))
-            queryable = queryable
-                .Where(x =>
-                    x.FirstName.Contains(filter.SearchString) ||
-                    (x.SurName != null && x.SurName.Contains(filter.SearchString)) ||
-                    x.FamilyName.Contains(filter.SearchString) ||
-                    (x.FirstName + " " + x.SurName + " " + x.FamilyName).Contains(filter.SearchString));
+
+        queryable = FilterApplicantsSearchString(queryable, filter.SearchString);
 
         if (filter.SelectedSpecialityId.HasValue)
             queryable = queryable
@@ -47,11 +42,40 @@ public static class ApplicantDataExtensions
 
         if (filter.SelectedDirectorDecisionType.HasValue)
             queryable = queryable.Where(x => x.DirectorDecision == filter.SelectedDirectorDecisionType);
-        sortLabel = string.IsNullOrEmpty(sortLabel) ? "FullName" : sortLabel;
+
+        var sortedQueryable = queryable.SortApplicantsTable(sortLabel, sortDirection);
+
+        var pagedQueryable = sortedQueryable.Skip(page * pageSize).Take(pageSize);
+
+        var items = await pagedQueryable.ToListAsync();
+        var totalItems = items.Count;
+        if (items.Count == pageSize) totalItems = await queryable.CountAsync();
+
+        return (items, totalItems);
+    }
+
+    public static IQueryable<Applicant> FilterApplicantsSearchString(this IQueryable<Applicant> queryable,
+        string? filterSearchString)
+    {
+        return !string.IsNullOrWhiteSpace(filterSearchString)
+            ? queryable
+                .Where(x =>
+                    EF.Functions.ILike(x.FamilyName + " " + x.FirstName + " " + x.SurName,
+                        "%" + filterSearchString + "%"))
+            : queryable;
+    }
+
+    public static IQueryable<Applicant> SortApplicantsTable(this IQueryable<Applicant> queryable, string sortLabel,
+        SortDirection sortDirection)
+    {
         queryable = sortLabel switch
         {
             "Id" => queryable.OrderByDirection(sortDirection, x => x.Id),
-            "FullName" => sortDirection switch
+            "MathRating" => queryable.OrderByDirection(sortDirection, x => x.MathRating),
+            "LanguageRating" => queryable.OrderByDirection(sortDirection, x => x.LanguageRating),
+            "AverageAttestRating" => queryable.OrderByDirection(sortDirection, x => x.AverageAttestRating),
+            "CommonScore" => queryable.OrderByDirection(sortDirection, x => x.CommonScore),
+            _ => sortDirection switch
             {
                 SortDirection.None => queryable,
                 SortDirection.Ascending => queryable.OrderBy(x => x.FamilyName)
@@ -61,20 +85,8 @@ public static class ApplicantDataExtensions
                     .ThenByDescending(x => x.FirstName)
                     .ThenByDescending(x => x.SurName),
                 _ => throw new ArgumentOutOfRangeException(nameof(sortDirection))
-            },
-            "MathRating" => queryable.OrderByDirection(sortDirection, x => x.MathRating),
-            "LanguageRating" => queryable.OrderByDirection(sortDirection, x => x.LanguageRating),
-            "AverageAttestRating" => queryable.OrderByDirection(sortDirection, x => x.AverageAttestRating),
-            "CommonScore" => queryable.OrderByDirection(sortDirection, x => x.CommonScore),
-            _ => queryable
+            }
         };
-
-        queryable = queryable.Skip(page * pageSize).Take(pageSize);
-
-        var items = await queryable.ToListAsync();
-        var totalItems = items.Count;
-        if (items.Count >= pageSize) totalItems = await queryable.CountAsync();
-
-        return (items, totalItems);
+        return queryable;
     }
 }

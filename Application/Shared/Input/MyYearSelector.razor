@@ -1,16 +1,27 @@
+@using Microsoft.CodeAnalysis
+@using System.Linq.Expressions
+@using Humanizer
 @inherits MudSelect<int>
 
-<MudField Label="@(string.IsNullOrWhiteSpace(Label) ? "Год" : Label)">
-    <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" ValueChanged="ValueChanged" ToStringFunc="GetYearString">
-        @foreach (var year in Years)
-        {
-            <MudSelectItem Value="@year"/>
-        }
-    </MudSelect>
-</MudField>
+<MudSelect
+    Label="@(string.IsNullOrWhiteSpace(Label) ? "Год" : Label)"
+    Placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? string.IsNullOrWhiteSpace(Label) ? "Год" : Label : Placeholder)"
+    T="int"
+    AnchorOrigin="Origin.BottomCenter"
+    Value="Value"
+    ValueChanged="OnValueChangedAsync"
+    ToStringFunc="GetYearString">
+    @foreach (var year in Years)
+    {
+        <MudSelectItem Value="@year"/>
+    }
+</MudSelect>
 
 @code
 {
+    [CascadingParameter]
+    EditContext? CascadedEditContext { get; set; }
+
     [Parameter]
     public int MinimalYear { get; set; } = 1949;
 
@@ -19,12 +30,21 @@
 
     public List<int> Years => Enumerable.Range(MinimalYear, MaximumYear - MinimalYear + 1).OrderByDescending(x => x).ToList();
 
+    [Parameter]
+    public Expression<Func<int>>? ValueExpression { get; set; }
+
+    private FieldIdentifier? Identifier { get; set; }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         if (Value == default)
         {
             Value = MaximumYear;
+        }
+        if (ValueExpression is not null)
+        {
+            Identifier = FieldIdentifier.Create(ValueExpression);
         }
     }
 
@@ -43,5 +63,14 @@
     private string GetYearString(int year)
     {
         return year == default ? string.Empty : year.ToString();
+    }
+
+    private async Task OnValueChangedAsync(int year)
+    {
+        await SetValueAsync(Value);
+        if (Identifier.HasValue && CascadedEditContext is not null)
+        {
+            CascadedEditContext.NotifyFieldChanged(Identifier.Value);
+        }
     }
 }
