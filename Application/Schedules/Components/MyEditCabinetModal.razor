@@ -1,0 +1,133 @@
+@using Microsoft.EntityFrameworkCore
+@using Application.Data
+@using Application.Common.Data
+@using Application.Schedules.Data
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+@inject IDialogService DialogService
+<MudIconButton Color="Color.Primary" Variant="Variant.Outlined" Icon="@Icons.Filled.Edit" OnClick="OnOpen" Title="Изменить кабинет"/>
+
+@if (Visible)
+{
+    <PageTitle>Изменить кабинет</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Изменить кабинет</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" ValidationFor="() => Form.Name"/>
+                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" ValidationFor="() => Form.Code"/>
+                        <MyInputComponent Label="Профиль" Placeholder="Профиль" @bind-Value="Form.Profile" ValidationFor="() => Form.Profile"/>
+                        <MyInputComponent Label="Отделение" Placeholder="Отделение" @bind-Value="Form.Wing" ValidationFor="() => Form.Wing"/>
+                        <MudNumericField Label="Этаж" Placeholder="Этаж" @bind-Value="Form.Floor" Min="1" Max="100"/>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Изменить кабинет</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnDeleteAsync">Удалить кабинет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+
+    private ComponentForm Form { get; set; } = null!;
+
+    private EditContext EditContext { get; set; } = null!;
+
+    private bool Visible { get; set; }
+
+    [Parameter]
+    public Cabinet Cabinet { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Cabinet> OnCabinetEdited { get; set; } = EventCallback<Cabinet>.Empty;
+    
+    [Parameter]
+    public EventCallback<Cabinet> OnCabinetRemoved { get; set; } = EventCallback<Cabinet>.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private void OnCancel()
+    {
+        Visible = false;
+    }
+
+    private void OnOpen()
+    {
+        Form = new ComponentForm(Cabinet);
+        EditContext = new EditContext(Form);
+        Visible = true;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!Visible || !EditContext.Validate())
+            return;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var cabinet = await context.Cabinet.SingleAsync(x => x.Id == Cabinet.Id);
+        cabinet.Name = Form.Name;
+        cabinet.Code = Form.Code;
+        cabinet.Profile = Form.Profile;
+        cabinet.Floor = Form.Floor;
+        cabinet.Wing = Form.Wing;
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnCabinetEdited.InvokeAsync();
+    }
+
+    private async Task OnDeleteAsync()
+    {
+        var result = await DialogService.ShowMessageBox("Удаление", "Удалить кабинет и все ссылки на него в рассписании?", "Да", "Нет");
+        if (!result.HasValue || !result.Value)
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbCabinet = await context.Cabinet.SingleAsync(x => x.Id == Cabinet.Id);
+        context.Remove(dbCabinet);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnCabinetRemoved.InvokeAsync(Cabinet);
+    }
+
+    public class ComponentForm
+    {
+        public ComponentForm(Cabinet cabinet)
+        {
+            Name = cabinet.Name;
+            Code = cabinet.Code;
+            Profile = cabinet.Profile;
+            Floor = cabinet.Floor;
+            Wing = cabinet.Wing;
+        }
+
+        [MyRequired]
+        public string Name { get; set; }
+
+        [MyRequired]
+        public string Code { get; set; }
+
+        public string Profile { get; set; }
+
+        [MyRequired]
+        public int Floor { get; set; }
+
+        public string Wing { get; set; }
+    }
+}

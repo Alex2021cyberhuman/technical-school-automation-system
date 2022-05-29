@@ -4,6 +4,7 @@
 @using Microsoft.EntityFrameworkCore
 @using Application.Access.Enums
 @using System.Security.Claims
+@using Application.Common.Enums
 @using Application.Data
 @using Application.Specialities.Services
 @inject IDbContextFactory<MainDbContext> DbContextFactory
@@ -15,6 +16,8 @@
     <div class="col-12 col-md-4">
         <EditForm EditContext="EditContext">
             <MyYearSelector @bind-Value="SelectedYear"/>
+            <MyEnumSelector TValue="FinanceEnrolmentType" @bind-Value="SelectedFinanceEnrolmentType" Label="Тип финансирования"/>
+            <MyEnumSelector TValue="EducationForm" @bind-Value="SelectedEducationForm" Label="Форма обучения"/>
             <MyInputRadioGroup Label="Специальность" @bind-Value="@SelectedSpecialityId" RadioItems="SpecialityRadioItems"/>
         </EditForm>
     </div>
@@ -53,6 +56,10 @@
 
     public long SelectedSpecialityId { get; set; }
 
+    public EducationForm? SelectedEducationForm { get; set; }
+    
+    public FinanceEnrolmentType? SelectedFinanceEnrolmentType { get; set; }
+    
     public EditContext EditContext { get; set; } = null!;
     
     [CascadingParameter]
@@ -92,8 +99,11 @@
 
     private bool Filter(Group group)
     {
-        return group.SpecialityId == SelectedSpecialityId && group.EnrollmentYear <= SelectedYear && group.GraduationYear >= SelectedYear;
+        return group.SpecialityId == SelectedSpecialityId &&
+        group.EnrollmentYear <= SelectedYear &&
+        group.GraduationYear >= SelectedYear &&
+        (!SelectedFinanceEnrolmentType.HasValue || SelectedFinanceEnrolmentType == group.FinanceEnrolmentType) &&
+        (!SelectedEducationForm.HasValue || SelectedEducationForm == group.EducationForm);
     }
-
 
 }

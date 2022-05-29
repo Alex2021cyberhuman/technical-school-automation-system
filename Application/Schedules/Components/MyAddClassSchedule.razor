@@ -85,7 +85,7 @@
     [Parameter]
     public EventCallback<ClassSchedule> OnClassScheduleCreated { get; set; }
 
-    public AddClassScheduleForm? Form { get; set; }
+    public AddClassScheduleForm Form { get; set; } = null!;
 
     public EditContext EditContext { get; set; } = null!;
 
@@ -121,7 +121,7 @@
             DayOfWeek = DayOfWeek,
             Number = Number,
             ReplacementMode = false,
-            WeekSeparation = Form!.WeeksSeparation.GetValueOrDefault()
+            WeekSeparation = Form.WeeksSeparation.GetValueOrDefault()
         }, Form.Teacher);
         if (!validTeacherPick)
         {

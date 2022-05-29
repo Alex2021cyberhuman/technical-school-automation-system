@@ -43,7 +43,7 @@ public class MainDbContext : DbContext, ISpecialitiesContext
 
     public DbSet<ClassScheduleReplacement> ClassScheduleReplacement => Set<ClassScheduleReplacement>();
 
-    public DbSet<Cabinet> Cabinets => Set<Cabinet>();
+    public DbSet<Cabinet> Cabinet => Set<Cabinet>();
 
     public DbSet<Schedule> Schedule => Set<Schedule>();
 

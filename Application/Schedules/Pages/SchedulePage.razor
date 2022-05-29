@@ -9,78 +9,78 @@
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDbContextFactory<AccessDbContext> AccessDbContextFactory
 <MudGrid>
-<MudItem xs="2">
-    <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
-        @if (SelectedSpeciality is not null)
-        {
-            <MudListSubheader>
-                Выбранная специальность:
-                @SelectedSpeciality.Code @SelectedSpeciality.Name
-            </MudListSubheader>
-        }
-        @foreach (var speciality in Specialities)
-        {
-            <MudListItem Text="@speciality.Name" Value="@speciality"/>
-        }
-    </MudList>
-</MudItem>
-@if (SelectedSpeciality is not null)
-{
     <MudItem xs="2">
-        <MudList Clickable="true" SelectedValue="SelectedGroup" SelectedValueChanged="SelectGroupAsync">
-            @if (SelectedGroup is not null)
+        <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
+            @if (SelectedSpeciality is not null)
             {
                 <MudListSubheader>
-                    Выбранная группа:
-                    @SelectedGroup.Name
+                    Выбранная специальность:
+                    @SelectedSpeciality.Code @SelectedSpeciality.Name
                 </MudListSubheader>
             }
-            @foreach (var group in Groups)
+            @foreach (var speciality in Specialities)
             {
-                <MudListItem Text="@group.Name" Value="@group"/>
+                <MudListItem Text="@speciality.Name" Value="@speciality"/>
             }
         </MudList>
     </MudItem>
-    <MudItem xs="8">
-    @if (SelectedSchedule is not null)
+    @if (SelectedSpeciality is not null)
     {
-        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
-        @*конечное расписание для чтения*@
-        <MudTabPanel Text="Расписание с заменами">
-            <MudGrid>
-                <MudItem xs="12">
-                    @*функции расписания*@
-                </MudItem>
-            </MudGrid>
-        </MudTabPanel>
-        @*список замен в расписании*@
-        <MudTabPanel Text="Замены">
-        </MudTabPanel>
-        @*таблица основного расписания*@
-        <MudTabPanel Text="Основное расписание">
-            <MyClassSchedulePanel
-                Teachers="Teachers"
-                Schedule="SelectedSchedule"
-                Subjects="Subjects"
-                MaxNumber="MaxNumber"
-                DayOfWeeks="DayOfWeeks"/>
-        </MudTabPanel>
-        </MudTabs>
+        <MudItem xs="2">
+            <MudList Clickable="true" SelectedValue="SelectedGroup" SelectedValueChanged="SelectGroupAsync">
+                @if (SelectedGroup is not null)
+                {
+                    <MudListSubheader>
+                        Выбранная группа:
+                        @SelectedGroup.Name
+                    </MudListSubheader>
+                }
+                @foreach (var group in Groups)
+                {
+                    <MudListItem Text="@group.Name" Value="@group"/>
+                }
+            </MudList>
+        </MudItem>
+        <MudItem xs="8">
+            @if (SelectedSchedule is not null)
+            {
+                <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
+                    @*конечное расписание для чтения*@
+                    <MudTabPanel Text="Расписание с заменами">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                @*функции расписания*@
+                            </MudItem>
+                        </MudGrid>
+                    </MudTabPanel>
+                    @*список замен в расписании*@
+                    <MudTabPanel Text="Замены">
+                    </MudTabPanel>
+                    @*таблица основного расписания*@
+                    <MudTabPanel Text="Основное расписание">
+                        <MyClassSchedulePanel
+                            Teachers="Teachers"
+                            Schedule="SelectedSchedule"
+                            Subjects="Subjects"
+                            MaxNumber="MaxNumber"
+                            DayOfWeeks="DayOfWeeks"/>
+                    </MudTabPanel>
+                </MudTabs>
+            }
+        </MudItem>
     }
-    </MudItem>
-}
 </MudGrid>
 
 @code {
 
     public List<User> Teachers { get; set; } = new();
-    
+
     private Speciality? SelectedSpeciality { get; set; }
 
     private List<Speciality> Specialities { get; set; } = new();
 
     private List<Group> Groups { get; set; } = new();
-    
+
     private Schedule? SelectedSchedule { get; set; }
 
     private Group? SelectedGroup { get; set; }
