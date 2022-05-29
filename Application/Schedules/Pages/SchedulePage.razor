@@ -57,6 +57,15 @@
                             MaxNumber="MaxNumber"
                             DayOfWeeks="DayOfWeeks"/>
                     </MudTabPanel>
+                    <MudTabPanel Text="Замены на определенную дату">
+                        <MyClassScheduleReplacementPanel
+                            Teachers="Teachers"
+                            Cabinets="Cabinets"
+                            Schedule="SelectedSchedule"
+                            Subjects="Subjects"
+                            MaxNumber="MaxNumber"
+                            DayOfWeeks="DayOfWeeks"/>
+                    </MudTabPanel>
                 </MudTabs>
             }
         </MudItem>
@@ -64,7 +73,7 @@
 </MudGrid>
 
 @code {
-    
+
     public List<Cabinet> Cabinets { get; set; } = null!;
 
     public List<User> Teachers { get; set; } = new();

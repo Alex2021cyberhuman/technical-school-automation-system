@@ -54,9 +54,9 @@
                         <h6>Данные заменяемого элемента расписания</h6>
                         <MudField Label="Недельное разделение">@StringLocalizer[ClassSchedule.WeeksSeparation.ToString()]</MudField>
                         <MudField Label="Дисциплина">@ClassSchedule.Subject.Name</MudField>
-                        <MudField Label="Учитель">@(ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано"))</MudField>
-                        <MudField Label="Дисциплина">@ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано"))</MudField>
-                        <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
+                        <MudField Label="Учитель">@ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано")</MudField>
+                        <MudField Label="Кабинет">@ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано")</MudField>
+                        <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Checked="Form.IsCancel"/>
                         @if (!Form.IsCancel)
                         {
                             <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>

@@ -33,7 +33,7 @@
                         <td>
                             @if (classScheduleReplacement is null)
                             {
-                                if (classSchedule is null)
+                                if (classSchedule is not null)
                                 {
                                     <MyReplaceClassSchedule
                                         ClassSchedule="classSchedule"
@@ -119,6 +119,10 @@
         {
             await using var context = await DbContextFactory.CreateDbContextAsync();
             ClassSchedules = await context.ClassSchedule
+                .Include(x => x.Cabinet)
+                .Include(x => x.Teacher)
+                .Include(x => x.Schedule)
+                .Include(x => x.Subject)
                 .Where(x => x.ScheduleId == Schedule.Id)
                 .Where(x => x.DayOfWeek == SelectedDate.DayOfWeek)
                 .OrderBy(x => x.Number)
@@ -134,6 +138,15 @@
         {
             return;
         }
+        if (dateTime.Value.Date < DateTime.Now.Date)
+        {
+            dateTime = DateTime.Now.Date;
+        }
+        while (!DayOfWeeks.Contains(dateTime.Value.DayOfWeek))
+        {
+            dateTime = dateTime.Value.AddDays(1);
+        }
+        
         var date = DateOnly.FromDateTime(dateTime.Value);
         await using var context = await DbContextFactory.CreateDbContextAsync();
         ClassScheduleReplacements = await context.ClassScheduleReplacement
@@ -142,12 +155,15 @@
             .Include(x => x.Cabinet)
             .Include(x => x.Teacher)
             .Include(x => x.Schedule)
+            .Include(x => x.Subject)
             .Include(x => x.ClassSchedule)
             .ThenInclude(x => x!.Cabinet)
             .Include(x => x.ClassSchedule)
             .ThenInclude(x => x!.Teacher)
             .Include(x => x.ClassSchedule)
             .ThenInclude(x => x!.Schedule)
+            .Include(x => x.ClassSchedule)
+            .ThenInclude(x => x!.Subject)
             .ToListAsync();
         ClassScheduleReplacementCache = ClassScheduleReplacements
             .ToDictionary(x => x.Number, x => x);

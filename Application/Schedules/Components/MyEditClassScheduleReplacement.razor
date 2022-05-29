@@ -76,12 +76,12 @@ else
                             <h6>Данные замененного элемента расписания</h6>
                             <MudField Label="Недельное разделение">@StringLocalizer[ClassScheduleReplacement.ClassSchedule.WeeksSeparation.ToString()]</MudField>
                             <MudField Label="Дисциплина">@ClassScheduleReplacement.ClassSchedule.Subject.Name</MudField>
-                            <MudField Label="Учитель">@(ClassScheduleReplacement.ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано"))</MudField>
-                            <MudField Label="Дисциплина">@ClassScheduleReplacement.ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано"))</MudField>
+                            <MudField Label="Учитель">@ClassScheduleReplacement.ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано")</MudField>
+                            <MudField Label="Кабинет">@ClassScheduleReplacement.ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано")</MudField>
                         }
                         @if (!Form.IsAddition)
                         {
-                            <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
+                            <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary"  @bind-Checked="Form.IsCancel"/>
                         }
                         @if (!Form.IsCancel)
                         {

@@ -79,6 +79,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Все.
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Поле {0} не может быть не указано или содержать только пробелы..
         /// </summary>
         public static string ArgumentIsNullOrWhitespace {
@@ -268,6 +277,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Знаменатель.
+        /// </summary>
+        public static string Divisor {
+            get {
+                return ResourceManager.GetString("Divisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Поле {0} не является e-mail адресом..
         /// </summary>
         public static string EmailAddressAttribute_Invalid {
@@ -318,6 +336,15 @@ namespace Application.Resources {
         public static string FileExtensionsAttribute_Invalid {
             get {
                 return ResourceManager.GetString("FileExtensionsAttribute_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ПТ.
+        /// </summary>
+        public static string Friday {
+            get {
+                return ResourceManager.GetString("Friday", resourceCulture);
             }
         }
         
@@ -412,6 +439,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ПН.
+        /// </summary>
+        public static string Monday {
+            get {
+                return ResourceManager.GetString("Monday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Не зачислять.
         /// </summary>
         public static string NotEnroll {
@@ -435,6 +471,15 @@ namespace Application.Resources {
         public static string NotСonsidered {
             get {
                 return ResourceManager.GetString("NotСonsidered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Числитель.
+        /// </summary>
+        public static string Numerator {
+            get {
+                return ResourceManager.GetString("Numerator", resourceCulture);
             }
         }
         
@@ -538,6 +583,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to СБ.
+        /// </summary>
+        public static string Saturday {
+            get {
+                return ResourceManager.GetString("Saturday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Подписано.
         /// </summary>
         public static string Signed {
@@ -574,6 +628,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ВС.
+        /// </summary>
+        public static string Sunday {
+            get {
+                return ResourceManager.GetString("Sunday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Учитель.
         /// </summary>
         public static string Teacher {
@@ -592,11 +655,29 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ЧТ.
+        /// </summary>
+        public static string Thursday {
+            get {
+                return ResourceManager.GetString("Thursday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Да.
         /// </summary>
         public static string True {
             get {
                 return ResourceManager.GetString("True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ВТ.
+        /// </summary>
+        public static string Tuesday {
+            get {
+                return ResourceManager.GetString("Tuesday", resourceCulture);
             }
         }
         
@@ -741,6 +822,15 @@ namespace Application.Resources {
         public static string Validator_Property_Value_Wrong_Type {
             get {
                 return ResourceManager.GetString("Validator_Property_Value_Wrong_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to СР.
+        /// </summary>
+        public static string Wednesday {
+            get {
+                return ResourceManager.GetString("Wednesday", resourceCulture);
             }
         }
         

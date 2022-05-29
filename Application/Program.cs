@@ -4,6 +4,7 @@ using Application.AdmissionCommittee.Services.EnrolledStudentsTable;
 using Application.AdmissionCommittee.Services.StatementDocument;
 using Application.Common.Services;
 using Application.Data;
+using Application.Schedules.Data;
 using Application.Specialities.Data;
 using Application.Startup;
 using Application.Teachers.Services.MonthProofreadingTeacherLoads;
@@ -38,6 +39,7 @@ MainDbContext.AddToServices(builder.Services, builder.Configuration, builder.Env
 builder.AddAccess();
 builder.Services.AddSingleton<MonthsService>();
 builder.Services.AddMudServices();
+builder.Services.AddSingleton<WeekSeparationService>();
 var app = builder.Build();
 
 app.UseResourceRequestLocalization();
