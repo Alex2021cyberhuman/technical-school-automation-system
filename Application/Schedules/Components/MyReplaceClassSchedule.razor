@@ -56,7 +56,7 @@
                         <MudField Label="Дисциплина">@ClassSchedule.Subject.Name</MudField>
                         <MudField Label="Учитель">@(ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано"))</MudField>
                         <MudField Label="Дисциплина">@ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано"))</MudField>
-                        <MudSwitch Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
+                        <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
                         @if (!Form.IsCancel)
                         {
                             <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>

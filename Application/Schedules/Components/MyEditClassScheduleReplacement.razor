@@ -81,7 +81,7 @@ else
                         }
                         @if (!Form.IsAddition)
                         {
-                            <MudSwitch Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
+                            <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
                         }
                         @if (!Form.IsCancel)
                         {
