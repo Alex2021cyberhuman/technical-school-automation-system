@@ -36,4 +36,6 @@ public class CreateUserForm
     [Display(Name = "Отчество")]
     [MyMaxLength(200)]
     public string SurName { get; set; } = string.Empty;
+
+    public string Profile { get; set; } = string.Empty;
 }

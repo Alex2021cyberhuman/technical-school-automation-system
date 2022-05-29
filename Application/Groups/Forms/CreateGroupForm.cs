@@ -42,7 +42,7 @@ public class CreateGroupForm : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (GraduationYear < EnrollmentYear)
+        if (GraduationYear <= EnrollmentYear)
             yield return new ValidationResult("Год выпуска указан не верно", new[] { nameof(GraduationYear) });
     }
 }

@@ -36,6 +36,7 @@
                         <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" ValidationFor="() => Form.FamilyName"/>
                         <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" ValidationFor="() => Form.FirstName"/>
                         <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
+                        <MyInputComponent Label="Отчество" @bind-Value="@Form.Profile" ValidationFor="() => Form.Profile"/>
                         <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
                         <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
                         <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
@@ -102,7 +103,8 @@
             FamilyName = Form.FamilyName,
             SurName = Form.SurName,
             EmailConfirmed = true,
-            LockoutEnabled = true
+            LockoutEnabled = true,
+            Profile = Form.Profile
         };
         var userPasswordHash = UserManager.PasswordHasher.HashPassword(user, Form.Password);
         user.PasswordHash = userPasswordHash;

@@ -41,6 +41,10 @@ public class MainDbContext : DbContext, ISpecialitiesContext
 
     public DbSet<ClassSchedule> ClassSchedule => Set<ClassSchedule>();
 
+    public DbSet<ClassScheduleReplacement> ClassScheduleReplacement => Set<ClassScheduleReplacement>();
+
+    public DbSet<Cabinet> Cabinets => Set<Cabinet>();
+
     public DbSet<Schedule> Schedule => Set<Schedule>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,7 +55,7 @@ public class MainDbContext : DbContext, ISpecialitiesContext
         {
             e.HasOne(x => x.Group)
                 .WithOne()
-                .HasForeignKey<Schedule>(x => x.Group);
+                .HasForeignKey<Schedule>(x => x.GroupId);
             e.HasMany(x => x.ClassSchedule)
                 .WithOne(x => x.Schedule)
                 .HasForeignKey(x => x.ScheduleId);

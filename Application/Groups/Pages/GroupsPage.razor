@@ -5,6 +5,7 @@
 @using Application.Access.Enums
 @using System.Security.Claims
 @using Application.Data
+@using Application.Specialities.Services
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 <h3>Группы</h3>
 <PageTitle>Группы</PageTitle>
@@ -12,9 +13,13 @@
 <CreateGroupModal OnAfterCreate="OnAfterGroupCreated"/>
 <div class="row">
     <div class="col-12 col-md-4">
+        <EditForm EditContext="EditContext">
+            <MyYearSelector @bind-Value="SelectedYear"/>
+            <MyInputRadioGroup Label="Специальность" @bind-Value="@SelectedSpecialityId" RadioItems="SpecialityRadioItems"/>
+        </EditForm>
     </div>
     <div class="col-12 col-md-8">
-        <MudTable Items="Groups" Hover="true" SortLabel="Сортировать по" Filter="Filter">
+        <MudTable T="Group" Items="Groups" Hover="true" SortLabel="Сортировать по" Filter="Filter">
             <HeaderContent>
                 <MudTh>№ п.п.</MudTh>
                 <MudTh>Название</MudTh>
@@ -42,12 +47,24 @@
 
     private ClaimsPrincipal CurrentUser { get; set; } = new();
 
+    public List<ValueRadioItem<long>> SpecialityRadioItems { get; set; } = new();
+
+    public int SelectedYear { get; set; }
+
+    public long SelectedSpecialityId { get; set; }
+
+    public EditContext EditContext { get; set; } = null!;
+    
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        EditContext = new(this);
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var specialities = await context.GetSpecialitiesAsync();
+        SpecialityRadioItems = specialities;
         await LoadGroupsAsync();
         CurrentUser = (await AuthenticationStateTask).User;
     }
@@ -75,7 +92,8 @@
 
     private bool Filter(Group group)
     {
-        return true;
+        return group.SpecialityId == SelectedSpecialityId && group.EnrollmentYear <= SelectedYear && group.GraduationYear >= SelectedYear;
     }
+
 
 }

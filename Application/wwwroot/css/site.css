@@ -84,3 +84,26 @@ a, .btn-link {
     max-width: 100% !important;
     margin: 1.75rem;
 }
+
+.schedule-cell-solid-item {
+    padding-top: 20px;
+    height: 150px;
+    width: 200px;
+    margin-top: 2px;
+    border-radius: 5px;
+}
+
+.schedule-cell-half-item {
+    height: 75px;
+    width: 200px;
+    margin-top: 1px;
+    border-radius: 5px;
+}
+
+.schedule-cell {
+    height: 152px;
+    width: 200px;
+    font-size: 15px;
+    line-height: 1;
+    margin: 2px;
+}

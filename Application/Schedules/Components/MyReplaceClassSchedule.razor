@@ -1,0 +1,113 @@
+@using Application.Schedules.Data
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Application.Data
+@using Application.Specialities.Data
+@inject IStringLocalizer StringLocalizer
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+
+<MudButton
+    Style="@(ClassSchedule.WeeksSeparation != WeeksSeparationType.All ? "height: 50%" : string.Empty)"
+    Variant="Variant.Outlined"
+    Color="Color.Secondary"
+    OnClick="OnOpen">
+    @ClassSchedule.Subject.Name
+</MudButton>
+
+@if (Visible)
+{
+    <PageTitle>Заменить элемент расписания</PageTitle>
+    <div class="modal fade show" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Заменить элемент расписания</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <EditForm EditContext="EditContext">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <MudField Label="День недели">@StringLocalizer[ClassSchedule.DayOfWeek.ToString()]</MudField>
+                        <MudField Label="Номер урока">@ClassSchedule.Number</MudField>
+                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                    </EditForm>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public ClassSchedule ClassSchedule { get; set; } = null!;
+
+    [Parameter]
+    public DateTime SelectedDate { get; set; }
+    
+    [Parameter]
+    public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<ClassScheduleReplacement> OnReplaceClassSchedule { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
+
+    public ComponentForm Form { get; set; } = null!;
+
+    public EditContext EditContext { get; set; } = null!;
+    
+    public bool Visible { get; set; }
+
+    private void OnCancel()
+    {
+        Visible = false;
+    }
+    
+    private void OnOpen()
+    {
+        Form = new(ClassSchedule);
+        EditContext = new(Form);
+        Visible = true;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!Visible || !EditContext.Validate())
+            return;
+        var replace = new ClassScheduleReplacement
+        {
+            ClassScheduleId = ClassSchedule.Id,
+            ScheduleId = ClassSchedule.ScheduleId,
+            SubjectId = Form.Subject.Id,
+            Date = DateOnly.FromDateTime(SelectedDate),
+            Number = ClassSchedule.Number
+        };
+        
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        context.Add(replace);
+        await context.SaveChangesAsync();
+        replace.Subject = Form.Subject;
+        replace.ClassSchedule = ClassSchedule;
+        OnCancel();
+        await OnReplaceClassSchedule.InvokeAsync(replace);
+    }
+
+    public class ComponentForm
+    {
+        public ComponentForm(ClassSchedule classSchedule)
+        {
+            Subject = classSchedule.Subject;
+        }
+
+        public Subject Subject { get; set; }
+    }
+    
+}

@@ -31,7 +31,7 @@
                         <MySubjectSelector Subjects="Subjects" Required="true" ValueChanged="OnSubjectChangedAsync"/>
                         <MyGroupSelector @bind-Value="Form.Group" Groups="Groups" Required="true"/>
                         <MudField Label="Тип">
-                            <strong>@StringLocalizer[Form.Group?.FinanceEnrolmentType.ToString() ?? string.Empty]</strong>
+                            <strong>@StringLocalizer[Form.Group.FinanceEnrolmentType.ToString()]</strong>
                         </MudField>
                         <MyEnumSelector TValue="TeacherLoadKind" @bind-Value="Form.Kind" Label="Характер" Required="true"/>
                         <MySemesterInput @bind-Value="Form.Semesters"/>

@@ -4,7 +4,7 @@
 @inherits MudBaseInput<TValue?>
 @inject IStringLocalizer StringLocalizer
 
-<MudSelect T="TValue" Label="@(Value.HasValue ? Label : Label + " (все)")" Placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? Label : Placeholder)" AnchorOrigin="Origin.BottomCenter" ValueChanged="CallbackAsync" Required="@Required" ToStringFunc="GetLocalizedString">
+<MudSelect T="TValue" Label="@(Value.HasValue ? Label : Label + " (все)")" Placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? Label : Placeholder)" AnchorOrigin="Origin.BottomCenter" Value="@(Value ?? default)" ValueChanged="CallbackAsync" Required="@Required" ToStringFunc="GetLocalizedString">
     @foreach (var item in Items)
     {
         <MudSelectItem Value="@item"/>
@@ -23,14 +23,17 @@
 
     private FieldIdentifier? Identifier { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
         var enums = Enum.GetValues<TValue>();
         enums = enums.OrderBy(x => GetLocalizedString(x)).ToArray();
         Items = enums;
-        if (Required)
+        if (Required && !Value.HasValue)
+        {
             Value = enums.First();
+        }
+        await ValueChanged.InvokeAsync(Value);
     }
 
     protected override void OnParametersSet()

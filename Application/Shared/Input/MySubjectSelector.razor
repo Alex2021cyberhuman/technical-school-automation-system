@@ -76,7 +76,7 @@ else if (Value != null && SemesterListVisible)
                         {
                             var label = $"Семестр №{semester.Number}";
                             <div class="col-sm-12 col-lg-4">
-                                <MudField Label="@label">@semester.Hours"</MudField>
+                                <MudField Label="@label">@semester.Hours</MudField>
                             </div>
                         }
                     </div>
@@ -106,11 +106,12 @@ else if (Value != null && SemesterListVisible)
 
     public MudTable<Subject>? MudTable { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
+        await base.OnParametersSetAsync();
         if (Value is not null || !Subjects.Any()) return;
         Value = Subjects.First();
+        await ValueChanged.InvokeAsync(Value);
         MudTable?.SetSelectedItem(Value);
     }
 
@@ -136,8 +137,8 @@ else if (Value != null && SemesterListVisible)
     private async Task OnSelectedItemChangedAsync(Subject obj)
     {
         Value = obj;
-        ToggleOpenSubjectList();
         await ValueChanged.InvokeAsync(Value);
+        ToggleOpenSubjectList();
     }
 
 }

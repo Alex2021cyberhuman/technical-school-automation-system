@@ -1,0 +1,212 @@
+@using Application.Schedules.Data
+@using Application.Specialities.Data
+@using Microsoft.EntityFrameworkCore.Internal
+@using Application.Groups.Data
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Localization
+@using Application.Data
+@using Application.Access.Data
+@inject IStringLocalizer StringLocalizer
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+<MudGrid>
+    <MudItem xs="12">
+        <MudSimpleTable Bordered="true">
+            <thead>
+            <tr>
+                <th></th>
+                @foreach (var dayOfWeek in DayOfWeeks)
+                {
+                    <th>@StringLocalizer[dayOfWeek.ToString()]</th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @for (var i = 1; i <= MaxNumber; i++)
+            {
+                var classNumber = i;
+                <tr>
+                    <td>@classNumber</td>
+                    @foreach (var dayOfWeek in DayOfWeeks)
+                    {
+                        var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
+                        @if (classSchedulesOfDayNumber is null || !classSchedulesOfDayNumber.Any())
+                        {
+                            <td>
+                                <div class="schedule-cell">
+                                    <MyAddClassSchedule
+                                        WeeksSeparation="WeeksSeparationType.All"
+                                        CanChangeWeekSeparation="true"
+                                        DayOfWeek="dayOfWeek"
+                                        Number="classNumber"
+                                        Schedule="Schedule"
+                                        Subjects="Subjects"
+                                        Teachers="Teachers"
+                                        OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                </div>
+                            </td>
+                        }
+                        else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
+                        {
+                            var item = classSchedulesOfDayNumber.First();
+                            <td>
+                                <div class="schedule-cell">
+                                    <MyEditClassSchedule
+                                        CanChangeWeekSeparation="true"
+                                        ClassSchedule="item"
+                                        Subjects="Subjects"
+                                        Teachers="Teachers"
+                                        OnClassScheduleEdited="OnClassScheduleEdited"
+                                        OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Odd);
+                            var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Even);
+                            <td>
+                                <div class="schedule-cell">
+                                    @if (oddItem is not null)
+                                    {
+                                        <MyEditClassSchedule
+                                            CanChangeWeekSeparation="@(evenItem is null)"
+                                            ClassSchedule="oddItem"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            OnClassScheduleEdited="OnClassScheduleEdited"
+                                            OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                    }
+                                    else
+                                    {
+                                        <MyAddClassSchedule
+                                            WeeksSeparation="WeeksSeparationType.Odd"
+                                            CanChangeWeekSeparation="@(evenItem is null)"
+                                            DayOfWeek="dayOfWeek"
+                                            Number="classNumber"
+                                            Schedule="Schedule"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                    }
+                                    @if (evenItem is not null)
+                                    {
+                                        <MyEditClassSchedule
+                                            CanChangeWeekSeparation="@(oddItem is null)"
+                                            ClassSchedule="evenItem"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            OnClassScheduleEdited="OnClassScheduleEdited"
+                                            OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                    }
+                                    else
+                                    {
+                                        <MyAddClassSchedule
+                                            WeeksSeparation="WeeksSeparationType.Even"
+                                            CanChangeWeekSeparation="@(oddItem is null)"
+                                            DayOfWeek="dayOfWeek"
+                                            Number="classNumber"
+                                            Schedule="Schedule"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                    }
+                                </div>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        </MudSimpleTable>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+
+    [Parameter]
+    public List<User> Teachers { get; set; } = new();
+
+    [Parameter]
+    public Schedule Schedule { get; set; } = null!;
+
+    [Parameter]
+    public List<Subject> Subjects { get; set; } = new();
+
+    [Parameter]
+    public int MaxNumber { get; set; }
+
+    [Parameter]
+    public DayOfWeek[] DayOfWeeks { get; set; } = null!;
+
+    private List<ClassSchedule> ClassSchedules { get; set; } = new();
+
+    private Dictionary<(int number, DayOfWeek dayOfWeek), List<ClassSchedule>> ClassScheduleCache { get; set; } = new();
+
+    private void OnClassScheduleCreated(ClassSchedule classSchedule)
+    {
+        ClassSchedules.Add(classSchedule);
+        var scheduleCell = (classSchedule.Number, classSchedule.DayOfWeek);
+        if (ClassScheduleCache.ContainsKey(scheduleCell))
+        {
+            ClassScheduleCache[scheduleCell].Add(classSchedule);
+        }
+        else
+        {
+            ClassScheduleCache[scheduleCell] = new()
+            {
+                classSchedule
+            };
+        }
+        StateHasChanged();
+    }
+
+    private void OnClassScheduleEdited(ClassSchedule classSchedule)
+    {
+        ClassSchedules[ClassSchedules.FindIndex(x => x.Id == classSchedule.Id)] = classSchedule;
+        var scheduleCell = (classSchedule.Number, classSchedule.DayOfWeek);
+        if (ClassScheduleCache.ContainsKey(scheduleCell))
+        {
+            var list = ClassScheduleCache[scheduleCell];
+            list[list.FindIndex(x => x.Id == classSchedule.Id)] = classSchedule;
+        }
+        else
+        {
+            ClassScheduleCache[scheduleCell] = new()
+            {
+                classSchedule
+            };
+        }
+        StateHasChanged();
+    }
+
+    private void OnClassScheduleRemoved(ClassSchedule classSchedule)
+    {
+        ClassSchedules.RemoveAll(x => x.Id == classSchedule.Id);
+        ClassScheduleCache[(classSchedule.Number, classSchedule.DayOfWeek)].RemoveAll(x => x.Id == classSchedule.Id);
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if (ClassSchedules.Count == 0 || ClassSchedules.First().ScheduleId != Schedule.Id)
+        {
+            await using var context = await DbContextFactory.CreateDbContextAsync();
+            ClassSchedules = await context.ClassSchedule
+                .Where(x => x.ScheduleId == Schedule.Id)
+                .OrderBy(x => x.Number)
+                .ThenBy(x => x.DayOfWeek)
+                .Include(x => x.Subject)
+                .Include(x => x.Teacher)
+                .Include(x => x.Schedule)
+                .Include(x => x.Cabinet)
+                .ToListAsync();
+            ClassScheduleCache = ClassSchedules
+                .GroupBy(x => (x.Number, x.DayOfWeek))
+                .ToDictionary(x => x.Key, x => x.ToList());
+        }
+    }
+
+
+}

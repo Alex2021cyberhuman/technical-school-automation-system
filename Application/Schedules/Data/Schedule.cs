@@ -1,4 +1,4 @@
-using DocumentFormat.OpenXml.Vml;
+using Application.Groups.Data;
 
 namespace Application.Schedules.Data;
 
@@ -11,17 +11,4 @@ public class Schedule
     public Group Group { get; set; } = null!;
 
     public List<ClassSchedule> ClassSchedule { get; set; } = null!;
-}
-
-public class ClassScheduleReplacement
-{
-    public long Id { get; set; }
-    
-    public long? ClassScheduleId { get; set; }
-
-    public ClassSchedule? ClassSchedule { get; set; }
-
-    public DateTime Date { get; set; }
-
-    public int Number { get; set; }
 }

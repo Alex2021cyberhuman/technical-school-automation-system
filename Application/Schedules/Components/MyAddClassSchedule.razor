@@ -1,13 +1,18 @@
 @using System.ComponentModel.DataAnnotations
+@using Application.Access.Data
 @using Application.Data
 @using Application.Schedules.Data
 @using Application.Schedules.Forms
 @using Application.Specialities.Data
+@using Microsoft.AspNetCore.Components
+@using Microsoft.CodeAnalysis.Differencing
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+
 <MudIconButton
+    Class="@ClassCss"
     Variant="Variant.Outlined"
     Color="Color.Secondary"
     OnClick="OnOpen"
@@ -33,18 +38,21 @@
                         <MudField Label="Номер урока">@Number</MudField>
                         @if (CanChangeWeekSeparation)
                         {
-                            <MyEnumSelector TValue="WeeksSeparationType" @bind-Value="Form.WeeksSeparation" Label="Недельное разделение"/>
+                            <MyEnumSelector TValue="WeeksSeparationType" @bind-Value="Form.WeeksSeparation" Label="Недельное разделение" Required="true"/>
                         }
                         else
                         {
                             <MudField Label="Недельное разделение">@Form.WeeksSeparation</MudField>
                         }
-                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject"/>
+                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                        <MyTeacherPicker
+                            @bind-Value="Form.Teacher"
+                            Teachers="Teachers"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Создать</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Сохранить</button>
                 </div>
             </div>
         </div>
@@ -52,6 +60,9 @@
 }
 
 @code {
+
+    [Parameter]
+    public List<User> Teachers { get; set; } = new();
 
     [Parameter]
     public WeeksSeparationType WeeksSeparation { get; set; }
@@ -74,11 +85,15 @@
     [Parameter]
     public EventCallback<ClassSchedule> OnClassScheduleCreated { get; set; }
 
-    public AddClassScheduleForm Form { get; set; } = null!;
+    public AddClassScheduleForm? Form { get; set; }
 
     public EditContext EditContext { get; set; } = null!;
 
     public bool Visible { get; set; }
+
+    public string ClassCss => WeeksSeparation != WeeksSeparationType.All ? "schedule-cell-half-item" : "schedule-cell-solid-item";
+
+    public ValidationMessageStore MessageStore { get; set; } = null!;
 
     private void OnOpen()
     {
@@ -87,6 +102,7 @@
             WeeksSeparation = WeeksSeparation
         };
         EditContext = new EditContext(Form);
+        MessageStore = new ValidationMessageStore(EditContext);
         Visible = true;
     }
 
@@ -97,16 +113,32 @@
 
     private async Task OnSubmitAsync()
     {
-        if (!Visible || !EditContext.Validate())
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        MessageStore.Clear();
+        var valid = EditContext.Validate();
+        var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, new()
+        {
+            DayOfWeek = DayOfWeek,
+            Number = Number,
+            ReplacementMode = false,
+            WeekSeparation = Form!.WeeksSeparation.GetValueOrDefault()
+        }, Form.Teacher);
+        if (!validTeacherPick)
+        {
+            valid = validTeacherPick && valid;
+            MessageStore.Add(FieldIdentifier.Create(() => Form.Teacher), teacherPickError);
+            EditContext.NotifyValidationStateChanged();
+        }
+        if (!Visible || !valid)
             return;
         var classSchedule = Form.ToClassSchedule(
             DayOfWeek,
             Number,
             Schedule.Id);
-        await using var context = await DbContextFactory.CreateDbContextAsync();
         context.Add(classSchedule);
         await context.SaveChangesAsync();
         classSchedule.Subject = Form.Subject!;
+        classSchedule.Teacher = Form.Teacher;
         OnCancel();
         await OnClassScheduleCreated.InvokeAsync(classSchedule);
     }

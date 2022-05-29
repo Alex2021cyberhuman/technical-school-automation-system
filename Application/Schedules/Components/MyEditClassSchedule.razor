@@ -1,27 +1,48 @@
 @using System.ComponentModel.DataAnnotations
+@using Application.Access.Data
 @using Application.Data
 @using Application.Schedules.Data
 @using Application.Schedules.Forms
 @using Application.Specialities.Data
+@using Microsoft.AspNetCore.Components
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
-<MudButton
-    Variant="Variant.Outlined"
-    Color="Color.Primary"
-    OnClick="OnOpen">
-    @ClassSchedule.Subject.Name
-</MudButton>
+@inject IDialogService DialogService
+@* <MudButton *@
+@*     Class="@ClassCss" *@
+@*     Variant="Variant.Outlined" *@
+@*     Color="Color.Primary" *@
+@*     OnClick="OnOpen"> *@
+@*     @ClassSchedule.Subject.Name *@
+@* </MudButton> *@
+
+<div class="@ClassCss" @onclick="OnOpen">
+    <strong>
+        @ClassSchedule.Subject.Name
+    </strong>
+    @if (ClassSchedule.Cabinet != null)
+    {
+        <small>
+            @ClassSchedule.Cabinet.Name
+        </small>
+    }
+    <br/>
+    @if (ClassSchedule.Teacher != null)
+    {
+        <i>@ClassSchedule.Teacher.Initials</i>
+    }
+</div>
 
 @if (Visible)
 {
-    <PageTitle>Добавить элемент расписания</PageTitle>
+    <PageTitle>Редактировать элемент расписания</PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Добавить элемент расписания</h5>
+                    <h5 class="modal-title">Редактировать элемент расписания</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -34,18 +55,22 @@
                         <MudField Label="Номер урока">@ClassSchedule.Number</MudField>
                         @if (CanChangeWeekSeparation)
                         {
-                            <MyEnumSelector TValue="WeeksSeparationType" @bind-Value="Form.WeeksSeparation" Label="Недельное разделение"/>
+                            <MyEnumSelector TValue="WeeksSeparationType" @bind-Value="Form.WeeksSeparation" Label="Недельное разделение" Required="true"/>
                         }
                         else
                         {
                             <MudField Label="Недельное разделение">@Form.WeeksSeparation</MudField>
                         }
-                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" />
+                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                        <MyTeacherPicker
+                            @bind-Value="Form.Teacher"
+                            Teachers="Teachers"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Создать</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Сохранить</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnDeleteAsync">Удалить</button>
                 </div>
             </div>
         </div>
@@ -55,27 +80,38 @@
 @code {
 
     [Parameter]
+    public List<User> Teachers { get; set; } = new();
+
+    [Parameter]
     public bool CanChangeWeekSeparation { get; set; }
 
     [Parameter]
     public ClassSchedule ClassSchedule { get; set; } = null!;
-    
+
     [Parameter]
     public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
-    
+
     [Parameter]
-    public EventCallback<ClassSchedule> OnClassScheduleEdited { get; set; }
+    public EventCallback<ClassSchedule> OnClassScheduleEdited { get; set; } = EventCallback<ClassSchedule>.Empty;
+
+    [Parameter]
+    public EventCallback<ClassSchedule> OnClassScheduleRemoved { get; set; } = EventCallback<ClassSchedule>.Empty;
 
     public EditClassScheduleForm Form { get; set; } = null!;
-    
+
     public EditContext EditContext { get; set; } = null!;
-    
+
     public bool Visible { get; set; }
-    
+
+    public string ClassCss => ClassSchedule.WeeksSeparation != WeeksSeparationType.All ? "schedule-cell-half-item" : "schedule-cell-solid-item";
+
+    public ValidationMessageStore MessageStore { get; set; } = null!;
+
     private void OnOpen()
     {
         Form = new EditClassScheduleForm(ClassSchedule);
         EditContext = new EditContext(Form);
+        MessageStore = new ValidationMessageStore(EditContext);
         Visible = true;
     }
 
@@ -86,26 +122,66 @@
 
     private async Task OnSubmitAsync()
     {
-        if (!Visible || !EditContext.Validate())
-            return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
+        MessageStore.Clear();
+        var valid = EditContext.Validate();
+        var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, new()
+        {
+            DayOfWeek = ClassSchedule.DayOfWeek,
+            Number = ClassSchedule.Number,
+            ReplacementMode = false,
+            WeekSeparation = Form.WeeksSeparation.GetValueOrDefault(),
+            ClassScheduleId = ClassSchedule.Id
+        }, Form.Teacher);
+        if (!validTeacherPick)
+        {
+            valid = validTeacherPick;
+            MessageStore.Add(FieldIdentifier.Create(() => Form.Teacher), teacherPickError);
+            EditContext.NotifyValidationStateChanged();
+        }
+        if (!Visible || !valid)
+            return;
         var dbClassSchedule = await context.ClassSchedule.FirstOrDefaultAsync(x => x.Id == ClassSchedule.Id);
         if (dbClassSchedule is null)
         {
             OnCancel();
             return;
         }
-        
-        dbClassSchedule.WeeksSeparation = Form.WeeksSeparation;
+
+        dbClassSchedule.WeeksSeparation = Form.WeeksSeparation!.Value;
         dbClassSchedule.SubjectId = Form.Subject.Id;
-        
-        ClassSchedule.WeeksSeparation = Form.WeeksSeparation;
+        dbClassSchedule.TeacherId = Form.Teacher?.Id;
+
+        ClassSchedule.WeeksSeparation = Form.WeeksSeparation.Value;
         ClassSchedule.SubjectId = Form.Subject.Id;
         ClassSchedule.Subject = Form.Subject;
-        
+        ClassSchedule.TeacherId = Form.Teacher?.Id;
+        ClassSchedule.Teacher = Form.Teacher;
+
         await context.SaveChangesAsync();
         OnCancel();
         await OnClassScheduleEdited.InvokeAsync(ClassSchedule);
+    }
+
+    private async Task OnDeleteAsync()
+    {
+        var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");
+        if (!result.HasValue || !result.Value)
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbClassSchedule = await context.ClassSchedule.FirstOrDefaultAsync(x => x.Id == ClassSchedule.Id);
+        if (dbClassSchedule is null)
+        {
+            OnCancel();
+            await OnClassScheduleRemoved.InvokeAsync(ClassSchedule);
+            return;
+        }
+        context.Remove(dbClassSchedule);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnClassScheduleRemoved.InvokeAsync(ClassSchedule);
     }
 
 }

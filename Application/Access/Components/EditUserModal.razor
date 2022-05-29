@@ -38,6 +38,7 @@
                         <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
                         <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
                         <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
+                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile" ValidationFor="() => Form.Profile"/>
                         <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                         <MyInputCheckBox Label="Заблокировать" @bind-Value="Form.Lockout"/>
                         @if (Form.Lockout)
@@ -111,6 +112,7 @@
         Form.FamilyName = User.FirstName;
         Form.SurName = User.FirstName;
         Form.RoleNames = userRoles;
+        Form.Profile = User.Profile;
         Visible = true;
     }
 
@@ -125,6 +127,7 @@
         user.FirstName = Form.FirstName;
         user.FamilyName = Form.FamilyName;
         user.SurName = Form.SurName;
+        user.Profile = Form.Profile;
         user.EmailConfirmed = true;
         user.LockoutEnabled = true;
         if (!string.IsNullOrWhiteSpace(Form.Password) &&

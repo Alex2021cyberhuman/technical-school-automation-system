@@ -35,12 +35,12 @@
 
     private FieldIdentifier? Identifier { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
+        await base.OnParametersSetAsync();
         if (Value == default)
         {
-            Value = MaximumYear;
+            await SetValueAsync(MaximumYear);
         }
         if (ValueExpression is not null)
         {
@@ -67,7 +67,11 @@
 
     private async Task OnValueChangedAsync(int year)
     {
-        await SetValueAsync(Value);
+        if (Value == year)
+            return;
+        
+        Value = year;
+        await ValueChanged.InvokeAsync(Value);
         if (Identifier.HasValue && CascadedEditContext is not null)
         {
             CascadedEditContext.NotifyFieldChanged(Identifier.Value);
