@@ -19,14 +19,24 @@
         Color="Color.Primary"
         OnClick="OnOpen">
         <div class="replacements-cell-text">
-            <strong>
-                Замена
-            </strong>
+            @if (ClassScheduleReplacement.ClassSchedule != null)
+            {
+                <strong>
+                    Замена
+                </strong>
+                
+            }
+            else
+            {
+                <strong>
+                    Добавление
+                </strong>
+            }
             @ClassScheduleReplacement.Subject!.Name
             @if (ClassScheduleReplacement.Cabinet != null)
             {
                 <small>
-                    (@ClassScheduleReplacement.Cabinet.Name)
+                    (@ClassScheduleReplacement.Cabinet.Code)
                 </small>
             }
             <br/>

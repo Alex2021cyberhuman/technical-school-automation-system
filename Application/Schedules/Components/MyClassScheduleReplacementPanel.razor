@@ -10,7 +10,7 @@
 <MudContainer>
     <MudGrid>
         <MudItem xs="12">
-            <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync"/>
+            <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync" Disabled="LoadingDate"/>
         </MudItem>
         <MudItem xs="12">
             <MudSimpleTable Bordered="true">
@@ -25,46 +25,48 @@
                 {
                     var classNumber = i;
                     var classSchedule =
-                        ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek:SelectedDate.DayOfWeek, WeeksSeparationType.All)) ??
-                        ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek:SelectedDate.DayOfWeek, CurrentWeekSeparation));
+                        ClassScheduleCache.GetValueOrDefault((classNumber, SelectedDate.DayOfWeek, WeeksSeparationType.All)) ??
+                        ClassScheduleCache.GetValueOrDefault((classNumber, SelectedDate.DayOfWeek, CurrentWeekSeparation));
                     var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
                     <tr>
                         <td>@classNumber</td>
                         <td>
-                            @if (classScheduleReplacement is null)
-                            {
-                                if (classSchedule is not null)
+                            <div class="replacements-cell">
+                                @if (classScheduleReplacement is null)
                                 {
-                                    <MyReplaceClassSchedule
-                                        ClassSchedule="classSchedule"
-                                        Cabinets="Cabinets"
-                                        Subjects="Subjects"
-                                        Teachers="Teachers"
-                                        SelectedDate="SelectedDate"
-                                        OnReplaceClassSchedule="OnReplaceClassSchedule"/>
+                                    if (classSchedule is not null)
+                                    {
+                                        <MyReplaceClassSchedule
+                                            ClassSchedule="classSchedule"
+                                            Cabinets="Cabinets"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            SelectedDate="SelectedDate"
+                                            OnReplaceClassSchedule="OnReplaceClassSchedule"/>
+                                    }
+                                    else
+                                    {
+                                        <MyCreateAdditionClassSchedule
+                                            Schedule="Schedule"
+                                            Cabinets="Cabinets"
+                                            Subjects="Subjects"
+                                            Teachers="Teachers"
+                                            SelectedDate="SelectedDate"
+                                            Number="classNumber"
+                                            OnClassScheduleReplacementCreated="OnClassScheduleReplacementCreated"/>
+                                    }
                                 }
                                 else
                                 {
-                                    <MyCreateAdditionClassSchedule
-                                        Schedule="Schedule"
+                                    <MyEditClassScheduleReplacement
                                         Cabinets="Cabinets"
                                         Subjects="Subjects"
                                         Teachers="Teachers"
-                                        SelectedDate="SelectedDate"
-                                        Number="classNumber"
-                                        OnClassScheduleReplacementCreated="OnClassScheduleReplacementCreated"/>
+                                        ClassScheduleReplacement="classScheduleReplacement"
+                                        OnEditClassScheduleReplacement="OnEditClassScheduleReplacement"
+                                        OnClassScheduleReplacementRemoved="OnClassScheduleReplacementRemoved"/>
                                 }
-                            }
-                            else
-                            {
-                                <MyEditClassScheduleReplacement
-                                    Cabinets="Cabinets"
-                                    Subjects="Subjects"
-                                    Teachers="Teachers"
-                                    ClassScheduleReplacement="classScheduleReplacement"
-                                    OnEditClassScheduleReplacement="OnEditClassScheduleReplacement"
-                                    OnClassScheduleReplacementRemoved="OnClassScheduleReplacementRemoved"/>
-                            }
+                            </div>
                         </td >
                     </tr>
                 }
@@ -106,6 +108,8 @@
 
     private Dictionary<int, ClassScheduleReplacement> ClassScheduleReplacementCache { get; set; } = new();
 
+    public bool LoadingDate { get; set; }
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -134,10 +138,11 @@
 
     private async Task ChangeDateAsync(DateTime? dateTime)
     {
-        if (!dateTime.HasValue)
+        if (LoadingDate || !dateTime.HasValue)
         {
             return;
         }
+        LoadingDate = true;
         if (dateTime.Value.Date < DateTime.Now.Date)
         {
             dateTime = DateTime.Now.Date;
@@ -146,7 +151,7 @@
         {
             dateTime = dateTime.Value.AddDays(1);
         }
-        
+
         var date = DateOnly.FromDateTime(dateTime.Value);
         await using var context = await DbContextFactory.CreateDbContextAsync();
         ClassScheduleReplacements = await context.ClassScheduleReplacement
@@ -168,8 +173,9 @@
         ClassScheduleReplacementCache = ClassScheduleReplacements
             .ToDictionary(x => x.Number, x => x);
 
-        SelectedDate = date.ToDateTime(TimeOnly.MinValue);
         CurrentWeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(SelectedDate);
+        LoadingDate = false;
+        SelectedDate = date.ToDateTime(TimeOnly.MinValue);
     }
 
     private void OnClassScheduleReplacementRemoved(ClassScheduleReplacement classScheduleReplacement)

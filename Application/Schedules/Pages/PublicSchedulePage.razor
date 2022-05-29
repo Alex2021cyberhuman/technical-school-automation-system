@@ -1,0 +1,454 @@
+@page "/schedule"
+@page "/schedule/{GroupId:long}"
+@attribute [Authorize(Policy = PolicyIdentifiers.ScheduleManagers)]
+@using Application.Schedules.Data
+@using Application.Specialities.Data
+@using Application.Groups.Data
+@using Microsoft.EntityFrameworkCore
+@using Application.Data
+@using Application.Access.Enums
+@using Microsoft.Extensions.Localization
+@inject IDbContextFactory<MainDbContext> DbContextFactory
+@inject IStringLocalizer StringLocalizer
+@inject WeekSeparationService WeekSeparationService
+@inject NavigationManager NavigationManager
+<PageTitle>Расписание</PageTitle>
+<h3>Расписание</h3>
+<MudGrid>
+<MudItem xs="12">
+    <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
+        @if (SelectedSpeciality is not null)
+        {
+            <MudListSubheader>
+                Выбранная специальность:
+                @SelectedSpeciality.Code @SelectedSpeciality.Name
+            </MudListSubheader>
+        }
+        @foreach (var speciality in Specialities)
+        {
+            <MudListItem Text="@speciality.Name" Value="@speciality"/>
+        }
+    </MudList>
+</MudItem>
+@if (SelectedSpeciality is not null)
+{
+    <MudItem xs="12">
+        <MudList Clickable="true" SelectedValue="SelectedGroup" SelectedValueChanged="SelectGroupAsync">
+            @if (SelectedGroup is not null)
+            {
+                <MudListSubheader>
+                    Выбранная группа:
+                    @SelectedGroup.Name
+                </MudListSubheader>
+            }
+            @foreach (var group in Groups)
+            {
+                <MudListItem Text="@group.Name" Value="@group"/>
+            }
+        </MudList>
+    </MudItem>
+    <MudItem xs="12">
+    @if (SelectedSchedule is not null)
+    {
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
+        <MudTabPanel Text="Основное расписание">
+            <MudContainer>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudSimpleTable Bordered="true">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                @foreach (var dayOfWeek in DayOfWeeks)
+                                {
+                                    <th>@StringLocalizer[dayOfWeek.ToString()]</th>
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @for (var i = 1; i <= MaxNumber; i++)
+                            {
+                                var classNumber = i;
+                                <tr>
+                                    <td>@classNumber</td>
+                                    @foreach (var dayOfWeek in DayOfWeeks)
+                                    {
+                                        var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
+                                        @if (classSchedulesOfDayNumber is null ||
+                                             !classSchedulesOfDayNumber.Any())
+                                        {
+                                            <td>
+                                                <div class="schedule-cell">
+                                                    <div class="schedule-cell-solid-item">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                        else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
+                                        {
+                                            var item = classSchedulesOfDayNumber.First();
+                                            <td>
+                                                <div class="schedule-cell">
+                                                    <div class="schedule-cell-text schedule-cell-solid-item">
+                                                        <strong>
+                                                            @item.Subject.Name
+                                                        </strong>
+                                                        @if (item.Cabinet != null)
+                                                        {
+                                                            <small>
+                                                                (@item.Cabinet.Code)
+                                                            </small>
+                                                        }
+                                                        <br/>
+                                                        @if (item.Teacher != null)
+                                                        {
+                                                            <i>@item.Teacher.Initials</i>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Divisor);
+                                            var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Numerator);
+                                            <td>
+                                                <div class="schedule-cell">
+                                                    @if (oddItem is not null)
+                                                    {
+                                                        <div class="schedule-cell-text schedule-cell-half-item">
+                                                            <strong>
+                                                                @oddItem.Subject.Name
+                                                            </strong>
+                                                            @if (oddItem.Cabinet != null)
+                                                            {
+                                                                <small>
+                                                                    (@oddItem.Cabinet.Code)
+                                                                </small>
+                                                            }
+                                                            <br/>
+                                                            @if (oddItem.Teacher != null)
+                                                            {
+                                                                <i>@oddItem.Teacher.Initials</i>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="schedule-cell-solid-item">
+                                                        </div>
+                                                    }
+                                                    @if (evenItem is not null)
+                                                    {
+                                                        <div class="schedule-cell-text schedule-cell-half-item">
+                                                            <strong>
+                                                                @evenItem.Subject.Name
+                                                            </strong>
+                                                            @if (evenItem.Cabinet != null)
+                                                            {
+                                                                <small>
+                                                                    (@evenItem.Cabinet.Code)
+                                                                </small>
+                                                            }
+                                                            <br/>
+                                                            @if (evenItem.Teacher != null)
+                                                            {
+                                                                <i>@evenItem.Teacher.Initials</i>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="schedule-cell-solid-item">
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        </MudTabPanel>
+        <MudTabPanel Text="Расписание на определенную дату">
+            <MudContainer>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync" Disabled="LoadingDate"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSimpleTable Bordered="true">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @for (var i = 1; i <= MaxNumber; i++)
+                            {
+                                var classNumber = i;
+                                var classScheduleList =
+                                    ClassScheduleCache.GetValueOrDefault((classNumber, SelectedDate.DayOfWeek));
+                                var classSchedule = classScheduleList?.SingleOrDefault(
+                                    x => x.WeeksSeparation == WeeksSeparationType.All ||
+                                         x.WeeksSeparation == CurrentWeekSeparation);
+                                var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
+                                <tr>
+                                    <td>@classNumber</td>
+                                    <td>
+                                        <div class="replacements-cell">
+                                            @if (classScheduleReplacement is null)
+                                            {
+                                                if (classSchedule is not null)
+                                                {
+                                                    <div
+                                                        class="replacements-cell-solid-item">
+                                                        <div class="replacements-cell-text">
+                                                            <strong>
+                                                                @classSchedule.Subject.Name
+                                                            </strong>
+                                                            @if (classSchedule.Cabinet != null)
+                                                            {
+                                                                <small>
+                                                                    (@classSchedule.Cabinet.Code)
+                                                                </small>
+                                                            }
+                                                            <br/>
+                                                            @if (classSchedule.Teacher != null)
+                                                            {
+                                                                <i>@classSchedule.Teacher.Initials</i>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="replacements-cell-solid-item">
+                                                        <div class="replacements-cell-text">
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (!classScheduleReplacement.IsCancel)
+                                                {
+                                                    <div class="replacements-cell-solid-item">
+                                                        <div class="replacements-cell-text">
+                                                            @if (classScheduleReplacement.ClassScheduleId.HasValue)
+                                                            {
+                                                                <strong>
+                                                                    Замена
+                                                                </strong>
+                                                            }
+                                                            else
+                                                            {
+                                                                <strong>
+                                                                    Добавление
+                                                                </strong>
+                                                            }
+                                                            @classScheduleReplacement.Subject!.Name
+                                                            @if (classScheduleReplacement.Cabinet != null)
+                                                            {
+                                                                <small>
+                                                                    (@classScheduleReplacement.Cabinet.Code)
+                                                                </small>
+                                                            }
+                                                            <br/>
+                                                            @if (classScheduleReplacement.Teacher != null)
+                                                            {
+                                                                <i>@classScheduleReplacement.Teacher.Initials</i>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div
+                                                        class="replacements-cell-solid-item">
+                                                        <div class="replacements-cell-text">
+                                                            <strong>
+                                                                Отмена
+                                                            </strong>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </td >
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        </MudTabPanel>
+        </MudTabs>
+    }
+    </MudItem>
+}
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public long? GroupId { get; set; }
+
+    public DateTime SelectedDate { get; set; } = DateTime.Now;
+
+    private Speciality? SelectedSpeciality { get; set; }
+
+    private List<Speciality> Specialities { get; set; } = new();
+
+    private List<Group> Groups { get; set; } = new();
+
+    private Schedule? SelectedSchedule { get; set; }
+
+    private Group? SelectedGroup { get; set; }
+
+    private int MaxNumber { get; } = 8;
+
+    public Dictionary<(int Number, DayOfWeek DayOfWeek), List<ClassSchedule>> ClassScheduleCache { get; set; } = null!;
+
+    private List<ClassScheduleReplacement> ClassScheduleReplacements { get; set; } = new();
+
+    private Dictionary<int, ClassScheduleReplacement> ClassScheduleReplacementCache { get; set; } = new();
+
+    public List<ClassSchedule> ClassSchedules { get; set; } = null!;
+
+    public WeeksSeparationType CurrentWeekSeparation { get; set; }
+
+    public bool LoadingDate { get; set; }
+
+    private DayOfWeek[] DayOfWeeks { get; } = {
+        DayOfWeek.Monday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Friday,
+        DayOfWeek.Saturday
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+
+        Specialities = await context.Speciality
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+        if (!GroupId.HasValue)
+            return;
+        var group = await context.Group.SingleOrDefaultAsync(x => x.Id == GroupId.Value);
+        if (group is null)
+            return;
+        var selectedSpeciality = Specialities.First(x => x.Id == group.SpecialityId);
+        await SelectSpecialityAsync(selectedSpeciality);
+        await SelectGroupAsync(Groups.First(x => x.Id == GroupId.Value));
+    }
+
+    private async Task SelectSpecialityAsync(object obj)
+    {
+        if (obj is not Speciality speciality ||
+            ReferenceEquals(speciality, SelectedSpeciality))
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var year = DateTime.Today.Year;
+        Groups = await context.Group
+            .AsNoTracking()
+            .Where(x => x.SpecialityId == speciality.Id)
+            .Where(x => x.GraduationYear >= year)
+            .OrderBy(x => x.EnrollmentYear)
+            .ThenBy(x => x.Name)
+            .ToListAsync();
+        SelectedSpeciality = speciality;
+        SelectedGroup = null;
+        SelectedSchedule = null;
+    }
+
+    private async Task SelectGroupAsync(object obj)
+    {
+        if (obj is not Group group ||
+            ReferenceEquals(group, SelectedGroup))
+        {
+            return;
+        }
+        var oldGroup = SelectedGroup;
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var schedule = await context.Schedule.FirstOrDefaultAsync(x => x.GroupId == group.Id);
+        if (schedule is null)
+        {
+            schedule = new()
+            {
+                GroupId = group.Id
+            };
+            context.Add(schedule);
+            await context.SaveChangesAsync();
+        }
+        SelectedSchedule = schedule;
+        SelectedGroup = group;
+        ClassSchedules = await context.ClassSchedule
+            .Where(x => x.ScheduleId == schedule.Id)
+            .OrderBy(x => x.Number)
+            .ThenBy(x => x.DayOfWeek)
+            .Include(x => x.Subject)
+            .Include(x => x.Teacher)
+            .Include(x => x.Schedule)
+            .Include(x => x.Cabinet)
+            .ToListAsync();
+        ClassScheduleCache = ClassSchedules
+            .GroupBy(x => (x.Number, x.DayOfWeek))
+            .ToDictionary(x => x.Key, x => x.ToList());
+        await ChangeDateAsync(DateTime.Now.Date);
+        if (oldGroup is not null && oldGroup.Id != group.Id)
+        {
+            NavigationManager.NavigateTo($"/schedule/{group.Id}");
+        }
+    }
+
+    private async Task ChangeDateAsync(DateTime? dateTime)
+    {
+        if (SelectedSchedule is null ||
+            LoadingDate ||
+            !dateTime.HasValue || (
+            ClassScheduleReplacements.FirstOrDefault()?.ScheduleId == SelectedSchedule.Id &&
+            ClassScheduleReplacements.FirstOrDefault()?.Date == DateOnly.FromDateTime(dateTime.Value)))
+        {
+            return;
+        }
+        LoadingDate = true;
+        if (dateTime.Value.Date < DateTime.Now.Date)
+        {
+            dateTime = DateTime.Now.Date;
+        }
+        while (!DayOfWeeks.Contains(dateTime.Value.DayOfWeek))
+        {
+            dateTime = dateTime.Value.AddDays(1);
+        }
+
+        var date = DateOnly.FromDateTime(dateTime.Value);
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        ClassScheduleReplacements = await context.ClassScheduleReplacement
+            .Where(x => x.ScheduleId == SelectedSchedule!.Id)
+            .Where(x => x.Date == date)
+            .Include(x => x.Cabinet)
+            .Include(x => x.Teacher)
+            .Include(x => x.Schedule)
+            .Include(x => x.Subject)
+            .ToListAsync();
+        ClassScheduleReplacementCache = ClassScheduleReplacements
+            .ToDictionary(x => x.Number, x => x);
+
+        CurrentWeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(SelectedDate);
+        LoadingDate = false;
+        SelectedDate = date.ToDateTime(TimeOnly.MinValue);
+    }
+
+}
