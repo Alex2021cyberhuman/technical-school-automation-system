@@ -53,23 +53,10 @@ public static class StartupAccessExtensions
             options.AddPolicy(PolicyIdentifiers.Default, policyBuilder =>
                 policyBuilder.RequireAuthenticatedUser());
             options.DefaultPolicy = options.GetPolicy(PolicyIdentifiers.Default)!;
-            options.AddPolicy(PolicyIdentifiers.AdmissionCommittee,
-                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
-                    .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director,
-                        RoleIdentifiers.AdmissionCommitteeMember));
-            options.AddPolicy(PolicyIdentifiers.HeadOfAdmissionCommittee,
-                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
-                    .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director));
-            options.AddPolicy(PolicyIdentifiers.Administrators,
-                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
-                    .RequireRole(RoleIdentifiers.Administrator));
-            options.AddPolicy(PolicyIdentifiers.Teachers,
-                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
-                    .RequireRole(RoleIdentifiers.Teacher));
-            options.AddPolicy(PolicyIdentifiers.Administration,
-                policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
-                    .RequireRole(RoleIdentifiers.Administrator, RoleIdentifiers.Director,
-                        RoleIdentifiers.AssociateDirector));
+            foreach (var (policy, roles) in PolicyIdentifiers.PolicyRoles)
+                options.AddPolicy(policy,
+                    policyBuilder => policyBuilder.Combine(options.GetPolicy(PolicyIdentifiers.Default)!)
+                        .RequireRole(roles));
         });
         builder.Services.AddIdentityLocalization();
         builder.Services.AddIdentity<User, Role>(options =>

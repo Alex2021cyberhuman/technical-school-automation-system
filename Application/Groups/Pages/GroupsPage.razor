@@ -1,9 +1,9 @@
 @page "/groups"
-@attribute [Authorize(Policy = PolicyIdentifiers.HeadOfAdmissionCommittee)]
+@attribute [Authorize]
 @using Application.Groups.Data
 @using Microsoft.EntityFrameworkCore
-@using Application.Access.Enums
 @using System.Security.Claims
+@using Application.Access.Enums
 @using Application.Common.Enums
 @using Application.Data
 @using Application.Specialities.Services
@@ -11,7 +11,10 @@
 <h3>Группы</h3>
 <PageTitle>Группы</PageTitle>
 Просмотр списка груп
-<CreateGroupModal OnAfterCreate="OnAfterGroupCreated"/>
+@if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+{
+    <CreateGroupModal OnAfterCreate="OnAfterGroupCreated"/>
+}
 <div class="row">
     <div class="col-12 col-md-4">
         <EditForm EditContext="EditContext">
@@ -57,23 +60,23 @@
     public long SelectedSpecialityId { get; set; }
 
     public EducationForm? SelectedEducationForm { get; set; }
-    
+
     public FinanceEnrolmentType? SelectedFinanceEnrolmentType { get; set; }
-    
+
     public EditContext EditContext { get; set; } = null!;
-    
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
         EditContext = new(this);
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var specialities = await context.GetSpecialitiesAsync();
         SpecialityRadioItems = specialities;
         await LoadGroupsAsync();
-        CurrentUser = (await AuthenticationStateTask).User;
     }
 
     private async Task OnAfterGroupCreated(CreateGroupModal.AfterCreateEventArgs args)
@@ -100,10 +103,10 @@
     private bool Filter(Group group)
     {
         return group.SpecialityId == SelectedSpecialityId &&
-        group.EnrollmentYear <= SelectedYear &&
-        group.GraduationYear >= SelectedYear &&
-        (!SelectedFinanceEnrolmentType.HasValue || SelectedFinanceEnrolmentType == group.FinanceEnrolmentType) &&
-        (!SelectedEducationForm.HasValue || SelectedEducationForm == group.EducationForm);
+               group.EnrollmentYear <= SelectedYear &&
+               group.GraduationYear >= SelectedYear &&
+               (!SelectedFinanceEnrolmentType.HasValue || SelectedFinanceEnrolmentType == group.FinanceEnrolmentType) &&
+               (!SelectedEducationForm.HasValue || SelectedEducationForm == group.EducationForm);
     }
 
 }

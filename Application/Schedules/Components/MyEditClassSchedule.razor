@@ -65,6 +65,9 @@
                         <MyTeacherPicker
                             @bind-Value="Form.Teacher"
                             Teachers="Teachers"/>
+                        <MyCabinetPicker
+                            @bind-Value="Form.Cabinet"
+                            Cabinets="Cabinets"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -83,13 +86,16 @@
     public List<User> Teachers { get; set; } = new();
 
     [Parameter]
+    public IReadOnlyCollection<Cabinet> Cabinets { get; set; } = null!;
+
+    [Parameter]
+    public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
+
+    [Parameter]
     public bool CanChangeWeekSeparation { get; set; }
 
     [Parameter]
     public ClassSchedule ClassSchedule { get; set; } = null!;
-
-    [Parameter]
-    public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
 
     [Parameter]
     public EventCallback<ClassSchedule> OnClassScheduleEdited { get; set; } = EventCallback<ClassSchedule>.Empty;
@@ -125,20 +131,8 @@
         await using var context = await DbContextFactory.CreateDbContextAsync();
         MessageStore.Clear();
         var valid = EditContext.Validate();
-        var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, new()
-        {
-            DayOfWeek = ClassSchedule.DayOfWeek,
-            Number = ClassSchedule.Number,
-            ReplacementMode = false,
-            WeekSeparation = Form.WeeksSeparation.GetValueOrDefault(),
-            ClassScheduleId = ClassSchedule.Id
-        }, Form.Teacher);
-        if (!validTeacherPick)
-        {
-            valid = validTeacherPick;
-            MessageStore.Add(FieldIdentifier.Create(() => Form.Teacher), teacherPickError);
-            EditContext.NotifyValidationStateChanged();
-        }
+        valid = await CheckTeacherAvailabilityAsync(context, valid);
+        valid = await CheckCabinetAvailabilityAsync(context, valid);
         if (!Visible || !valid)
             return;
         var dbClassSchedule = await context.ClassSchedule.FirstOrDefaultAsync(x => x.Id == ClassSchedule.Id);
@@ -151,12 +145,15 @@
         dbClassSchedule.WeeksSeparation = Form.WeeksSeparation!.Value;
         dbClassSchedule.SubjectId = Form.Subject.Id;
         dbClassSchedule.TeacherId = Form.Teacher?.Id;
+        dbClassSchedule.CabinetId = Form.Cabinet?.Id;
 
         ClassSchedule.WeeksSeparation = Form.WeeksSeparation.Value;
         ClassSchedule.SubjectId = Form.Subject.Id;
         ClassSchedule.Subject = Form.Subject;
         ClassSchedule.TeacherId = Form.Teacher?.Id;
         ClassSchedule.Teacher = Form.Teacher;
+        ClassSchedule.CabinetId = Form.Cabinet?.Id;
+        ClassSchedule.Cabinet = Form.Cabinet;
 
         await context.SaveChangesAsync();
         OnCancel();
@@ -166,7 +163,7 @@
     private async Task OnDeleteAsync()
     {
         var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");
-        if (!result.HasValue || !result.Value)
+        if (result.GetValueOrDefault())
         {
             return;
         }
@@ -182,6 +179,40 @@
         await context.SaveChangesAsync();
         OnCancel();
         await OnClassScheduleRemoved.InvokeAsync(ClassSchedule);
+    }
+
+    private async Task<bool> CheckTeacherAvailabilityAsync(MainDbContext context, bool valid)
+    {
+        var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, new()
+        {
+            DayOfWeek = ClassSchedule.DayOfWeek,
+            Number = ClassSchedule.Number,
+            ReplacementMode = false,
+            WeekSeparation = Form.WeeksSeparation.GetValueOrDefault(),
+            ClassScheduleId = ClassSchedule.Id
+        }, Form.Teacher);
+        if (validTeacherPick) return valid;
+
+        MessageStore.Add(FieldIdentifier.Create(() => Form.Teacher), teacherPickError);
+        EditContext.NotifyValidationStateChanged();
+        return false;
+    }
+
+    private async Task<bool> CheckCabinetAvailabilityAsync(MainDbContext context, bool valid)
+    {
+        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, new()
+        {
+            DayOfWeek = ClassSchedule.DayOfWeek,
+            Number = ClassSchedule.Number,
+            ReplacementMode = false,
+            WeekSeparation = Form.WeeksSeparation.GetValueOrDefault(),
+            ClassScheduleId = ClassSchedule.Id
+        }, Form.Cabinet);
+        if (validCabinetPick) return valid;
+
+        MessageStore.Add(FieldIdentifier.Create(() => Form.Cabinet), cabinetPickError);
+        EditContext.NotifyValidationStateChanged();
+        return false;
     }
 
 }

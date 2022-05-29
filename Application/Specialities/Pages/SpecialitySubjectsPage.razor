@@ -1,9 +1,10 @@
 @page "/speciality/{specialityId:long}/subjects"
-@attribute [Authorize(Policy = PolicyIdentifiers.Administration)]
+@attribute [Authorize]
 @using Application.Specialities.Data
 @using Microsoft.EntityFrameworkCore
 @using Application.Access.Enums
 @using Application.Data
+@using System.Security.Claims
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 @if (Speciality.Id != SpecialityId)
@@ -15,7 +16,10 @@ else
 {
     <PageTitle>Специальность @Speciality.Code @Speciality.Name</PageTitle>
     <h3>Специальность @Speciality.Code @Speciality.Name</h3>
-    <CreateSubjectModal Speciality="@Speciality" OnSubmit="RefreshAsync"/>
+    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+    {
+        <CreateSubjectModal Speciality="@Speciality" OnSubmit="RefreshAsync"/>
+    }
     <MudTable Items="@Subjects" Hover="true" SortLabel="Сортировать по" Filter="Filter">
         <ToolBarContent>
             <MudTextField @bind-Value="SearchString" Placeholder="Поиск дисциплины" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -34,8 +38,11 @@ else
             <MudTd DataLabel="Название">@context.Name</MudTd>
             <MudTd DataLabel="Код">@context.Code</MudTd>
             <MudTd>
-                <EditSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
-                <DeleteSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
+                @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+                {
+                    <EditSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
+                    <DeleteSubjectModal Subject="@context" OnSubmit="RefreshAsync"/>
+                }
             </MudTd>
         </RowTemplate>
     </MudTable>
@@ -53,9 +60,15 @@ else
 
     public string SearchString { get; set; } = string.Empty;
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    private ClaimsPrincipal CurrentUser { get; set; } = null!;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var speciality = await context.Speciality.FirstOrDefaultAsync(x => x.Id == SpecialityId);
         if (speciality is null)

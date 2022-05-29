@@ -1,19 +1,27 @@
+@page "/cabinets/manage"
+@attribute [Authorize]
+@using Application.Access.Enums
 @using Application.Schedules.Data
 @using Microsoft.AspNetCore.Components
 @using Microsoft.EntityFrameworkCore
 @using Application.Data
+@using System.Security.Claims
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+
 <PageTitle>Кабинеты</PageTitle>
 <h3>Кабинеты</h3>
 <MudContainer>
     <MudGrid>
         <MudItem xs="12">
-            <MyCreateCabinetModal OnCabinetCreated="OnCabinetCreated"/>
+            @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+            {
+                <MyCreateCabinetModal OnCabinetCreated="OnCabinetCreated"/>
+            }
         </MudItem>
         <MudItem xs="12">
             <MudTable T="Cabinet" Items="@Cabinets" Hover="true" SortLabel="Сортировать по" Filter="Filter">
                 <ToolBarContent>
-                    <MudTextField @bind-Value="SearchString" Placeholder="Поиск Учителя" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                    <MudTextField @bind-Value="SearchString" Placeholder="Поиск кабинета" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>
@@ -40,10 +48,13 @@
                     <MudTd DataLabel="Этаж">@context.Floor</MudTd>
                     <MudTd DataLabel="Отделение">@context.Wing</MudTd>
                     <MudTd>
-                        <MyEditCabinetModal
-                            Cabinet="context"
-                            OnCabinetEdited="OnCabinetEdited"
-                            OnCabinetRemoved="OnCabinetRemoved"/>
+                        @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+                        {
+                            <MyEditCabinetModal
+                                Cabinet="context"
+                                OnCabinetEdited="OnCabinetEdited"
+                                OnCabinetRemoved="OnCabinetRemoved"/>
+                        }
                     </MudTd>
                 </RowTemplate>
             </MudTable>
@@ -57,9 +68,15 @@
 
     private string SearchString { get; set; } = string.Empty;
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    private ClaimsPrincipal CurrentUser { get; set; } = null!;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
         await LoadCabinetsAsync();
     }
 

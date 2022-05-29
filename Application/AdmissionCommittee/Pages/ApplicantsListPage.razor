@@ -87,7 +87,7 @@
                 <MudTd>@context.Description</MudTd>
                 <MudTd>@(StringLocalizer[context.DirectorDecision.ToString()])</MudTd>
                 <MudTd>
-                    @if (CurrentUser.IsInRole(RoleIdentifiers.AssociateDirector) || CurrentUser.IsInRole(RoleIdentifiers.Director))
+                    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
                     {
                         <MudIconButton Icon="@Icons.Filled.DeleteForever" Title="Удалить данные" OnClick="@(async () => await DeleteApplicantAsync(context))"/>
                         if (context.DirectorDecision == DirectorDecisionType.NotСonsidered)

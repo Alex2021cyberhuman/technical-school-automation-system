@@ -53,7 +53,7 @@
 
     [Parameter]
     public DateTime SelectedDate { get; set; }
-    
+
     [Parameter]
     public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
 
@@ -63,14 +63,14 @@
     public ComponentForm Form { get; set; } = null!;
 
     public EditContext EditContext { get; set; } = null!;
-    
+
     public bool Visible { get; set; }
 
     private void OnCancel()
     {
         Visible = false;
     }
-    
+
     private void OnOpen()
     {
         Form = new(ClassSchedule);
@@ -90,7 +90,7 @@
             Date = DateOnly.FromDateTime(SelectedDate),
             Number = ClassSchedule.Number
         };
-        
+
         await using var context = await DbContextFactory.CreateDbContextAsync();
         context.Add(replace);
         await context.SaveChangesAsync();
@@ -109,5 +109,5 @@
 
         public Subject Subject { get; set; }
     }
-    
+
 }

@@ -11,7 +11,7 @@
     Variant="Variant.Outlined"
     Color="Color.Primary"
     OnClick="OnOpen">
-    @ClassScheduleReplacement.Subject.Name 
+    @ClassScheduleReplacement.Subject.Name
     @if (ClassScheduleReplacement.ClassSchedule != null)
     {
         <MudText Typo="Typo.caption">(ClassScheduleReplacement.ClassSchedule.Subject.Name)</MudText>
@@ -55,7 +55,7 @@
 
     [Parameter]
     public ClassScheduleReplacement ClassScheduleReplacement { get; set; } = null!;
-    
+
     [Parameter]
     public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
 
@@ -64,18 +64,18 @@
 
     [Parameter]
     public EventCallback<ClassScheduleReplacement> OnClassScheduleReplacementRemoved { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
-    
+
     public ComponentForm Form { get; set; } = null!;
 
     public EditContext EditContext { get; set; } = null!;
-    
+
     public bool Visible { get; set; }
 
     private void OnCancel()
     {
         Visible = false;
     }
-    
+
     private void OnOpen()
     {
         Form = new(ClassScheduleReplacement);
@@ -111,7 +111,7 @@
 
         public Subject Subject { get; set; }
     }
-    
+
     private async Task OnDeleteAsync()
     {
         var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");

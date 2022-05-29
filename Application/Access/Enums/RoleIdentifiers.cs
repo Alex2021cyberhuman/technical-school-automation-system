@@ -12,6 +12,8 @@ public static class RoleIdentifiers
 
     public const string AssociateDirector = "AssociateDirector";
 
+    public const string ScheduleManager = "ScheduleManager";
+
     public static readonly IReadOnlyList<string> Roles = new[]
     {
         Administrator,

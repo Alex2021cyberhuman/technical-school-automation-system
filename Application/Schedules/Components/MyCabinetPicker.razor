@@ -5,55 +5,59 @@
 @using System.Linq.Expressions
 @using Application.Schedules.Data
 @using Microsoft.Extensions.Localization
-@inherits MudBaseInput<Application.Access.Data.User?>
+@inherits MudBaseInput<Cabinet?>
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILogger<MyTeacherPicker> Logger
 @inject IStringLocalizer StringLocalizer
 <MudField Label="Учитель" Variant="Variant.Text">
-    <MudText>@Value?.FullName</MudText>
-    <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpenTeacherList" Icon="@(TeacherListVisible ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Title="Список учителей" Size="Size.Small"/>
+    <MudText>@Value?.Name (@Value?.Code)</MudText>
+    <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleCabinetList" Icon="@(CabinetsListVisible ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Title="Список кабинетов" Size="Size.Small"/>
     <MudIconButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="DeselectAsync" Icon="@Icons.Filled.Cancel" Title="Отменить" Size="Size.Small"/>
 </MudField>
-@if (TeacherListVisible)
+@if (CabinetsListVisible)
 {
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document" style="max-width: 847px!important;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Выбор Учителя</h5>
-                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleOpenTeacherList">
+                    <h5 class="modal-title">Выбор кабинета</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="ToggleCabinetList">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <MudTable T="User" Items="@Teachers" Hover="true" SortLabel="Сортировать по" Filter="Filter" SelectedItemChanged="OnSelectedItemChangedAsync">
+                    <MudTable T="Cabinet" Items="@Cabinets" Hover="true" SortLabel="Сортировать по" Filter="Filter" SelectedItemChanged="OnSelectedItemChangedAsync">
                         <ToolBarContent>
                             <MudTextField @bind-Value="SearchString" Placeholder="Поиск Учителя" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                         </ToolBarContent>
                         <HeaderContent>
                             <MudTh>
-                                <MudTableSortLabel T="User" SortBy="teacher => teacher.FullName">ФИО</MudTableSortLabel>
+                                <MudTableSortLabel T="Cabinet" SortBy="cabinet => cabinet.Code.ToNaturalSortString()">Код</MudTableSortLabel>
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel T="User" SortBy="teacher => teacher.Profile">Профиль</MudTableSortLabel>
+                                <MudTableSortLabel T="Cabinet" SortBy="cabinet => cabinet.Profile">Профиль</MudTableSortLabel>
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel T="User" SortBy="teacher => teacher.UserName">Имя пользователя</MudTableSortLabel>
+                                <MudTableSortLabel T="Cabinet" SortBy="cabinet => cabinet.Name">Название</MudTableSortLabel>
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel T="User" SortBy="teacher => teacher.Email">Email</MudTableSortLabel>
+                                <MudTableSortLabel T="Cabinet" SortBy="cabinet => cabinet.Floor">Этаж</MudTableSortLabel>
+                            </MudTh>
+                            <MudTh>
+                                <MudTableSortLabel T="Cabinet" SortBy="cabinet => cabinet.Wing">Отделение</MudTableSortLabel>
                             </MudTh>
                         </HeaderContent>
                         <RowTemplate>
-                            <MudTd DataLabel="ФИО">@context.FullName</MudTd>
+                            <MudTd DataLabel="Код">@context.Code</MudTd>
                             <MudTd DataLabel="Профиль">@context.Profile</MudTd>
-                            <MudTd DataLabel="Имя пользователя">@context.UserName</MudTd>
-                            <MudTd DataLabel="Email">@context.Email</MudTd>
+                            <MudTd DataLabel="Название">@context.Name</MudTd>
+                            <MudTd DataLabel="Этаж">@context.Floor</MudTd>
+                            <MudTd DataLabel="Отделение">@context.Wing</MudTd>
                         </RowTemplate>
                     </MudTable>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ToggleOpenTeacherList">Закрыть</button>
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleCabinetList">Закрыть</button>
                 </div>
             </div>
         </div>
@@ -64,10 +68,10 @@
 {
 
     [Parameter]
-    public Expression<Func<User>>? ValueExpression { get; set; }
+    public Expression<Func<Cabinet>>? ValueExpression { get; set; }
 
     [Parameter]
-    public IReadOnlyCollection<User> Teachers { get; set; } = new List<User>();
+    public IReadOnlyCollection<Cabinet> Cabinets { get; set; } = new List<Cabinet>();
 
     [CascadingParameter]
     EditContext? CascadedEditContext { get; set; }
@@ -79,7 +83,7 @@
 
     public string SearchString { get; set; } = string.Empty;
 
-    public bool TeacherListVisible { get; set; }
+    public bool CabinetsListVisible { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -90,27 +94,30 @@
         }
     }
 
-    private void ToggleOpenTeacherList()
+    private void ToggleCabinetList()
     {
-        TeacherListVisible = !TeacherListVisible;
+        CabinetsListVisible = !CabinetsListVisible;
     }
 
-    private bool Filter(User teacher)
+    private bool Filter(Cabinet cabinet)
     {
-        return string.IsNullOrWhiteSpace(SearchString) ||
-               string.Join(
-                   teacher.FullName,
-                   teacher.Profile,
-                   teacher.UserName,
-                   teacher.Email).Contains(SearchString, StringComparison.CurrentCultureIgnoreCase);
+        return
+            string.IsNullOrWhiteSpace(SearchString) ||
+            string.Join(
+                " ",
+                cabinet.Code,
+                cabinet.Name,
+                cabinet.Floor.ToString(),
+                cabinet.Profile,
+                cabinet.Wing).Contains(SearchString, StringComparison.CurrentCultureIgnoreCase);
     }
 
-    private async Task OnSelectedItemChangedAsync(User teacher)
+    private async Task OnSelectedItemChangedAsync(Cabinet cabinet)
     {
-        Value = teacher;
+        Value = cabinet;
         await ValueChanged.InvokeAsync(Value);
         CascadedEditContext?.NotifyFieldChanged(FieldIdentifier);
-        ToggleOpenTeacherList();
+        ToggleCabinetList();
     }
 
     private async Task DeselectAsync()

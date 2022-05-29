@@ -69,7 +69,7 @@
     {
         if (Value == year)
             return;
-        
+
         Value = year;
         await ValueChanged.InvokeAsync(Value);
         if (Identifier.HasValue && CascadedEditContext is not null)

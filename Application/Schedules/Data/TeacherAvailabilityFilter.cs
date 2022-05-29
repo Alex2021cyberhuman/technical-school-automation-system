@@ -11,7 +11,7 @@ public class TeacherAvailabilityFilter
     public DateOnly Date { get; set; }
 
     public long? ClassScheduleId { get; set; }
-    
+
     public long? ClassScheduleReplacementId { get; set; }
 
     public WeeksSeparationType WeekSeparation { get; set; }

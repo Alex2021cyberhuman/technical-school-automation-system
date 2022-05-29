@@ -67,7 +67,7 @@ public class MainDbContext : DbContext, ISpecialitiesContext
                 .WithMany()
                 .HasForeignKey(x => x.SubjectId);
         });
-        
+
         modelBuilder.Entity<Applicant>(e =>
         {
             e.OwnsOne(x => x.Passport);

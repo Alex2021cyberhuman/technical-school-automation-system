@@ -13,13 +13,16 @@ public class EditClassScheduleForm
         WeeksSeparation = classSchedule.WeeksSeparation;
         Subject = classSchedule.Subject;
         Teacher = classSchedule.Teacher;
+        Cabinet = classSchedule.Cabinet;
     }
-    
+
     public WeeksSeparationType? WeeksSeparation { get; set; }
-    
+
     [Display(Name = "Предмет")]
     [MyRequired]
     public Subject Subject { get; set; }
-    
+
     public User? Teacher { get; set; }
+
+    public Cabinet? Cabinet { get; set; }
 }

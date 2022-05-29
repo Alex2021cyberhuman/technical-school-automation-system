@@ -2,8 +2,10 @@
 @using Application.Groups.Data
 @using System.Security.Claims
 @using Application.Access.Enums
+@using Application.AdmissionCommittee.Data
 @using Application.Common.Enums
 @using Application.Data
+@using EFCore.BulkExtensions
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDialogService DialogService
 <button type="button" class="btn btn-primary" @onclick="OnOpenAsync">
@@ -50,6 +52,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
+                    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+                    {
+                        <button type="button" class="btn btn-secondary" @onclick="OnDeleteAsync">Удалить</button>
+                    }
                 </div>
             </div>
         </div>
@@ -58,9 +64,9 @@
 
 @code
 {
-    public bool ModalVisible { get; set; }
+    private bool ModalVisible { get; set; }
 
-    public List<Student> Students { get; set; } = new();
+    private List<Student> Students { get; set; } = new();
 
     [Parameter]
     public Group Group { get; set; } = new();
@@ -68,7 +74,18 @@
     [Parameter]
     public EventCallback StudentListChanged { get; set; } = EventCallback.Empty;
 
-    public string? SearchString { get; set; }
+    private string? SearchString { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    private ClaimsPrincipal CurrentUser { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
+    }
 
     private async Task OnOpenAsync()
     {
@@ -128,4 +145,25 @@
         await LoadStudentsAsync();
         await StudentListChanged.InvokeAsync();
     }
+
+    private async Task OnDeleteAsync()
+    {
+        var result = await DialogService.ShowMessageBox("Удаление", "Удалить группу?", "Да", "Нет");
+        if (!result.GetValueOrDefault())
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbGroup = await context.Group.SingleAsync(x => x.Id == Group.Id);
+        var applicantIds = Students.Select(student => student.ApplicantId).ToList();
+        await context.Applicant
+            .Where(x => applicantIds.Contains(x.Id))
+            .BatchUpdateAsync(x => new Applicant { DirectorDecision = DirectorDecisionType.NotСonsidered, Student = null });
+        context.Remove(dbGroup);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnGroupRemoved.InvokeAsync(Group);
+    }
+
+    public EventCallback<Group> OnGroupRemoved { get; set; } = EventCallback<Group>.Empty;
 }

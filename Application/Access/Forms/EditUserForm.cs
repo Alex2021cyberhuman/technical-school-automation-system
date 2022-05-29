@@ -38,6 +38,6 @@ public class EditUserForm
     public bool Lockout { get; set; }
 
     public DateTime? LockoutEnd { get; set; }
-    
+
     public string Profile { get; set; } = string.Empty;
 }

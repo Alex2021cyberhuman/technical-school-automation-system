@@ -9,12 +9,14 @@ namespace Application.Schedules.Forms;
 public class AddClassScheduleForm
 {
     public WeeksSeparationType? WeeksSeparation { get; set; }
-    
+
     [Display(Name = "Предмет")]
     [MyRequired]
     public Subject? Subject { get; set; }
 
     public User? Teacher { get; set; }
+
+    public Cabinet? Cabinet { get; set; }
 
     public ClassSchedule ToClassSchedule(
         DayOfWeek dayOfWeek,
@@ -28,7 +30,8 @@ public class AddClassScheduleForm
             Number = number,
             ScheduleId = scheduleId,
             SubjectId = Subject!.Id,
-            TeacherId = Teacher?.Id
+            TeacherId = Teacher?.Id,
+            CabinetId = Cabinet?.Id
         };
         return classSchedule;
     }

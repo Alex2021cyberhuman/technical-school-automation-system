@@ -53,7 +53,7 @@
 
     [Parameter]
     public EventCallback<Cabinet> OnCabinetEdited { get; set; } = EventCallback<Cabinet>.Empty;
-    
+
     [Parameter]
     public EventCallback<Cabinet> OnCabinetRemoved { get; set; } = EventCallback<Cabinet>.Empty;
 
@@ -94,7 +94,7 @@
     private async Task OnDeleteAsync()
     {
         var result = await DialogService.ShowMessageBox("Удаление", "Удалить кабинет и все ссылки на него в рассписании?", "Да", "Нет");
-        if (!result.HasValue || !result.Value)
+        if (!result.GetValueOrDefault())
         {
             return;
         }

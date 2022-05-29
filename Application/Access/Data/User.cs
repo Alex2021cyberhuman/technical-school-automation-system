@@ -19,6 +19,6 @@ public class User : IdentityUser<long>
     // public DateTime Activated { get; set; } = DateTime.UtcNow;
 
     public string Profile { get; set; } = string.Empty;
-    
+
     public List<UserRole> UserRoles { get; set; } = null!;
 }
