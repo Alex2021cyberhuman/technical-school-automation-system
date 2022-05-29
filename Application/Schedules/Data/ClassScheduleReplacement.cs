@@ -15,9 +15,9 @@ public class ClassScheduleReplacement
 
     public ClassSchedule? ClassSchedule { get; set; }
 
-    public long SubjectId { get; set; }
+    public long? SubjectId { get; set; }
 
-    public Subject Subject { get; set; } = null!;
+    public Subject? Subject { get; set; }
 
     public long? CabinetId { get; set; }
 
@@ -30,4 +30,8 @@ public class ClassScheduleReplacement
     public DateOnly Date { get; set; }
 
     public int Number { get; set; }
+
+    public bool IsCancel { get; set; }
+
+    public bool IsAddition { get; set; }
 }

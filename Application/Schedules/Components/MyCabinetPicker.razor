@@ -9,8 +9,15 @@
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILogger<MyTeacherPicker> Logger
 @inject IStringLocalizer StringLocalizer
-<MudField Label="Учитель" Variant="Variant.Text">
-    <MudText>@Value?.Name (@Value?.Code)</MudText>
+<MudField Label="Кабинет">
+    @if (Value is null)
+    {
+        <MudText>Не выбрано</MudText>
+    }
+    else
+    {
+        <MudText>@Value?.Name (@Value?.Code)</MudText>
+    }
     <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleCabinetList" Icon="@(CabinetsListVisible ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Title="Список кабинетов" Size="Size.Small"/>
     <MudIconButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="DeselectAsync" Icon="@Icons.Filled.Cancel" Title="Отменить" Size="Size.Small"/>
 </MudField>
@@ -28,7 +35,7 @@
                 <div class="modal-body">
                     <MudTable T="Cabinet" Items="@Cabinets" Hover="true" SortLabel="Сортировать по" Filter="Filter" SelectedItemChanged="OnSelectedItemChangedAsync">
                         <ToolBarContent>
-                            <MudTextField @bind-Value="SearchString" Placeholder="Поиск Учителя" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            <MudTextField @bind-Value="SearchString" Placeholder="Поиск кабинета" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                         </ToolBarContent>
                         <HeaderContent>
                             <MudTh>
@@ -77,7 +84,7 @@
     EditContext? CascadedEditContext { get; set; }
 
     [Parameter]
-    public TeacherAvailabilityFilter TeacherAvailabilityFilterFilter { get; set; } = new();
+    public ScheduleAvailabilityFilter ScheduleAvailabilityFilterFilter { get; set; } = new();
 
     public FieldIdentifier FieldIdentifier { get; set; }
 

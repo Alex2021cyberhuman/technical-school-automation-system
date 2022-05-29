@@ -2,6 +2,7 @@
 @using Application.Data
 @using Application.Common.Data
 @using Application.Schedules.Data
+@using System.ComponentModel.DataAnnotations
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
@@ -85,23 +86,24 @@
         context.Add(cabinet);
         await context.SaveChangesAsync();
         OnCancel();
-        await OnCabinetCreated.InvokeAsync();
+        await OnCabinetCreated.InvokeAsync(cabinet);
     }
 
     public class ComponentForm
     {
         [MyRequired]
+        [Display(Name = "Название")]
         public string Name { get; set; } = string.Empty;
 
         [MyRequired]
+        [Display(Name = "Код")]
         public string Code { get; set; } = string.Empty;
 
         public string Profile { get; set; } = string.Empty;
 
-        [MyRequired]
-        public int Floor { get; set; }
+        public int Floor { get; set; } = 1;
 
-        public string Wing { get; set; } = string.Empty;
+        public string Wing { get; set; } = "Основное";
     }
 
 }

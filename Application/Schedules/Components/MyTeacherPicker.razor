@@ -9,8 +9,15 @@
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject ILogger<MyTeacherPicker> Logger
 @inject IStringLocalizer StringLocalizer
-<MudField Label="Учитель" Variant="Variant.Text">
-    <MudText>@Value?.FullName</MudText>
+<MudField Label="Учитель">
+    @if (Value is null)
+    {
+        <MudText>Не выбрано</MudText>
+    }
+    else
+    {
+        <MudText>@Value?.FullName</MudText>
+    }
     <MudIconButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ToggleOpenTeacherList" Icon="@(TeacherListVisible ? Icons.Filled.Close : Icons.Filled.MenuOpen)" Title="Список учителей" Size="Size.Small"/>
     <MudIconButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="DeselectAsync" Icon="@Icons.Filled.Cancel" Title="Отменить" Size="Size.Small"/>
 </MudField>
@@ -73,7 +80,7 @@
     EditContext? CascadedEditContext { get; set; }
 
     [Parameter]
-    public TeacherAvailabilityFilter TeacherAvailabilityFilterFilter { get; set; } = new();
+    public ScheduleAvailabilityFilter ScheduleAvailabilityFilterFilter { get; set; } = new();
 
     public FieldIdentifier FieldIdentifier { get; set; }
 

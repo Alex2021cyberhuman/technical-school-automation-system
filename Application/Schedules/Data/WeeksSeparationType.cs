@@ -2,7 +2,7 @@ namespace Application.Schedules.Data;
 
 public enum WeeksSeparationType
 {
-    Even,
-    Odd,
+    Numerator,
+    Divisor,
     All
 }

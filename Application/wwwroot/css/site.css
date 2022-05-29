@@ -107,3 +107,38 @@ a, .btn-link {
     line-height: 1;
     margin: 2px;
 }
+
+.schedule-cell-text {
+    font-size: 15px;
+    line-height: 1;
+    margin: 2px;
+}
+
+.replacements-cell-solid-item {
+    padding-top: 20px;
+    height: 150px;
+    width: 200px;
+    margin-top: 2px;
+    border-radius: 5px;
+}
+
+.replacements-cell-half-item {
+    height: 75px;
+    width: 200px;
+    margin-top: 1px;
+    border-radius: 5px;
+}
+
+.replacements-cell {
+    height: 152px;
+    width: 200px;
+    font-size: 15px;
+    line-height: 1;
+    margin: 2px;
+}
+
+.replacements-cell-text {
+    font-size: 15px;
+    line-height: 1;
+    margin: 2px;
+}

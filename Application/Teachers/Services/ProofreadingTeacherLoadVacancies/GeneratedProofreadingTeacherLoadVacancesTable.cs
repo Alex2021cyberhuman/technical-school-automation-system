@@ -987,7 +987,7 @@ public class GeneratedProofreadingTeacherLoadVacanciesTable
             { CellReference = "D4", StyleIndex = (UInt32Value)3U, DataType = CellValues.String };
         var cellValue3 = new CellValue
         {
-            Text = "Предмет"
+            Text = "Дисциплина"
         };
 
         cell11.Append(cellValue3);

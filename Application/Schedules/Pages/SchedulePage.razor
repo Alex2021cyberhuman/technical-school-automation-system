@@ -48,21 +48,10 @@
             @if (SelectedSchedule is not null)
             {
                 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
-                    @*конечное расписание для чтения*@
-                    <MudTabPanel Text="Расписание с заменами">
-                        <MudGrid>
-                            <MudItem xs="12">
-                                @*функции расписания*@
-                            </MudItem>
-                        </MudGrid>
-                    </MudTabPanel>
-                    @*список замен в расписании*@
-                    <MudTabPanel Text="Замены">
-                    </MudTabPanel>
-                    @*таблица основного расписания*@
                     <MudTabPanel Text="Основное расписание">
                         <MyClassSchedulePanel
                             Teachers="Teachers"
+                            Cabinets="Cabinets"
                             Schedule="SelectedSchedule"
                             Subjects="Subjects"
                             MaxNumber="MaxNumber"
@@ -75,6 +64,8 @@
 </MudGrid>
 
 @code {
+    
+    public List<Cabinet> Cabinets { get; set; } = null!;
 
     public List<User> Teachers { get; set; } = new();
 
@@ -112,6 +103,8 @@
         Teachers = await accessContext.Users
             .Where(x => x.UserRoles.Any(role => role.Role.Name == RoleIdentifiers.Teacher))
             .Where(x => !x.LockoutEnd.HasValue || x.LockoutEnd <= nowOffset)
+            .ToListAsync();
+        Cabinets = await context.Cabinet
             .ToListAsync();
     }
 

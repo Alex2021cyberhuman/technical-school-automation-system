@@ -9,7 +9,7 @@ public static class ScheduleDataExtensions
 {
     public static async Task<(bool Valid, string Message)> ValidateTeacherAvailabilityAsync(this MainDbContext context,
         IStringLocalizer stringLocalizer,
-        TeacherAvailabilityFilter filter,
+        ScheduleAvailabilityFilter filter,
         User? teacher)
     {
         if (teacher is not null)
@@ -24,6 +24,7 @@ public static class ScheduleDataExtensions
                 .Include(x => x.Schedule)
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Subject)
+                .AsNoTracking()
                 .SingleOrDefaultAsync();
             if (filter.ReplacementMode)
             {
@@ -35,6 +36,7 @@ public static class ScheduleDataExtensions
                         .Where(x => x.Date == filter.Date)
                         .Where(x => x.ClassScheduleId == element.Id)
                         .Where(x => x.TeacherId != teacher.Id)
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
                     if (replacementElement is null)
                         return (false,
@@ -50,10 +52,11 @@ public static class ScheduleDataExtensions
                         .Include(x => x.Schedule)
                         .ThenInclude(x => x.Group)
                         .Include(x => x.Subject)
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
                     if (replacementElement is not null)
                         return (false,
-                            $"Учитель {teacher.FullName} будет занят {filter.Date.ToShortDateString()} на уроке №{filter.Number} дисциплина {replacementElement.Subject.Name} группа {replacementElement.Schedule.Group.Name}.");
+                            $"Учитель {teacher.FullName} будет занят {filter.Date.ToShortDateString()} на уроке №{filter.Number} дисциплина {replacementElement.Subject!.Name} группа {replacementElement.Schedule.Group.Name}.");
                 }
             }
             else if (element is not null)
@@ -68,7 +71,7 @@ public static class ScheduleDataExtensions
 
     public static async Task<(bool Valid, string Message)> ValidateCabinetAvailabilityAsync(this MainDbContext context,
         IStringLocalizer stringLocalizer,
-        TeacherAvailabilityFilter filter,
+        ScheduleAvailabilityFilter filter,
         Cabinet? cabinet)
     {
         if (cabinet is not null)
@@ -83,6 +86,7 @@ public static class ScheduleDataExtensions
                 .Include(x => x.Schedule)
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Subject)
+                .AsNoTracking()
                 .SingleOrDefaultAsync();
             if (filter.ReplacementMode)
             {
@@ -94,6 +98,7 @@ public static class ScheduleDataExtensions
                         .Where(x => x.Date == filter.Date)
                         .Where(x => x.ClassScheduleId == element.Id)
                         .Where(x => x.CabinetId != cabinet.Id)
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
                     if (replacementElement is null)
                         return (false,
@@ -109,10 +114,11 @@ public static class ScheduleDataExtensions
                         .Include(x => x.Schedule)
                         .ThenInclude(x => x.Group)
                         .Include(x => x.Subject)
+                        .AsNoTracking()
                         .SingleOrDefaultAsync();
                     if (replacementElement is not null)
                         return (false,
-                            $"Кабинет {cabinet.Code} будет занят {filter.Date.ToShortDateString()} на уроке №{filter.Number} дисциплина {replacementElement.Subject.Name} группа {replacementElement.Schedule.Group.Name}.");
+                            $"Кабинет {cabinet.Code} будет занят {filter.Date.ToShortDateString()} на уроке №{filter.Number} дисциплина {replacementElement.Subject!.Name} группа {replacementElement.Schedule.Group.Name}.");
                 }
             }
             else if (element is not null)

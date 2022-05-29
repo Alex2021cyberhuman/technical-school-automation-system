@@ -18,7 +18,7 @@ public class EditClassScheduleForm
 
     public WeeksSeparationType? WeeksSeparation { get; set; }
 
-    [Display(Name = "Предмет")]
+    [Display(Name = "Дисциплина")]
     [MyRequired]
     public Subject Subject { get; set; }
 

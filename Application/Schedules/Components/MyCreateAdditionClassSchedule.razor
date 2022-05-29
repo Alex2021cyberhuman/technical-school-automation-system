@@ -4,42 +4,28 @@
 @using Microsoft.Extensions.Localization
 @using Application.Data
 @using Application.Specialities.Data
-@using Application.Common.Helpers
 @using Application.Access.Data
+@using Application.Common.Data
+@using System.ComponentModel.DataAnnotations
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
-
-<MudButton
+@inject WeekSeparationService WeekSeparationService
+<MudIconButton
     Class="replacements-cell-solid-item"
     Variant="Variant.Outlined"
-    Color="Color.Primary"
-    OnClick="OnOpen">
-    <div class="replacements-cell-text">
-        <strong>
-            @ClassSchedule.Subject.Name
-        </strong>
-        @if (ClassSchedule.Cabinet != null)
-        {
-            <small>
-                (@ClassSchedule.Cabinet.Name)
-            </small>
-        }
-        <br/>
-        @if (ClassSchedule.Teacher != null)
-        {
-            <i>@ClassSchedule.Teacher.Initials</i>
-        }
-    </div>
-</MudButton>
+    Color="Color.Secondary"
+    OnClick="OnOpen"
+    Title="Добавить однодневный элемент расписания"
+    Icon="@Icons.Filled.Add"/>
 
 @if (Visible)
 {
-    <PageTitle>Заменить элемент расписания</PageTitle>
+    <PageTitle>Добавить однодневный элемент расписания</PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Заменить элемент расписания</h5>
+                    <h5 class="modal-title">Добавить однодневный элемент расписания</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -49,24 +35,15 @@
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
                         <MudField Label="Дата">@SelectedDate.ToShortDateString()</MudField>
-                        <MudField Label="День недели">@StringLocalizer[ClassSchedule.DayOfWeek.ToString()]</MudField>
-                        <MudField Label="Номер урока">@ClassSchedule.Number</MudField>
-                        <h6>Данные заменяемого элемента расписания</h6>
-                        <MudField Label="Недельное разделение">@StringLocalizer[ClassSchedule.WeeksSeparation.ToString()]</MudField>
-                        <MudField Label="Дисциплина">@ClassSchedule.Subject.Name</MudField>
-                        <MudField Label="Учитель">@(ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано"))</MudField>
-                        <MudField Label="Дисциплина">@ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано"))</MudField>
-                        <MudSwitch Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
-                        @if (!Form.IsCancel)
-                        {
-                            <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
-                            <MyTeacherPicker
-                                @bind-Value="Form.Teacher"
-                                Teachers="Teachers"/>
-                            <MyCabinetPicker
-                                @bind-Value="Form.Cabinet"
-                                Cabinets="Cabinets"/>
-                        }
+                        <MudField Label="День недели">@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</MudField>
+                        <MudField Label="Номер урока">@Number</MudField>
+                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                        <MyTeacherPicker
+                            @bind-Value="Form.Teacher"
+                            Teachers="Teachers"/>
+                        <MyCabinetPicker
+                            @bind-Value="Form.Cabinet"
+                            Cabinets="Cabinets"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -82,7 +59,7 @@
 @code {
 
     [Parameter]
-    public ClassSchedule ClassSchedule { get; set; } = null!;
+    public Schedule Schedule { get; set; } = null!;
 
     [Parameter]
     public IReadOnlyCollection<Cabinet> Cabinets { get; set; } = null!;
@@ -97,26 +74,28 @@
     public DateTime SelectedDate { get; set; }
 
     [Parameter]
-    public EventCallback<ClassScheduleReplacement> OnReplaceClassSchedule { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
+    public int Number { get; set; }
     
+    [Parameter]
+    public EventCallback<ClassScheduleReplacement> OnClassScheduleReplacementCreated { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
+
     public ComponentForm Form { get; set; } = null!;
 
     public EditContext EditContext { get; set; } = null!;
 
     public ValidationMessageStore MessageStore { get; set; } = null!;
-
+    
     public bool Visible { get; set; }
 
     public ScheduleAvailabilityFilter ScheduleAvailabilityFilter => new()
     {
         DayOfWeek = SelectedDate.DayOfWeek,
-        Number = ClassSchedule.Number,
+        Number = Number,
         ReplacementMode = true,
-        WeekSeparation = ClassSchedule.WeeksSeparation,
-        ClassScheduleId = ClassSchedule.Id,
+        WeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(SelectedDate),
         Date = DateOnly.FromDateTime(SelectedDate)
     };
-
+    
     private void OnCancel()
     {
         Visible = false;
@@ -124,7 +103,7 @@
 
     private void OnOpen()
     {
-        Form = new(ClassSchedule);
+        Form = new();
         EditContext = new(Form);
         MessageStore = new(EditContext);
         Visible = true;
@@ -132,34 +111,34 @@
 
     private async Task OnSubmitAsync()
     {
+
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var valid = EditContext.Validate();
         valid = await CheckTeacherAvailabilityAsync(context, valid);
         valid = await CheckCabinetAvailabilityAsync(context, valid);
         if (!Visible || !valid)
             return;
-        
+
         var replace = new ClassScheduleReplacement
         {
-            ClassScheduleId = ClassSchedule.Id,
-            ScheduleId = ClassSchedule.ScheduleId,
-            SubjectId = Form.IsCancel ? null : Form.Subject.Id,
-            TeacherId = Form.IsCancel ? null : Form.Teacher?.Id,
-            CabinetId = Form.IsCancel ? null : Form.Cabinet?.Id,
+            ScheduleId = Schedule.Id,
+            SubjectId = Form.Subject!.Id,
+            TeacherId = Form.Teacher?.Id,
+            CabinetId = Form.Cabinet?.Id,
             Date = DateOnly.FromDateTime(SelectedDate),
-            Number = ClassSchedule.Number,
-            IsCancel = Form.IsCancel
+            Number = Number,
+            IsCancel = false,
+            IsAddition = true
         };
-        
         context.Add(replace);
         await context.SaveChangesAsync();
-        replace.Subject = Form.IsCancel ? null : Form.Subject;
-        replace.Teacher = Form.IsCancel ? null : Form.Teacher;
-        replace.Cabinet = Form.IsCancel ? null : Form.Cabinet;
-        replace.ClassSchedule = ClassSchedule;
+        replace.Subject = Form.Subject;
+        replace.Teacher = Form.Teacher;
+        replace.Cabinet = Form.Cabinet;
+        replace.Schedule = Schedule;
         OnCancel();
-        await OnReplaceClassSchedule.InvokeAsync(replace);
-    } 
+        await OnClassScheduleReplacementCreated.InvokeAsync(replace);
+    }
     
     private async Task<bool> CheckTeacherAvailabilityAsync(MainDbContext context, bool valid)
     {
@@ -181,24 +160,16 @@
         EditContext.NotifyValidationStateChanged();
         return false;
     }
-
+    
 
     public class ComponentForm
     {
-        public ComponentForm(ClassSchedule classSchedule)
-        {
-            Subject = classSchedule.Subject;
-            Teacher = classSchedule.Teacher;
-            Cabinet = classSchedule.Cabinet;
-        }
-
-        public Subject Subject { get; set; }
+        [MyRequired]
+        [Display(Name = "Дисциплина")]
+        public Subject? Subject { get; set; }
 
         public User? Teacher { get; set; }
 
         public Cabinet? Cabinet { get; set; }
-
-        public bool IsCancel { get; set; }
     }
-
 }

@@ -10,30 +10,28 @@
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDialogService DialogService
-@* <MudButton *@
-@*     Class="@ClassCss" *@
-@*     Variant="Variant.Outlined" *@
-@*     Color="Color.Primary" *@
-@*     OnClick="OnOpen"> *@
-@*     @ClassSchedule.Subject.Name *@
-@* </MudButton> *@
-
-<div class="@ClassCss" @onclick="OnOpen">
-    <strong>
-        @ClassSchedule.Subject.Name
-    </strong>
-    @if (ClassSchedule.Cabinet != null)
-    {
-        <small>
-            @ClassSchedule.Cabinet.Name
-        </small>
-    }
-    <br/>
-    @if (ClassSchedule.Teacher != null)
-    {
-        <i>@ClassSchedule.Teacher.Initials</i>
-    }
-</div>
+<MudButton
+    Class="@ClassCss"
+    Variant="Variant.Outlined"
+    Color="Color.Primary"
+    OnClick="OnOpen">
+    <div class="schedule-cell-text">
+        <strong>
+            @ClassSchedule.Subject.Name
+        </strong>
+        @if (ClassSchedule.Cabinet != null)
+        {
+            <small>
+                (@ClassSchedule.Cabinet.Name)
+            </small>
+        }
+        <br/>
+        @if (ClassSchedule.Teacher != null)
+        {
+            <i>@ClassSchedule.Teacher.Initials</i>
+        }
+    </div>
+</MudButton>
 
 @if (Visible)
 {

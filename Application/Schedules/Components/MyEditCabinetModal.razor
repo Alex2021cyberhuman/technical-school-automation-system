@@ -2,6 +2,7 @@
 @using Application.Data
 @using Application.Common.Data
 @using Application.Schedules.Data
+@using System.ComponentModel.DataAnnotations
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDialogService DialogService
 <MudIconButton Color="Color.Primary" Variant="Variant.Outlined" Icon="@Icons.Filled.Edit" OnClick="OnOpen" Title="Изменить кабинет"/>
@@ -86,9 +87,16 @@
         cabinet.Profile = Form.Profile;
         cabinet.Floor = Form.Floor;
         cabinet.Wing = Form.Wing;
+        
+        Cabinet.Name = Form.Name;
+        Cabinet.Code = Form.Code;
+        Cabinet.Profile = Form.Profile;
+        Cabinet.Floor = Form.Floor;
+        Cabinet.Wing = Form.Wing;
+        
         await context.SaveChangesAsync();
         OnCancel();
-        await OnCabinetEdited.InvokeAsync();
+        await OnCabinetEdited.InvokeAsync(Cabinet);
     }
 
     private async Task OnDeleteAsync()
@@ -117,10 +125,13 @@
             Wing = cabinet.Wing;
         }
 
+        
         [MyRequired]
+        [Display(Name = "Название")]
         public string Name { get; set; }
 
         [MyRequired]
+        [Display(Name = "Код")]
         public string Code { get; set; }
 
         public string Profile { get; set; }

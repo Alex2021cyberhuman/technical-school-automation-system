@@ -1,6 +1,6 @@
 namespace Application.Schedules.Data;
 
-public class TeacherAvailabilityFilter
+public class ScheduleAvailabilityFilter
 {
     public int Number { get; set; }
 

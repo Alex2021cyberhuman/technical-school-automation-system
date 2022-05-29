@@ -4,19 +4,53 @@
 @using Microsoft.Extensions.Localization
 @using Application.Data
 @using Application.Specialities.Data
+@using Application.Common.Helpers
+@using Application.Access.Data
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDialogService DialogService
-<MudButton
-    Variant="Variant.Outlined"
-    Color="Color.Primary"
-    OnClick="OnOpen">
-    @ClassScheduleReplacement.Subject.Name
-    @if (ClassScheduleReplacement.ClassSchedule != null)
-    {
-        <MudText Typo="Typo.caption">(ClassScheduleReplacement.ClassSchedule.Subject.Name)</MudText>
-    }
-</MudButton>
+@inject WeekSeparationService WeekSeparationService
+
+@if (!ClassScheduleReplacement.IsCancel)
+{
+    <MudButton
+        Class="replacements-cell-solid-item"
+        Variant="Variant.Outlined"
+        Color="Color.Primary"
+        OnClick="OnOpen">
+        <div class="replacements-cell-text">
+            <strong>
+                Замена
+            </strong>
+            @ClassScheduleReplacement.Subject!.Name
+            @if (ClassScheduleReplacement.Cabinet != null)
+            {
+                <small>
+                    (@ClassScheduleReplacement.Cabinet.Name)
+                </small>
+            }
+            <br/>
+            @if (ClassScheduleReplacement.Teacher != null)
+            {
+                <i>@ClassScheduleReplacement.Teacher.Initials</i>
+            }
+        </div>
+    </MudButton>
+}
+else
+{
+    <MudButton
+        Class="replacements-cell-solid-item"
+        Variant="Variant.Outlined"
+        Color="Color.Primary"
+        OnClick="OnOpen">
+        <div class="replacements-cell-text">
+            <strong>
+                Отмена
+            </strong>
+        </div>
+    </MudButton>
+}
 
 @if (Visible)
 {
@@ -37,7 +71,28 @@
                         <MudField Label="День недели">@StringLocalizer[ClassScheduleReplacement.Date.DayOfWeek.ToString()]</MudField>
                         <MudField Label="Дата">@ClassScheduleReplacement.Date.ToShortDateString()</MudField>
                         <MudField Label="Номер урока">@ClassScheduleReplacement.Number</MudField>
-                        <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                        @if (ClassScheduleReplacement.ClassSchedule != null)
+                        {
+                            <h6>Данные замененного элемента расписания</h6>
+                            <MudField Label="Недельное разделение">@StringLocalizer[ClassScheduleReplacement.ClassSchedule.WeeksSeparation.ToString()]</MudField>
+                            <MudField Label="Дисциплина">@ClassScheduleReplacement.ClassSchedule.Subject.Name</MudField>
+                            <MudField Label="Учитель">@(ClassScheduleReplacement.ClassSchedule.Teacher?.Initials.OrToDefault("Не выбрано"))</MudField>
+                            <MudField Label="Дисциплина">@ClassScheduleReplacement.ClassSchedule.Cabinet?.Name.OrToDefault("Не выбрано"))</MudField>
+                        }
+                        @if (!Form.IsAddition)
+                        {
+                            <MudSwitch Label="Это отмена?" Color="Color.Primary" @bind-Value="Form.IsCancel"/>
+                        }
+                        @if (!Form.IsCancel)
+                        {
+                            <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
+                            <MyTeacherPicker
+                                @bind-Value="Form.Teacher"
+                                Teachers="Teachers"/>
+                            <MyCabinetPicker
+                                @bind-Value="Form.Cabinet"
+                                Cabinets="Cabinets"/>
+                        }
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -54,10 +109,16 @@
 @code {
 
     [Parameter]
-    public ClassScheduleReplacement ClassScheduleReplacement { get; set; } = null!;
+    public IReadOnlyCollection<Cabinet> Cabinets { get; set; } = null!;
 
     [Parameter]
     public IReadOnlyCollection<Subject> Subjects { get; set; } = null!;
+
+    [Parameter]
+    public IReadOnlyCollection<User> Teachers { get; set; } = null!;
+
+    [Parameter]
+    public ClassScheduleReplacement ClassScheduleReplacement { get; set; } = null!;
 
     [Parameter]
     public EventCallback<ClassScheduleReplacement> OnEditClassScheduleReplacement { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
@@ -69,7 +130,20 @@
 
     public EditContext EditContext { get; set; } = null!;
 
+    public ValidationMessageStore MessageStore { get; set; } = null!;
+
     public bool Visible { get; set; }
+
+    public ScheduleAvailabilityFilter ScheduleAvailabilityFilter => new()
+    {
+        DayOfWeek = ClassScheduleReplacement.Date.DayOfWeek,
+        Number = ClassScheduleReplacement.Number,
+        ReplacementMode = true,
+        WeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(ClassScheduleReplacement.Date.ToDateTime(TimeOnly.MinValue)),
+        ClassScheduleId = ClassScheduleReplacement.ClassScheduleId,
+        ClassScheduleReplacementId = ClassScheduleReplacement.Id,
+        Date = ClassScheduleReplacement.Date
+    };
 
     private void OnCancel()
     {
@@ -80,26 +154,74 @@
     {
         Form = new(ClassScheduleReplacement);
         EditContext = new(Form);
+        MessageStore = new(EditContext);
         Visible = true;
     }
 
     private async Task OnSubmitAsync()
     {
-        if (!Visible || !EditContext.Validate())
-            return;
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var replace = await context.ClassScheduleReplacement.FirstOrDefaultAsync(x => x.Id == ClassScheduleReplacement.Id);
-        if (replace is null)
-        {
-            OnCancel();
+        var valid = EditContext.Validate();
+        valid = await CheckTeacherAvailabilityAsync(context, valid);
+        valid = await CheckCabinetAvailabilityAsync(context, valid);
+        if (!Visible || !valid)
             return;
-        }
-        replace.SubjectId = Form.Subject.Id;
+
+        var replace = await context.ClassScheduleReplacement.SingleAsync(x => x.Id == ClassScheduleReplacement.Id);
+
+        replace.IsCancel = Form.IsCancel;
+        replace.SubjectId = Form.IsCancel ? null : Form.Subject?.Id;
+        replace.TeacherId = Form.IsCancel ? null : Form.Teacher?.Id;
+        replace.CabinetId = Form.IsCancel ? null : Form.Cabinet?.Id;
+
         await context.SaveChangesAsync();
-        ClassScheduleReplacement.Subject = Form.Subject;
-        ClassScheduleReplacement.SubjectId = Form.Subject.Id;
+
+        ClassScheduleReplacement.IsCancel = Form.IsCancel;
+        ClassScheduleReplacement.Subject = Form.IsCancel ? null : Form.Subject;
+        ClassScheduleReplacement.SubjectId = Form.IsCancel ? null : Form.Subject?.Id;
+        ClassScheduleReplacement.Teacher = Form.IsCancel ? null : Form.Teacher;
+        ClassScheduleReplacement.TeacherId = Form.IsCancel ? null : Form.Teacher?.Id;
+        ClassScheduleReplacement.Cabinet = Form.IsCancel ? null : Form.Cabinet;
+        ClassScheduleReplacement.CabinetId = Form.IsCancel ? null : Form.Cabinet?.Id;
+
         OnCancel();
         await OnEditClassScheduleReplacement.InvokeAsync(ClassScheduleReplacement);
+    }
+
+    private async Task OnDeleteAsync()
+    {
+        var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");
+        if (result.GetValueOrDefault())
+        {
+            return;
+        }
+        await using var context = await DbContextFactory.CreateDbContextAsync();
+        var dbClassSchedule = await context.ClassScheduleReplacement.SingleAsync(x => x.Id == ClassScheduleReplacement.Id);
+        context.Remove(dbClassSchedule);
+        await context.SaveChangesAsync();
+        OnCancel();
+        await OnClassScheduleReplacementRemoved.InvokeAsync(ClassScheduleReplacement);
+    }
+
+    private async Task<bool> CheckTeacherAvailabilityAsync(MainDbContext context, bool valid)
+    {
+        var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Teacher);
+        if (validTeacherPick) return valid;
+
+        MessageStore.Add(FieldIdentifier.Create(() => Form.Teacher), teacherPickError);
+        EditContext.NotifyValidationStateChanged();
+        return false;
+    }
+
+
+    private async Task<bool> CheckCabinetAvailabilityAsync(MainDbContext context, bool valid)
+    {
+        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Cabinet);
+        if (validCabinetPick) return valid;
+
+        MessageStore.Add(FieldIdentifier.Create(() => Form.Cabinet), cabinetPickError);
+        EditContext.NotifyValidationStateChanged();
+        return false;
     }
 
     public class ComponentForm
@@ -107,29 +229,21 @@
         public ComponentForm(ClassScheduleReplacement classScheduleReplacement)
         {
             Subject = classScheduleReplacement.Subject;
+            Teacher = classScheduleReplacement.Teacher;
+            Cabinet = classScheduleReplacement.Cabinet;
+            IsCancel = classScheduleReplacement.IsCancel;
+            IsAddition = classScheduleReplacement.IsAddition;
         }
 
-        public Subject Subject { get; set; }
-    }
+        public Subject? Subject { get; set; }
 
-    private async Task OnDeleteAsync()
-    {
-        var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");
-        if (!result.HasValue || !result.Value)
-        {
-            return;
-        }
-        await using var context = await DbContextFactory.CreateDbContextAsync();
-        var dbClassSchedule = await context.ClassScheduleReplacement.FirstOrDefaultAsync(x => x.Id == ClassScheduleReplacement.Id);
-        if (dbClassSchedule is null)
-        {
-            OnCancel();
-            return;
-        }
-        context.Remove(dbClassSchedule);
-        await context.SaveChangesAsync();
-        OnCancel();
-        await OnClassScheduleReplacementRemoved.InvokeAsync(ClassScheduleReplacement);
+        public User? Teacher { get; set; }
+
+        public Cabinet? Cabinet { get; set; }
+
+        public bool IsCancel { get; set; }
+
+        public bool IsAddition { get; set; }
     }
 
 }

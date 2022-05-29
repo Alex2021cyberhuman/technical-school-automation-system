@@ -1,105 +1,86 @@
 @using Application.Schedules.Data
 @using Application.Specialities.Data
-@using Microsoft.EntityFrameworkCore.Internal
-@using Application.Groups.Data
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Localization
 @using Application.Data
+@using Application.Access.Data
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
-<MudGrid>
-    <MudItem xs="12">
-        <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync"/>
-    </MudItem>
-    <MudItem xs="12">
-        <MudSimpleTable Bordered="true">
-            <thead>
-            <tr>
-                <th></th>
-                <th>@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for (var i = 1; i <= MaxNumber; i++)
-            {
-                var classNumber = i;
-                var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek:SelectedDate.DayOfWeek));
-                var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
-                var item = classSchedulesOfDayNumber?.FirstOrDefault();
+@inject WeekSeparationService WeekSeparationService
+<MudContainer>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync"/>
+        </MudItem>
+        <MudItem xs="12">
+            <MudSimpleTable Bordered="true">
+                <thead>
                 <tr>
-                    <td>@classNumber</td>
-                    <td>
-
-                        @if (classSchedulesOfDayNumber is null || !classSchedulesOfDayNumber.Any())
-                        {
-                        }
-                        else if (item is not null && item.WeeksSeparation == WeeksSeparationType.All)
-                        {
-                            if (classScheduleReplacement is null)
-                            {
-                                <MyReplaceClassSchedule
-                                    ClassSchedule="item"
-                                    SelectedDate="SelectedDate"
-                                    Subjects="Subjects"
-                                    OnReplaceClassSchedule="OnReplaceClassSchedule"/>
-                            }
-                            else
-                            {
-                                <MyEditClassScheduleReplacement
-                                    ClassScheduleReplacement="classScheduleReplacement"
-                                    Subjects="Subjects"
-                                    OnEditClassScheduleReplacement="OnEditClassScheduleReplacement"
-                                    OnClassScheduleReplacementRemoved="OnClassScheduleReplacementRemoved"/>
-                            }
-                        }
-                        else
-                        {
-                            var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Odd);
-                            var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Even);
+                    <th></th>
+                    <th>@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for (var i = 1; i <= MaxNumber; i++)
+                {
+                    var classNumber = i;
+                    var classSchedule =
+                        ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek:SelectedDate.DayOfWeek, WeeksSeparationType.All)) ??
+                        ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek:SelectedDate.DayOfWeek, CurrentWeekSeparation));
+                    var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
+                    <tr>
+                        <td>@classNumber</td>
+                        <td>
                             @if (classScheduleReplacement is null)
                             {
-                                @if (oddItem is not null)
+                                if (classSchedule is null)
                                 {
                                     <MyReplaceClassSchedule
-                                        ClassSchedule="oddItem"
-                                        SelectedDate="SelectedDate"
+                                        ClassSchedule="classSchedule"
+                                        Cabinets="Cabinets"
                                         Subjects="Subjects"
+                                        Teachers="Teachers"
+                                        SelectedDate="SelectedDate"
                                         OnReplaceClassSchedule="OnReplaceClassSchedule"/>
                                 }
                                 else
                                 {
-                                }
-                                @if (evenItem is not null)
-                                {
-                                    <MyReplaceClassSchedule
-                                        ClassSchedule="evenItem"
-                                        SelectedDate="SelectedDate"
+                                    <MyCreateAdditionClassSchedule
+                                        Schedule="Schedule"
+                                        Cabinets="Cabinets"
                                         Subjects="Subjects"
-                                        OnReplaceClassSchedule="OnReplaceClassSchedule"/>
-                                }
-                                else
-                                {
+                                        Teachers="Teachers"
+                                        SelectedDate="SelectedDate"
+                                        Number="classNumber"
+                                        OnClassScheduleReplacementCreated="OnClassScheduleReplacementCreated"/>
                                 }
                             }
                             else
                             {
                                 <MyEditClassScheduleReplacement
-                                    ClassScheduleReplacement="classScheduleReplacement"
+                                    Cabinets="Cabinets"
                                     Subjects="Subjects"
+                                    Teachers="Teachers"
+                                    ClassScheduleReplacement="classScheduleReplacement"
                                     OnEditClassScheduleReplacement="OnEditClassScheduleReplacement"
                                     OnClassScheduleReplacementRemoved="OnClassScheduleReplacementRemoved"/>
                             }
-                        }
-                    </td >
-                </tr>
-            }
-            </tbody>
-        </MudSimpleTable>
-    </MudItem>
-</MudGrid>
-
+                        </td >
+                    </tr>
+                }
+                </tbody>
+            </MudSimpleTable>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
 
 @code {
+
+    [Parameter]
+    public List<User> Teachers { get; set; } = new();
+
+    [Parameter]
+    public List<Cabinet> Cabinets { get; set; } = new();
 
     [Parameter]
     public Schedule Schedule { get; set; } = null!;
@@ -113,76 +94,37 @@
     [Parameter]
     public DayOfWeek[] DayOfWeeks { get; set; } = null!;
 
+    public WeeksSeparationType CurrentWeekSeparation { get; set; }
+
     public DateTime SelectedDate { get; set; } = DateTime.Now;
 
     private List<ClassSchedule> ClassSchedules { get; set; } = new();
 
-    private Dictionary<(int number, DayOfWeek dayOfWeek), List<ClassSchedule>> ClassScheduleCache { get; set; } = new();
+    private Dictionary<(int number, DayOfWeek dayOfWeek, WeeksSeparationType weeksSeparation), ClassSchedule> ClassScheduleCache { get; set; } = new();
 
     private List<ClassScheduleReplacement> ClassScheduleReplacements { get; set; } = new();
 
     private Dictionary<int, ClassScheduleReplacement> ClassScheduleReplacementCache { get; set; } = new();
 
-    private void OnClassScheduleCreated(ClassSchedule classSchedule)
+    protected override async Task OnInitializedAsync()
     {
-        ClassSchedules.Add(classSchedule);
-        var scheduleCell = (classSchedule.Number, classSchedule.DayOfWeek);
-        if (ClassScheduleCache.ContainsKey(scheduleCell))
-        {
-            ClassScheduleCache[scheduleCell].Add(classSchedule);
-        }
-        else
-        {
-            ClassScheduleCache[scheduleCell] = new()
-            {
-                classSchedule
-            };
-        }
-    }
-
-    private void OnReplaceClassSchedule(ClassScheduleReplacement classScheduleReplacement)
-    {
-        ClassScheduleReplacements.Add(classScheduleReplacement);
-        var scheduleCell = classScheduleReplacement.Number;
-        if (!ClassScheduleReplacementCache.ContainsKey(scheduleCell))
-        {
-            ClassScheduleReplacementCache[scheduleCell] = classScheduleReplacement;
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
-    }
-
-    private void OnEditClassScheduleReplacement(ClassScheduleReplacement classScheduleReplacement)
-    {
-        var index = ClassScheduleReplacements.FindIndex(x => x.Id == classScheduleReplacement.Id);
-        ClassScheduleReplacements[index] = classScheduleReplacement;
-        var scheduleCell = classScheduleReplacement.Number;
-        if (ClassScheduleReplacementCache.ContainsKey(scheduleCell))
-        {
-            ClassScheduleReplacementCache[scheduleCell] = classScheduleReplacement;
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
+        await base.OnInitializedAsync();
+        await ChangeDateAsync(DateTime.Now);
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        var oldSchedule = Schedule;
         await base.OnParametersSetAsync();
-        if (!ReferenceEquals(oldSchedule, Schedule))
+        if (ClassSchedules.Count == 0 || ClassSchedules.First().ScheduleId != Schedule.Id)
         {
             await using var context = await DbContextFactory.CreateDbContextAsync();
             ClassSchedules = await context.ClassSchedule
                 .Where(x => x.ScheduleId == Schedule.Id)
+                .Where(x => x.DayOfWeek == SelectedDate.DayOfWeek)
                 .OrderBy(x => x.Number)
                 .ThenBy(x => x.DayOfWeek).ToListAsync();
             ClassScheduleCache = ClassSchedules
-                .GroupBy(x => (x.Number, x.DayOfWeek))
-                .ToDictionary(x => x.Key, x => x.ToList());
+                .ToDictionary(x => (x.Number, x.DayOfWeek, x.WeeksSeparation));
         }
     }
 
@@ -197,10 +139,21 @@
         ClassScheduleReplacements = await context.ClassScheduleReplacement
             .Where(x => x.ScheduleId == Schedule.Id)
             .Where(x => x.Date == date)
+            .Include(x => x.Cabinet)
+            .Include(x => x.Teacher)
+            .Include(x => x.Schedule)
+            .Include(x => x.ClassSchedule)
+            .ThenInclude(x => x!.Cabinet)
+            .Include(x => x.ClassSchedule)
+            .ThenInclude(x => x!.Teacher)
+            .Include(x => x.ClassSchedule)
+            .ThenInclude(x => x!.Schedule)
             .ToListAsync();
         ClassScheduleReplacementCache = ClassScheduleReplacements
             .ToDictionary(x => x.Number, x => x);
+
         SelectedDate = date.ToDateTime(TimeOnly.MinValue);
+        CurrentWeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(SelectedDate);
     }
 
     private void OnClassScheduleReplacementRemoved(ClassScheduleReplacement classScheduleReplacement)
@@ -208,14 +161,29 @@
         var index = ClassScheduleReplacements.FindIndex(x => x.Id == classScheduleReplacement.Id);
         ClassScheduleReplacements.RemoveAt(index);
         var scheduleCell = classScheduleReplacement.Number;
-        if (ClassScheduleReplacementCache.ContainsKey(scheduleCell))
-        {
-            ClassScheduleReplacementCache.Remove(scheduleCell);
-        }
-        else
-        {
-            throw new InvalidOperationException();
-        }
+        ClassScheduleReplacementCache.Remove(scheduleCell);
+    }
+
+    private void OnReplaceClassSchedule(ClassScheduleReplacement classScheduleReplacement)
+    {
+        ClassScheduleReplacements.Add(classScheduleReplacement);
+        var scheduleCell = classScheduleReplacement.Number;
+        ClassScheduleReplacementCache[scheduleCell] = classScheduleReplacement;
+    }
+
+    private void OnEditClassScheduleReplacement(ClassScheduleReplacement classScheduleReplacement)
+    {
+        var index = ClassScheduleReplacements.FindIndex(x => x.Id == classScheduleReplacement.Id);
+        ClassScheduleReplacements[index] = classScheduleReplacement;
+        var scheduleCell = classScheduleReplacement.Number;
+        ClassScheduleReplacementCache[scheduleCell] = classScheduleReplacement;
+    }
+
+    private void OnClassScheduleReplacementCreated(ClassScheduleReplacement classScheduleReplacement)
+    {
+        ClassScheduleReplacements.Add(classScheduleReplacement);
+        var scheduleCell = classScheduleReplacement.Number;
+        ClassScheduleReplacementCache[scheduleCell] = classScheduleReplacement;
     }
 
 }
