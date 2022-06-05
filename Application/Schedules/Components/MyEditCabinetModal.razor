@@ -9,7 +9,7 @@
 
 @if (Visible)
 {
-    <PageTitle>Изменить кабинет</PageTitle>
+    <PageTitle>Техникум - Изменить кабинет </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -23,10 +23,10 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" ValidationFor="() => Form.Name"/>
-                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" ValidationFor="() => Form.Code"/>
-                        <MyInputComponent Label="Профиль" Placeholder="Профиль" @bind-Value="Form.Profile" ValidationFor="() => Form.Profile"/>
-                        <MyInputComponent Label="Отделение" Placeholder="Отделение" @bind-Value="Form.Wing" ValidationFor="() => Form.Wing"/>
+                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" />
+                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" />
+                        <MyInputComponent Label="Профиль" Placeholder="Профиль" @bind-Value="Form.Profile" />
+                        <MyInputComponent Label="Отделение" Placeholder="Отделение" @bind-Value="Form.Wing" />
                         <MudNumericField Label="Этаж" Placeholder="Этаж" @bind-Value="Form.Floor" Min="1" Max="100"/>
                     </EditForm>
                 </div>
@@ -87,13 +87,13 @@
         cabinet.Profile = Form.Profile;
         cabinet.Floor = Form.Floor;
         cabinet.Wing = Form.Wing;
-        
+
         Cabinet.Name = Form.Name;
         Cabinet.Code = Form.Code;
         Cabinet.Profile = Form.Profile;
         Cabinet.Floor = Form.Floor;
         Cabinet.Wing = Form.Wing;
-        
+
         await context.SaveChangesAsync();
         OnCancel();
         await OnCabinetEdited.InvokeAsync(Cabinet);
@@ -125,7 +125,7 @@
             Wing = cabinet.Wing;
         }
 
-        
+
         [MyRequired]
         [Display(Name = "Название")]
         public string Name { get; set; }

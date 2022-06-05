@@ -12,7 +12,7 @@
 <div class="row">
     <div class="col-12 col-md-4">
         <EditForm EditContext="FilterContext">
-            <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString" ValidationFor="() => Filter.SearchString"/>
+            <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString" />
         </EditForm>
         <CreateUserModal OnSubmit="RefreshAsync"/>
     </div>
@@ -35,10 +35,7 @@
                     <td>@item.FullName</td>
                     <td>@item.UserName</td>
                     <td>
-                        @foreach (var role in item.UserRoles)
-                        {
-                            <span>@(StringLocalizer[role.Role.Name] + ", ")</span>
-                        }
+                        @string.Join(", ", item.UserRoles.Select(x => StringLocalizer[x.Role.Name]))
                     </td>
                     <td>
                         <EditUserModal User="@item" OnSubmit="RefreshAsync"/>

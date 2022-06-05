@@ -13,7 +13,8 @@
 @inject ProofreadingTeacherLoadVacanciesCreator ProofreadingTeacherLoadVacanciesCreator
 @inject MonthProofreadingTeacherLoadsCreator MonthProofreadingTeacherLoadsCreator
 @inject NavigationManager NavigationManager
-<PageTitle>Вычитка часов преподования</PageTitle>
+@inject IDialogService DialogService
+<PageTitle>Техникум - Вычитка часов преподования </PageTitle>
 <h3>Вычитка часов преподования</h3>
 
 <CreateProofreadingTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync" GetAllUserLoadsAsync="GetAllUserLoadsAsync"/>
@@ -147,13 +148,15 @@
 
     private async Task CreateProofreadingTeacherLoadVacanciesTableAsync()
     {
-        if (SelectedMonth == default && SelectedYear == default)
+        if (SelectedMonth == default || SelectedYear == default)
         {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Выберите месяц и год");
             return;
         }
         var loads = Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth).ToList();
         if (!loads.Any())
         {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Нет нагрузок на данный период");
             return;
         }
         var fileName = await ProofreadingTeacherLoadVacanciesCreator.CreatePackageAsync(
@@ -166,13 +169,15 @@
 
     private async Task CreateMonthProofreadingTeacherLoadVacanciesTable()
     {
-        if (SelectedMonth == default && SelectedYear == default)
+        if (SelectedMonth == default || SelectedYear == default)
         {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Выберите месяц и год");
             return;
         }
         var loads = Loads.Where(x => x.Year == SelectedYear && x.Month == SelectedMonth).ToList();
         if (!loads.Any())
         {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Нет нагрузок на данный период");
             return;
         }
         var fileName = await MonthProofreadingTeacherLoadsCreator.CreatePackageAsync(

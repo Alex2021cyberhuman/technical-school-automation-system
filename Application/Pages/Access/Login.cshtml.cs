@@ -68,8 +68,11 @@ public class LoginModel : PageModel
         }
 
         if (result.RequiresTwoFactor)
-            // TODO: Сделать 2х факторную авторизацию
-            throw new NotImplementedException();
+        {
+            _logger.LogError("User account requires two factor authorization that is not implemented");
+            return RedirectToPage("/");
+        }
+
         if (result.IsLockedOut)
         {
             _logger.LogWarning("User account locked out");

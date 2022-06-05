@@ -20,7 +20,7 @@
 
 @if (Visible)
 {
-    <PageTitle>Добавить однодневный элемент расписания</PageTitle>
+    <PageTitle>Техникум - Добавить однодневный элемент расписания </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -75,7 +75,7 @@
 
     [Parameter]
     public int Number { get; set; }
-    
+
     [Parameter]
     public EventCallback<ClassScheduleReplacement> OnClassScheduleReplacementCreated { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
 
@@ -84,7 +84,7 @@
     public EditContext EditContext { get; set; } = null!;
 
     public ValidationMessageStore MessageStore { get; set; } = null!;
-    
+
     public bool Visible { get; set; }
 
     public ScheduleAvailabilityFilter ScheduleAvailabilityFilter => new()
@@ -95,7 +95,7 @@
         WeekSeparation = WeekSeparationService.GetCurrentWeekSeparation(SelectedDate),
         Date = DateOnly.FromDateTime(SelectedDate)
     };
-    
+
     private void OnCancel()
     {
         Visible = false;
@@ -111,7 +111,6 @@
 
     private async Task OnSubmitAsync()
     {
-
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var valid = EditContext.Validate();
         valid = await CheckTeacherAvailabilityAsync(context, valid);
@@ -139,7 +138,7 @@
         OnCancel();
         await OnClassScheduleReplacementCreated.InvokeAsync(replace);
     }
-    
+
     private async Task<bool> CheckTeacherAvailabilityAsync(MainDbContext context, bool valid)
     {
         var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Teacher);
@@ -153,14 +152,14 @@
 
     private async Task<bool> CheckCabinetAvailabilityAsync(MainDbContext context, bool valid)
     {
-        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter , Form.Cabinet);
+        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Cabinet);
         if (validCabinetPick) return valid;
 
         MessageStore.Add(FieldIdentifier.Create(() => Form.Cabinet), cabinetPickError);
         EditContext.NotifyValidationStateChanged();
         return false;
     }
-    
+
 
     public class ComponentForm
     {
@@ -172,4 +171,5 @@
 
         public Cabinet? Cabinet { get; set; }
     }
+
 }

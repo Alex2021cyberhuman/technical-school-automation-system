@@ -592,6 +592,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Менеджер расписания.
+        /// </summary>
+        public static string ScheduleManager {
+            get {
+                return ResourceManager.GetString("ScheduleManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Подписано.
         /// </summary>
         public static string Signed {

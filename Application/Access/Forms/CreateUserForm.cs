@@ -13,7 +13,8 @@ public class CreateUserForm
     public string Password { get; set; } = string.Empty;
 
     [MyRequired]
-    [Compare(nameof(Password))]
+    [Compare(nameof(Password), ErrorMessageResourceName = "CompareAttribute_MustMatch",
+        ErrorMessageResourceType = typeof(Resources.Resource))]
     [DataType(DataType.Password)]
     [Display(Name = "Подтвердите пароль")]
     public string ConfirmPassword { get; set; } = string.Empty;

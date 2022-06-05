@@ -1370,11 +1370,11 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         var s = "";
         while (n > 26)
         {
-            s = new string((char)(64 + n % 26), 1) + s;
+            s = new string((char)(65 + n % 27), 1) + s;
             n /= 26;
         }
 
-        s = new string((char)(64 + n % 26), 1) + s;
+        s = new string((char)(64 + n % 27), 1) + s;
         var cellReference = $"{s}{rowIndex}";
         return cellReference;
     }

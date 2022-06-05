@@ -256,34 +256,37 @@
     <data name="ArgumentIsNullOrWhitespace" xml:space="preserve">
     <value>Поле {0} не может быть не указано или содержать только пробелы.</value>
   </data>
-  <data name="Sunday" xml:space="preserve">
+    <data name="Sunday" xml:space="preserve">
     <value>ВС</value>
   </data>
-  <data name="Monday" xml:space="preserve">
+    <data name="Monday" xml:space="preserve">
     <value>ПН</value>
   </data>
-  <data name="Tuesday" xml:space="preserve">
+    <data name="Tuesday" xml:space="preserve">
     <value>ВТ</value>
   </data>
-  <data name="Wednesday" xml:space="preserve">
+    <data name="Wednesday" xml:space="preserve">
     <value>СР</value>
   </data>
-  <data name="Thursday" xml:space="preserve">
+    <data name="Thursday" xml:space="preserve">
     <value>ЧТ</value>
   </data>
-  <data name="Friday" xml:space="preserve">
+    <data name="Friday" xml:space="preserve">
     <value>ПТ</value>
   </data>
-  <data name="Saturday" xml:space="preserve">
+    <data name="Saturday" xml:space="preserve">
     <value>СБ</value>
   </data>
-  <data name="Numerator" xml:space="preserve">
+    <data name="Numerator" xml:space="preserve">
     <value>Числитель</value>
   </data>
-  <data name="Divisor" xml:space="preserve">
+    <data name="Divisor" xml:space="preserve">
     <value>Знаменатель</value>
   </data>
-  <data name="All" xml:space="preserve">
+    <data name="All" xml:space="preserve">
     <value>Все</value>
+  </data>
+    <data name="ScheduleManager" xml:space="preserve">
+    <value>Менеджер расписания</value>
   </data>
 </root>

@@ -11,7 +11,8 @@ public class EditUserForm
     [Display(Name = "Пароль")]
     public string Password { get; set; } = string.Empty;
 
-    [Compare(nameof(Password))]
+    [Compare(nameof(Password), ErrorMessageResourceName = "CompareAttribute_MustMatch",
+        ErrorMessageResourceType = typeof(Resources.Resource))]
     [DataType(DataType.Password)]
     [Display(Name = "Подтвердите пароль")]
     public string ConfirmPassword { get; set; } = string.Empty;

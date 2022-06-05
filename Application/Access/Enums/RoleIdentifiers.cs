@@ -20,6 +20,7 @@ public static class RoleIdentifiers
         Director,
         AdmissionCommitteeMember,
         AssociateDirector,
-        Teacher
+        Teacher,
+        ScheduleManager
     };
 }

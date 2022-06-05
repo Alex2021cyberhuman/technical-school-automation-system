@@ -13,7 +13,7 @@
 
 @if (Visible)
 {
-    <PageTitle>Редактировать пользователя @User.FullName</PageTitle>
+    <PageTitle>Техникум - Редактировать пользователя @User.FullName </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -31,14 +31,14 @@
                         }
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login" ValidationFor="() => Form.Login"/>
-                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email" ValidationFor="() => Form.Email"/>
-                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" ValidationFor="() => Form.FamilyName"/>
-                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" ValidationFor="() => Form.FirstName"/>
-                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" ValidationFor="() => Form.SurName"/>
-                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" ValidationFor="() => Form.Password"/>
-                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" ValidationFor="() => Form.ConfirmPassword"/>
-                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile" ValidationFor="() => Form.Profile"/>
+                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login" />
+                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email" />
+                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" />
+                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" />
+                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" />
+                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" />
+                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" />
+                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile" />
                         <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                         <MyInputCheckBox Label="Заблокировать" @bind-Value="Form.Lockout"/>
                         @if (Form.Lockout)
@@ -109,8 +109,8 @@
         Form.LockoutEnd = Form.LockoutEnd.Value.ToLocalTime();
         Form.Email = User.Email;
         Form.FirstName = User.FirstName;
-        Form.FamilyName = User.FirstName;
-        Form.SurName = User.FirstName;
+        Form.FamilyName = User.FamilyName;
+        Form.SurName = User.SurName ?? string.Empty;
         Form.RoleNames = userRoles;
         Form.Profile = User.Profile;
         Visible = true;

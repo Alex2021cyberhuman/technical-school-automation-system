@@ -9,12 +9,12 @@
 
 @if (Speciality.Id != SpecialityId)
 {
-    <PageTitle>Не найдено!</PageTitle>
+    <PageTitle>Техникум - Не найдено! </PageTitle>
     <h3>Ничего не найдено!</h3>
 }
 else
 {
-    <PageTitle>Специальность @Speciality.Code @Speciality.Name</PageTitle>
+    <PageTitle>Техникум - Специальность @Speciality.Code @Speciality.Name </PageTitle>
     <h3>Специальность @Speciality.Code @Speciality.Name</h3>
     @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
     {

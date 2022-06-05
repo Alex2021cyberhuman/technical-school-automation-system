@@ -1,7 +1,72 @@
 ﻿@page "/"
+@using Application.Access.Enums
+@using System.Security.Claims
 
-<PageTitle>Главная</PageTitle>
+<MudContainer>
+    <h1>Добрый день!</h1>
+    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+    {
+        <a class="btn btn-primary btn-block" href="/manage/users">
+            Управление пользователями
+        </a>
+        <hr/>
+    }
+    @if (CurrentUser.Identity?.IsAuthenticated ?? false)
+    {
+        <a class="btn btn-secondary btn-block" href="/specialities">
+            Специальности и Дисциплинаы
+        </a>
+        <a class="btn btn-secondary btn-block" href="/cabinets">
+            Кабинеты
+        </a>
+        <hr/>
+        <a class="btn btn-secondary btn-block" href="/groups">
+            Группы
+        </a>
+        <hr/>
+    }
+    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.ScheduleManagers))
+    {
+        <a class="btn btn-primary btn-block" href="/schedule/manage">
+            Управление расписанием
+        </a>
+    }
+    <a class="btn btn-outline-info btn-block" href="/schedule/">
+        Расписание
+    </a>
+    <hr/>
+    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.AdmissionCommittee))
+    {
+        <a class="btn btn-info btn-block" href="/applicants">
+            Список Абитуриентов
+        </a>
+        <a class="btn btn-info btn-block" href="/applicants/create">
+            Новый Абитуриент
+        </a>
+        <hr/>
+    }
+    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Teachers))
+    {
+        <a class="btn btn-outline-primary btn-block" href="/load">
+            Нагрузки
+        </a>
+        <a class="btn btn-outline-primary btn-block" href="/proofreading">
+            Вычитка часов преподавателям
+        </a>
+    }
+</MudContainer>
 
-<h1>Добрый день!</h1>
+@code {
 
-Начнем работу?
+    private ClaimsPrincipal CurrentUser { get; set; } = new();
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        CurrentUser = (await AuthenticationStateTask).User;
+    }
+
+}

@@ -9,7 +9,7 @@
 @attribute [Authorize(Policy = PolicyIdentifiers.Teachers)]
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
-<PageTitle>Нагрузка</PageTitle>
+<PageTitle>Техникум - Нагрузка </PageTitle>
 <h3>Нагрузка</h3>
 
 <CreateTeacherLoadModal CurrentUserId="CurrentUserId" OnSubmit="RefreshAsync"/>

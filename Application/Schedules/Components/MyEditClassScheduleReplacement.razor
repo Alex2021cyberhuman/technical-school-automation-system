@@ -24,7 +24,6 @@
                 <strong>
                     Замена
                 </strong>
-                
             }
             else
             {
@@ -64,7 +63,7 @@ else
 
 @if (Visible)
 {
-    <PageTitle>Редактировать замененный элемент расписания</PageTitle>
+    <PageTitle>Техникум - Редактировать замененный элемент расписания </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -91,7 +90,7 @@ else
                         }
                         @if (!Form.IsAddition)
                         {
-                            <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary"  @bind-Checked="Form.IsCancel"/>
+                            <MudSwitch T="bool" Label="Это отмена?" Color="Color.Primary" @bind-Checked="Form.IsCancel"/>
                         }
                         @if (!Form.IsCancel)
                         {

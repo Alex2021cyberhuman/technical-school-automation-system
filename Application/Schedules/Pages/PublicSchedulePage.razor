@@ -1,6 +1,5 @@
 @page "/schedule"
 @page "/schedule/{GroupId:long}"
-@attribute [Authorize(Policy = PolicyIdentifiers.ScheduleManagers)]
 @using Application.Schedules.Data
 @using Application.Specialities.Data
 @using Application.Groups.Data
@@ -12,7 +11,7 @@
 @inject IStringLocalizer StringLocalizer
 @inject WeekSeparationService WeekSeparationService
 @inject NavigationManager NavigationManager
-<PageTitle>Расписание</PageTitle>
+<PageTitle>Техникум - Расписание </PageTitle>
 <h3>Расписание</h3>
 <MudGrid>
 <MudItem xs="12">
@@ -418,8 +417,8 @@
         if (SelectedSchedule is null ||
             LoadingDate ||
             !dateTime.HasValue || (
-            ClassScheduleReplacements.FirstOrDefault()?.ScheduleId == SelectedSchedule.Id &&
-            ClassScheduleReplacements.FirstOrDefault()?.Date == DateOnly.FromDateTime(dateTime.Value)))
+                ClassScheduleReplacements.FirstOrDefault()?.ScheduleId == SelectedSchedule.Id &&
+                ClassScheduleReplacements.FirstOrDefault()?.Date == DateOnly.FromDateTime(dateTime.Value)))
         {
             return;
         }

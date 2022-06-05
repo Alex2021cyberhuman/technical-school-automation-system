@@ -6,19 +6,19 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <PageTitle>Авторизуйтесь!</PageTitle>
+                    <PageTitle>Техникум - Авторизуйтесь! </PageTitle>
                     <h3>Авторизуйтесь!</h3>
                     <a href="Access/Login">Вход</a>
                 </NotAuthorized>
                 <Authorizing>
-                    <PageTitle>Нет прав!</PageTitle>
+                    <PageTitle>Техникум - Нет прав! </PageTitle>
                     <h3>У вас нет прав для доступа к этой странице! </h3>
                 </Authorizing>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
         </Found>
         <NotFound>
-            <PageTitle>Не найдено!</PageTitle>
+            <PageTitle>Техникум - Не найдено! </PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
                 <h3>Ничего не найдено!</h3>
             </LayoutView>

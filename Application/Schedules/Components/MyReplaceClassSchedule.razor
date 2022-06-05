@@ -34,7 +34,7 @@
 
 @if (Visible)
 {
-    <PageTitle>Заменить элемент расписания</PageTitle>
+    <PageTitle>Техникум - Заменить элемент расписания </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -98,7 +98,7 @@
 
     [Parameter]
     public EventCallback<ClassScheduleReplacement> OnReplaceClassSchedule { get; set; } = EventCallback<ClassScheduleReplacement>.Empty;
-    
+
     public ComponentForm Form { get; set; } = null!;
 
     public EditContext EditContext { get; set; } = null!;
@@ -138,7 +138,7 @@
         valid = await CheckCabinetAvailabilityAsync(context, valid);
         if (!Visible || !valid)
             return;
-        
+
         var replace = new ClassScheduleReplacement
         {
             ClassScheduleId = ClassSchedule.Id,
@@ -150,7 +150,7 @@
             Number = ClassSchedule.Number,
             IsCancel = Form.IsCancel
         };
-        
+
         context.Add(replace);
         await context.SaveChangesAsync();
         replace.Subject = Form.IsCancel ? null : Form.Subject;
@@ -159,8 +159,8 @@
         replace.ClassSchedule = ClassSchedule;
         OnCancel();
         await OnReplaceClassSchedule.InvokeAsync(replace);
-    } 
-    
+    }
+
     private async Task<bool> CheckTeacherAvailabilityAsync(MainDbContext context, bool valid)
     {
         var (validTeacherPick, teacherPickError) = await context.ValidateTeacherAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Teacher);
@@ -174,7 +174,7 @@
 
     private async Task<bool> CheckCabinetAvailabilityAsync(MainDbContext context, bool valid)
     {
-        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter , Form.Cabinet);
+        var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Cabinet);
         if (validCabinetPick) return valid;
 
         MessageStore.Add(FieldIdentifier.Create(() => Form.Cabinet), cabinetPickError);

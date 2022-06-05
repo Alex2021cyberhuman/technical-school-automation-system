@@ -16,7 +16,7 @@
 @inject StatementDocumentCreator StatementDocumentCreator
 @inject ILogger<ApplicantCreatePage> Logger
 @inject NavigationManager NavigationManager
-<PageTitle>Заполнить данные абитуриента</PageTitle>
+<PageTitle>Техникум - Заполнить данные абитуриента </PageTitle>
 <h3>Данные абитуриента</h3>
 <div class="container">
     <div class="row">
@@ -24,27 +24,27 @@
                   OnValidSubmit="OnSubmitAsync">
             <DataAnnotationsValidator/>
             <ValidationSummary/>
-            <MyInputComponent Label="Фамилия" ValidationFor="@(() => Form.FamilyName)" @bind-Value="@Form.FamilyName" Placeholder="Фамилия"/>
-            <MyInputComponent Label="Имя" ValidationFor="@(() => Form.FirstName)" @bind-Value="@Form.FirstName" Placeholder="Имя"/>
-            <MyInputComponent Label="Отчество" ValidationFor="@(() => Form.SurName)" @bind-Value="@Form.SurName" Placeholder="Отчество"/>
+            <MyInputComponent Label="Фамилия"  @bind-Value="@Form.FamilyName" Placeholder="Фамилия"/>
+            <MyInputComponent Label="Имя"  @bind-Value="@Form.FirstName" Placeholder="Имя"/>
+            <MyInputComponent Label="Отчество"  @bind-Value="@Form.SurName" Placeholder="Отчество"/>
             <MudDatePicker @bind-Value="@Form.DateOfBirth" Label="Дата рождения"/>
-            <MyInputComponent Label="Тип документа удостоверяющего личность" ValidationFor="@(() => Form.PassportType)" @bind-Value="@Form.PassportType" Placeholder="Тип паспорта"/>
-            <MyInputComponent Label="Серия" ValidationFor="@(() => Form.PassportSerial)" @bind-Value="@Form.PassportSerial" Placeholder="Серия паспорта"/>
-            <MyInputComponent Label="Номер" ValidationFor="@(() => Form.PassportNumber)" @bind-Value="@Form.PassportNumber" Placeholder="Номер паспорта"/>
-            <MyInputComponent Label="Кем выдан" ValidationFor="@(() => Form.PassportIssuer)" @bind-Value="@Form.PassportIssuer" Placeholder="Кем выдан"/>
-            <MyInputComponent Label="Код отделения (если есть)" Placeholder="Код отделения (если есть)" ValidationFor="@(() => Form.PassportIssuerCode)" @bind-Value="@Form.PassportIssuerCode"/>
+            <MyInputComponent Label="Тип документа удостоверяющего личность"  @bind-Value="@Form.PassportType" Placeholder="Тип паспорта"/>
+            <MyInputComponent Label="Серия"  @bind-Value="@Form.PassportSerial" Placeholder="Серия паспорта"/>
+            <MyInputComponent Label="Номер"  @bind-Value="@Form.PassportNumber" Placeholder="Номер паспорта"/>
+            <MyInputComponent Label="Кем выдан"  @bind-Value="@Form.PassportIssuer" Placeholder="Кем выдан"/>
+            <MyInputComponent Label="Код отделения (если есть)" Placeholder="Код отделения (если есть)"  @bind-Value="@Form.PassportIssuerCode"/>
             <MudDatePicker @bind-Value="@Form.PassportIssueDate" Label="Дата выдачи"/>
-            <MyInputComponent Label="Место жительства" ValidationFor="@(() => Form.Address)" @bind-Value="@Form.Address" Placeholder="Место жительства"/>
-            <MyInputComponent Label="Почтовый индекс" ValidationFor="@(() => Form.PostalCode)" @bind-Value="@Form.PostalCode" Placeholder="Почтовый индекс"/>
-            <MyInputComponent Label="Мобильный телефон" ValidationFor="@(() => Form.Phone)" @bind-Value="@Form.Phone" Placeholder="Мобильный телефон"/>
-            <MyInputComponent Label="Дополнительные сведения" ValidationFor="@(() => Form.Description)" @bind-Value="@Form.Description" Placeholder="Дополнительные сведения"/>
+            <MyInputComponent Label="Место жительства"  @bind-Value="@Form.Address" Placeholder="Место жительства"/>
+            <MyInputComponent Label="Почтовый индекс"  @bind-Value="@Form.PostalCode" Placeholder="Почтовый индекс"/>
+            <MyInputComponent Label="Мобильный телефон"  @bind-Value="@Form.Phone" Placeholder="Мобильный телефон"/>
+            <MyInputComponent Label="Дополнительные сведения"  @bind-Value="@Form.Description" Placeholder="Дополнительные сведения"/>
             <MudNumericField Min="0" Max="100" @bind-Value="@Form.LanguageRating" Label="Баллы по русскому языку"/>
             <MudNumericField Min="0" Max="100" @bind-Value="@Form.MathRating" Label="Баллы по математике"/>
             <MudNumericField Min="0" Max="5" @bind-Value="@Form.AverageAttestRating" Label="Средний бал по аттестату"/>
             <MyEnumInputRadioGroup Label="Тип базового обучения" @bind-Value="@Form.EducationType" TValue="EducationType"/>
-            <MyInputComponent Label="Учебное заведение" ValidationFor="@(() => Form.EducationDescription)" @bind-Value="@Form.EducationDescription" Placeholder="Учебное заведение"/>
-            <MyInputComponent Label="Серия документа об образовании" ValidationFor="@(() => Form.EducationDocumentSerial)" @bind-Value="@Form.EducationDocumentSerial" Placeholder="Серия документа об образовании"/>
-            <MyInputComponent Label="Номер документа об образовании" ValidationFor="@(() => Form.EducationDocumentNumber)" @bind-Value="@Form.EducationDocumentNumber" Placeholder="Номер документа об образовании"/>
+            <MyInputComponent Label="Учебное заведение"  @bind-Value="@Form.EducationDescription" Placeholder="Учебное заведение"/>
+            <MyInputComponent Label="Серия документа об образовании"  @bind-Value="@Form.EducationDocumentSerial" Placeholder="Серия документа об образовании"/>
+            <MyInputComponent Label="Номер документа об образовании"  @bind-Value="@Form.EducationDocumentNumber" Placeholder="Номер документа об образовании"/>
             <MudDatePicker @bind-Value="@Form.EducationDocumentIssued" Label="Дата выдачи документа об образовании"/>
             <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
             <MyInputCheckBox Label="Первый раз в техникуме" @bind-Value="@Form.FirstTimeInTechnicalSchool"/>
@@ -55,29 +55,29 @@
             {
                 @if (Form.HasMother)
                 {
-                    <MyInputComponent Label="Имя матери" ValidationFor="@(() => Form.MotherFirstName)" @bind-Value="@Form.MotherFirstName" Placeholder="Имя матери"/>
-                    <MyInputComponent Label="Фамилия матери" ValidationFor="@(() => Form.MotherFamilyName)" @bind-Value="@Form.MotherFamilyName" Placeholder="Фамилия матери"/>
-                    <MyInputComponent Label="Отчество матери" ValidationFor="@(() => Form.MotherSurName)" @bind-Value="@Form.MotherSurName" Placeholder="Отчество матери"/>
-                    <MyInputComponent Label="Описание работы матери" ValidationFor="@(() => Form.MotherWorkDescription)" @bind-Value="@Form.MotherWorkDescription" Placeholder="Описание работы матери"/>
-                    <MyInputComponent Label="Мобильный телефон матери" ValidationFor="@(() => Form.MotherMobilePhone)" @bind-Value="@Form.MotherMobilePhone" Placeholder="Мобильный телефон матери"/>
-                    <MyInputComponent Label="Рабочий телефон матери" ValidationFor="@(() => Form.MotherWorkPhone)" @bind-Value="@Form.MotherWorkPhone" Placeholder="Рабочий телефон матери"/>
-                    <MyInputComponent Label="Домашний телефон матери" ValidationFor="@(() => Form.MotherHomePhone)" @bind-Value="@Form.MotherHomePhone" Placeholder="Домашний телефон матери"/>
+                    <MyInputComponent Label="Имя матери"  @bind-Value="@Form.MotherFirstName" Placeholder="Имя матери"/>
+                    <MyInputComponent Label="Фамилия матери"  @bind-Value="@Form.MotherFamilyName" Placeholder="Фамилия матери"/>
+                    <MyInputComponent Label="Отчество матери"  @bind-Value="@Form.MotherSurName" Placeholder="Отчество матери"/>
+                    <MyInputComponent Label="Описание работы матери"  @bind-Value="@Form.MotherWorkDescription" Placeholder="Описание работы матери"/>
+                    <MyInputComponent Label="Мобильный телефон матери"  @bind-Value="@Form.MotherMobilePhone" Placeholder="Мобильный телефон матери"/>
+                    <MyInputComponent Label="Рабочий телефон матери"  @bind-Value="@Form.MotherWorkPhone" Placeholder="Рабочий телефон матери"/>
+                    <MyInputComponent Label="Домашний телефон матери"  @bind-Value="@Form.MotherHomePhone" Placeholder="Домашний телефон матери"/>
                 }
-                <MyInputCheckBox Label="Есть отец" ValidationFor="@(() => Form.HasFather)" @bind-Value="@Form.HasFather"/>
+                <MyInputCheckBox Label="Есть отец"  @bind-Value="@Form.HasFather"/>
                 @if (Form.HasFather)
                 {
-                    <MyInputComponent Label="Имя отца" ValidationFor="@(() => Form.FatherFirstName)" @bind-Value="@Form.FatherFirstName" Placeholder="Имя отца"/>
-                    <MyInputComponent Label="Фамилия отца" ValidationFor="@(() => Form.FatherFamilyName)" @bind-Value="@Form.FatherFamilyName" Placeholder="Фамилия отца"/>
-                    <MyInputComponent Label="Отчество отца" ValidationFor="@(() => Form.FatherSurName)" @bind-Value="@Form.FatherSurName" Placeholder="Отчество отца"/>
-                    <MyInputComponent Label="Описание работы отца" ValidationFor="@(() => Form.FatherWorkDescription)" @bind-Value="@Form.FatherWorkDescription" Placeholder="Описание работы отца"/>
-                    <MyInputComponent Label="Мобильный телефон отца" ValidationFor="@(() => Form.FatherMobilePhone)" @bind-Value="@Form.FatherMobilePhone" Placeholder="Мобильный телефон отца"/>
-                    <MyInputComponent Label="Рабочий телефон отца" ValidationFor="@(() => Form.FatherWorkPhone)" @bind-Value="@Form.FatherWorkPhone" Placeholder="Рабочий телефон отца"/>
-                    <MyInputComponent Label="Домашний телефон отца" ValidationFor="@(() => Form.FatherHomePhone)" @bind-Value="@Form.FatherHomePhone" Placeholder="Домашний телефон отца"/>
+                    <MyInputComponent Label="Имя отца"  @bind-Value="@Form.FatherFirstName" Placeholder="Имя отца"/>
+                    <MyInputComponent Label="Фамилия отца"  @bind-Value="@Form.FatherFamilyName" Placeholder="Фамилия отца"/>
+                    <MyInputComponent Label="Отчество отца"  @bind-Value="@Form.FatherSurName" Placeholder="Отчество отца"/>
+                    <MyInputComponent Label="Описание работы отца"  @bind-Value="@Form.FatherWorkDescription" Placeholder="Описание работы отца"/>
+                    <MyInputComponent Label="Мобильный телефон отца"  @bind-Value="@Form.FatherMobilePhone" Placeholder="Мобильный телефон отца"/>
+                    <MyInputComponent Label="Рабочий телефон отца"  @bind-Value="@Form.FatherWorkPhone" Placeholder="Рабочий телефон отца"/>
+                    <MyInputComponent Label="Домашний телефон отца"  @bind-Value="@Form.FatherHomePhone" Placeholder="Домашний телефон отца"/>
                 }
             }
             else
             {
-                <MyInputComponent Label="Описание работы" ValidationFor="@(() => Form.DistanceApplicantWorkDescription)" @bind-Value="@Form.DistanceApplicantWorkDescription" Placeholder="Описание работы"/>
+                <MyInputComponent Label="Описание работы"  @bind-Value="@Form.DistanceApplicantWorkDescription" Placeholder="Описание работы"/>
             }
             <MyCheckboxGroup TCheck="long" Options="@SpecialityIdsOptions" @bind-Value="@Form.SelectedSpecialityIds"/>
             <button class="btn btn-primary" type="submit" disabled="@(!IsValid)">Записать и провести</button>

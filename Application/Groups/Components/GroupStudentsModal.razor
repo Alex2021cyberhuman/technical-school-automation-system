@@ -14,7 +14,7 @@
 
 @if (ModalVisible)
 {
-    <PageTitle>Список студентов в группе</PageTitle>
+    <PageTitle>Техникум - Список студентов в группе </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -26,7 +26,10 @@
                 </div>
                 <div class="modal-body">
                     <MudTextField Label="Поиск студентов" @bind-Value="SearchString"/>
-                    <EnrollApplicantModal Group="Group" StudentsAdded="OnStudentsAddedAsync"/>
+                    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+                    {
+                        <EnrollApplicantModal Group="Group" StudentsAdded="OnStudentsAddedAsync"/>
+                    }
                     <MudTable Items="Students" T="Student" Filter="Filter" SortLabel="Сортировать по">
                         <HeaderContent>
                             <MudTh>№</MudTh>
@@ -44,7 +47,10 @@
                             <MudTd>@context.DateOfBirth.ToShortDateString()</MudTd>
                             <MudTd>
                                 <MudButtonGroup>
-                                    <MudIconButton Icon="@Icons.Filled.Delete" Title="Исключить" OnClick="@(async () => await ExcludeAsync(@context))"/>
+                                    @if (CurrentUser.IsInPolicy(PolicyIdentifiers.Administration))
+                                    {
+                                        <MudIconButton Icon="@Icons.Filled.Delete" Title="Исключить" OnClick="@(async () => await ExcludeAsync(@context))"/>
+                                    }
                                 </MudButtonGroup>
                             </MudTd>
                         </RowTemplate>
@@ -132,6 +138,7 @@
             await LoadStudentsAsync();
             return;
         }
+
         var removeStudent = await DialogService.ShowMessageBox("Исключение", $"Вы действительно хотите исключить студента {student.FullName} из группы {Group.Name}? Вы сможете зачислить его повторно.", "Да", "Нет");
         if (!removeStudent.HasValue || !removeStudent.Value)
         {

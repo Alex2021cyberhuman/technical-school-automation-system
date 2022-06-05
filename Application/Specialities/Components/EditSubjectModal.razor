@@ -10,7 +10,7 @@
 
 @if (Visible)
 {
-    <PageTitle>Изменить дисцеплину</PageTitle>
+    <PageTitle>Техникум - Изменить дисцеплину </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -24,8 +24,8 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" ValidationFor="() => Form.Name"/>
-                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" ValidationFor="() => Form.Code"/>
+                        <MyInputComponent Label="Название" Placeholder="Название" @bind-Value="Form.Name" />
+                        <MyInputComponent Label="Код" Placeholder="Код" @bind-Value="Form.Code" />
                         <MySemesterInput @bind-Value="Form.Semesters"/>
                     </EditForm>
                 </div>

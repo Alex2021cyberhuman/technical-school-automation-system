@@ -7,17 +7,13 @@
     {
         <label class="form-control-label" for="@Id">@Label</label>
     }
-    <input type="@Type" class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@(Placeholder ?? Label ?? string.Empty)"/>
+    <input type="@Type" class="form-control @CssClass" id="@Id" @bind="@CurrentValue" placeholder="@(Placeholder ?? Label ?? string.Empty)" autocomplete="@(Autocomplete ? "on" : "new-password")"/>
     <div class="form-control-validation">
-        <ValidationMessage For="@ValidationFor"/>
+        <ValidationMessage For="@ValueExpression"/>
     </div>
 </div>
 
 @code {
-
-    [Parameter]
-    [EditorRequired]
-    public Expression<Func<string>>? ValidationFor { get; set; } = default!;
 
     [Parameter]
     public string? Id { get; set; }
@@ -37,5 +33,7 @@
         validationErrorMessage = null!;
         return true;
     }
+
+    public bool Autocomplete { get; set; }
 
 }
