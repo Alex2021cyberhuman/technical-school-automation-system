@@ -31,25 +31,29 @@
                         }
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login" />
-                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email" />
-                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" />
-                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" />
-                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" />
-                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" />
-                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" />
-                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile" />
+                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login"/>
+                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email"/>
+                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName"/>
+                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName"/>
+                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName"/>
+                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password"/>
+                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword"/>
+                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile"/>
                         <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                         <MyInputCheckBox Label="Заблокировать" @bind-Value="Form.Lockout"/>
                         @if (Form.Lockout)
                         {
-                            <MudDatePicker
-                                Label="Конец блокировки"
-                                Editable="true"
-                                @bind-Date="Form.LockoutEnd"
-                                Mask="@(new DateMask("0000-00-00"))"
-                                DateFormat="yyyy-MM-dd"
-                                Placeholder="Конец блокировки"/>
+                            <MyInputCheckBox Label="Навсегда" @bind-Value="Form.LockoutForever"/>
+                            @if (!Form.LockoutForever)
+                            {
+                                <MudDatePicker
+                                    Label="Конец блокировки"
+                                    Editable="true"
+                                    @bind-Date="Form.LockoutEnd"
+                                    Mask="@(new DateMask("0000-00-00"))"
+                                    DateFormat="yyyy-MM-dd"
+                                    Placeholder="Конец блокировки"/>
+                            }
                         }
                     </EditForm>
                 </div>
@@ -105,8 +109,10 @@
         AllRoles = roles.Select(x => new OptionItem<string>(StringLocalizer[x.Name], x.Name, userRoles.Contains(x.Name))).ToDictionary(x => x.Value);
         Form.Login = User.UserName;
         Form.Lockout = User.LockoutEnd.HasValue && User.LockoutEnd > DateTime.UtcNow;
+        Form.LockoutForever = User.LockoutEnd.HasValue && User.LockoutEnd == DateTimeOffset.MaxValue;
         Form.LockoutEnd = Form.Lockout ? new DateTime(User.LockoutEnd!.Value.Ticks) : DateTime.Now;
         Form.LockoutEnd = Form.LockoutEnd.Value.ToLocalTime();
+        Form.LockoutEnd = Form.LockoutForever ? DateTime.Now.AddYears(1) : Form.LockoutEnd;
         Form.Email = User.Email;
         Form.FirstName = User.FirstName;
         Form.FamilyName = User.FamilyName;
@@ -121,7 +127,11 @@
         if (!Visible || !EditContext.Validate())
             return;
         var user = await UserManager.FindByIdAsync(User.Id.ToString());
-        user.LockoutEnd = Form.Lockout ? Form.LockoutEnd!.Value.ToUniversalTime() : DateTime.UtcNow.AddDays(-1);
+        user.LockoutEnd = Form.Lockout ?
+            Form.LockoutForever ?
+                DateTimeOffset.MaxValue :
+                Form.LockoutEnd!.Value.ToUniversalTime() :
+            DateTime.UtcNow.AddDays(-1);
         user.UserName = Form.Login;
         user.Email = Form.Email;
         user.FirstName = Form.FirstName;

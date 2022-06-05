@@ -5,17 +5,17 @@
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 
 <button type="button" class="btn btn-primary" @onclick="OnOpen">
-    Изменить дисцеплину
+    Изменить дисциплину
 </button>
 
 @if (Visible)
 {
-    <PageTitle>Техникум - Изменить дисцеплину </PageTitle>
+    <PageTitle>Техникум - Изменить дисциплину </PageTitle>
     <div class="modal fade show" role="dialog" style="display: block;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Изменить дисцеплину</h5>
+                    <h5 class="modal-title">Изменить дисциплину</h5>
                     <button type="button" class="close" data-dismiss="modal" @onclick="OnCancel">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="OnCancel">Закрыть</button>
-                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Изменить дисцеплину</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnSubmitAsync">Изменить дисциплину</button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
-﻿<MudThemeProvider/>
+﻿@using System.Security.Claims
+<MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 <CascadingAuthenticationState>
@@ -6,9 +7,17 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <PageTitle>Техникум - Авторизуйтесь! </PageTitle>
-                    <h3>Авторизуйтесь!</h3>
-                    <a href="Access/Login">Вход</a>
+                    @if (context.User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        <PageTitle>Техникум - Нет прав! </PageTitle>
+                        <h3>У вас нет прав для доступа к этой странице! </h3>
+                    }
+                    else
+                    {
+                        <PageTitle>Техникум - Авторизуйтесь! </PageTitle>
+                        <h3>Авторизуйтесь!</h3>
+                        <a href="Access/Login">Вход</a>
+                    }
                 </NotAuthorized>
                 <Authorizing>
                     <PageTitle>Техникум - Нет прав! </PageTitle>

@@ -70,7 +70,7 @@ namespace Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Член приемной коммисии.
+        ///   Looks up a localized string similar to Член приемной комиссии.
         /// </summary>
         public static string AdmissionCommitteeMember {
             get {
@@ -466,7 +466,7 @@ namespace Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не рассмотренно.
+        ///   Looks up a localized string similar to Не рассмотрено.
         /// </summary>
         public static string NotСonsidered {
             get {

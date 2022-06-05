@@ -55,17 +55,48 @@ public class MainDbContext : DbContext, ISpecialitiesContext
         {
             e.HasOne(x => x.Group)
                 .WithOne()
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<Schedule>(x => x.GroupId);
             e.HasMany(x => x.ClassSchedule)
                 .WithOne(x => x.Schedule)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(x => x.ScheduleId);
         });
 
         modelBuilder.Entity<ClassSchedule>(e =>
         {
+            e.HasOne(x => x.Cabinet)
+                .WithMany()
+                .HasForeignKey(x => x.CabinetId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
             e.HasOne(x => x.Subject)
                 .WithMany()
-                .HasForeignKey(x => x.SubjectId);
+                .HasForeignKey(x => x.SubjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ClassScheduleReplacement>(e =>
+        {
+            e.HasOne(x => x.Cabinet)
+                .WithMany()
+                .HasForeignKey(x => x.CabinetId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(x => x.Subject)
+                .WithMany()
+                .HasForeignKey(x => x.SubjectId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.ClassSchedule)
+                .WithMany()
+                .HasForeignKey(x => x.ClassScheduleId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.Schedule)
+                .WithMany()
+                .HasForeignKey(x => x.ScheduleId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Applicant>(e =>
@@ -81,6 +112,7 @@ public class MainDbContext : DbContext, ISpecialitiesContext
         {
             entity.HasOne(x => x.Applicant)
                 .WithOne(x => x.Student)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<Student>(x => x.ApplicantId);
         });
 
@@ -88,53 +120,62 @@ public class MainDbContext : DbContext, ISpecialitiesContext
         {
             e.HasOne(x => x.Applicant)
                 .WithMany(x => x.ApplicantSpecialities)
-                .HasForeignKey(x => x.ApplicantId);
+                .HasForeignKey(x => x.ApplicantId)
+                .OnDelete(DeleteBehavior.Cascade);
             e.HasOne(x => x.Speciality)
                 .WithMany()
-                .HasForeignKey(x => x.SpecialityId);
+                .HasForeignKey(x => x.SpecialityId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Group>(entity =>
         {
             entity.HasMany(x => x.Students)
                 .WithOne(x => x.Group)
-                .HasForeignKey(x => x.GroupId);
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
             entity.HasOne(x => x.Applicant)
                 .WithOne(x => x.Student)
-                .HasForeignKey<Student>(x => x.ApplicantId);
+                .HasForeignKey<Student>(x => x.ApplicantId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Subject>(entity =>
         {
             entity.HasOne(x => x.Speciality)
                 .WithMany(x => x.Subjects)
-                .HasForeignKey(x => x.SpecialityId);
+                .HasForeignKey(x => x.SpecialityId)
+                .OnDelete(DeleteBehavior.Cascade);
             entity.OwnsMany(x => x.Semesters);
         });
 
         modelBuilder.Entity<TeacherLoad>(entity =>
         {
-            entity.HasMany(x => x.ProofreadingTeacherLoads)
-                .WithOne(x => x.TeacherLoad)
-                .HasForeignKey(x => x.TeacherLoadId);
             entity.HasOne(x => x.Group)
                 .WithMany()
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(x => x.GroupId);
             entity.HasOne(x => x.Subject)
                 .WithMany()
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(x => x.SubjectId);
             entity.HasOne(x => x.Teacher)
                 .WithMany()
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey(x => x.TeacherId);
             entity.OwnsMany(x => x.Semesters);
         });
 
         modelBuilder.Entity<ProofreadingTeacherLoad>(entity =>
         {
+            entity.HasOne(x => x.TeacherLoad)
+                .WithMany(x => x.ProofreadingTeacherLoads)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(x => x.TeacherLoadId);
             entity.OwnsMany(x => x.Days);
             entity.HasIndex(x => new { x.Year, x.Month });
         });

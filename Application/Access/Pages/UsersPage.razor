@@ -9,6 +9,8 @@
 @inject IStringLocalizer StringLocalizer
 @inject ILogger<UsersPage> Logger
 
+<PageTitle>Техникум - Управление пользователями</PageTitle>
+
 <div class="row">
     <div class="col-12 col-md-4">
         <EditForm EditContext="FilterContext">
@@ -24,6 +26,7 @@
                 <td>ФИО</td>
                 <td>Логин</td>
                 <td>Роли</td>
+                <td>Блокировка</td>
                 <td></td>
             </tr>
             </thead>
@@ -36,6 +39,21 @@
                     <td>@item.UserName</td>
                     <td>
                         @string.Join(", ", item.UserRoles.Select(x => StringLocalizer[x.Role.Name]))
+                    </td>
+                    <td>
+                        @if (!item.LockoutEnd.HasValue || item.LockoutEnd.Value.LocalDateTime <= DateTime.Now)
+                        {
+                            <strong>-</strong>
+                        }
+                        else if (item.LockoutEnd == DateTimeOffset.MaxValue)
+                        {
+                            <strong>Навсегда</strong>
+                        }
+                        else
+                        {
+                            var localLockoutEnd = @item.LockoutEnd.Value.LocalDateTime;
+                            <span>@localLockoutEnd.ToShortDateString() @localLockoutEnd.ToShortTimeString()</span>
+                        }
                     </td>
                     <td>
                         <EditUserModal User="@item" OnSubmit="RefreshAsync"/>
@@ -112,7 +130,7 @@
 
     private async Task RefreshAsync()
     {
-        AllUsers = await GetUsersAsync();
+        AllUsers = await GetUsersAsync().ConfigureAwait(true);
         FilterUsers();
     }
 

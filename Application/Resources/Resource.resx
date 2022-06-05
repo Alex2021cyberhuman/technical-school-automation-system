@@ -59,7 +59,7 @@
     </data>
 
     <data name="NotСonsidered" xml:space="preserve">
-        <value>Не рассмотренно</value>
+        <value>Не рассмотрено</value>
     </data>
     <data name="Enroll" xml:space="preserve">
         <value>Зачислить</value>
@@ -82,9 +82,9 @@
     <data name="Administrator" xml:space="preserve">
         <value>Администратор</value>
     </data>
-    <data name="AdmissionCommitteeMember" xml:space="preserve">
-        <value>Член приемной коммисии</value>
-    </data>
+  <data name="AdmissionCommitteeMember" xml:space="preserve">
+    <value>Член приемной комиссии</value>
+  </data>
     <data name="Teacher" xml:space="preserve">
         <value>Учитель</value>
     </data>

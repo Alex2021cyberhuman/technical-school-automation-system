@@ -103,7 +103,7 @@
                 </MudTd>
             </RowTemplate>
             <PagerContent>
-                <MudTablePager PageSizeOptions="new[] { 100 }"/>
+                <MudTablePager RowsPerPageString="Строк на страницу" PageSizeOptions="new[] { 100 }"/>
             </PagerContent>
         </MudTable>
     </div>
@@ -158,14 +158,21 @@
 
     private async Task OnDownloadApplicantsTableAsync()
     {
-        if (ApplicantsTable is null || ApplicantsTable.TotalItems <= 0)
+        if (!Filter.SelectedSpecialityId.HasValue)
         {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Выберите специальность. Настройте фильтр.");
+            return;
+        }
+        var items = ApplicantsTable?.FilteredItems?.ToList();
+        if (items is null || items.Count <= 0)
+        {
+            _ = await DialogService.ShowMessageBox("Ошибка", "Поиск не дал результатов. Настройте фильтр.");
             return;
         }
         var basePath = Configuration["AdmissionCommittee:ApplicantsTablePath"];
         var fileName = $"Сводная_Абитуриентов_{DateTime.Now.ToString("yyyyMMddHHmmss")}_{Path.GetRandomFileName()}.xlsx";
         var fullFileName = Path.Combine(basePath, fileName);
-        var model = new ApplicantsTableModel(ApplicantsTable.Items, Specialities.First(x => x.Id == Filter.SelectedSpecialityId), StringLocalizer);
+        var model = new ApplicantsTableModel(items, Specialities.First(x => x.Id == Filter.SelectedSpecialityId), StringLocalizer);
         _ = await ApplicantsTableCreator.CreatePackageAsync(fullFileName, model);
         NavigationManager.NavigateTo(NavigationManager.BaseUri + fileName, true);
     }
