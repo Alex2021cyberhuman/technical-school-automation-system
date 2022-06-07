@@ -62,7 +62,7 @@
                                 </EditForm>
                             </div>
                             <div class="row">
-                                <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable">
+                                <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable" RowsPerPage="150">
                                     <HeaderContent>
                                         <MudTh>Зачислить</MudTh>
                                         <MudTh>
@@ -108,7 +108,7 @@
                                         <MudTd>@context.Description</MudTd>
                                     </RowTemplate>
                                     <PagerContent>
-                                        <MudTablePager PageSizeOptions="new[] { 100 }"/>
+                                        <MudTablePager RowsPerPageString="Строк на страницу" HideRowsPerPage="true" InfoFormat="{first_item}-{last_item} / {all_items}"/>
                                     </PagerContent>
                                 </MudTable>
                             </div>

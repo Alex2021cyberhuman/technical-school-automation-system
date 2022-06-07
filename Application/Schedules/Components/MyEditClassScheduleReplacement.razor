@@ -200,7 +200,7 @@ else
     private async Task OnDeleteAsync()
     {
         var result = await DialogService.ShowMessageBox("Удаление", "Удалить элемент расписания?", "Да", "Нет");
-        if (result.GetValueOrDefault())
+        if (!result.GetValueOrDefault())
         {
             return;
         }

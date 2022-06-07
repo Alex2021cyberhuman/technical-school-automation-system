@@ -47,7 +47,7 @@
         </EditForm>
     </div>
     <div class="row">
-        <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable">
+        <MudTable T="Applicant" ServerData="LoadApplicantsFromDatabase" @ref="ApplicantsTable" RowsPerPage="150">
             <HeaderContent>
                 <MudTh>
                     <MudTableSortLabel T="Applicant" SortLabel="Id">№</MudTableSortLabel>
@@ -103,7 +103,7 @@
                 </MudTd>
             </RowTemplate>
             <PagerContent>
-                <MudTablePager RowsPerPageString="Строк на страницу" PageSizeOptions="new[] { 100 }"/>
+                <MudTablePager RowsPerPageString="Строк на страницу" HideRowsPerPage="true"  InfoFormat="{first_item}-{last_item} / {all_items}"/>
             </PagerContent>
         </MudTable>
     </div>
@@ -200,6 +200,7 @@
         var dbApplicant = await context.Applicant
             .Include(x => x.Student)
             .ThenInclude(x => x!.Group)
+            .Include(x => x.Statement)
             .FirstOrDefaultAsync(x => x.Id == applicant.Id);
         if (dbApplicant is null)
         {
@@ -215,6 +216,13 @@
         if (!deleteApplicant.HasValue || !deleteApplicant.Value)
         {
             return;
+        }
+        var basePath = Configuration["AdmissionCommittee:StatementPath"];
+        var fileName = dbApplicant.Statement.Name;
+        var fullFileName = Path.Combine(basePath, fileName);
+        if (File.Exists(fullFileName))
+        {
+            File.Delete(fullFileName);
         }
         context.Remove(dbApplicant);
         await context.SaveChangesAsync();

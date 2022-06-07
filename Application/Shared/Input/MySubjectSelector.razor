@@ -115,6 +115,18 @@ else if (Value != null && SemesterListVisible)
         MudTable?.SetSelectedItem(Value);
     }
 
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        try
+        {
+            await base.SetParametersAsync(parameters);
+        }
+        catch (InvalidOperationException invalidOperationException)
+        {
+            //
+        }
+    }
+
     private void ToggleOpenSubjectList()
     {
         SubjectListVisible = !SubjectListVisible;

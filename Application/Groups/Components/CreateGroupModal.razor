@@ -30,8 +30,8 @@
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
                         <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
                         <MyEnumInputRadioGroup Label="Тип" @bind-Value="@Form.FinanceEnrolmentType" TValue="FinanceEnrolmentType"/>
-                        <MyYearSelector Label="Год набора" @bind-Value="@Form.EnrollmentYear"/>
-                        <MyYearSelector Label="Год выпуска" @bind-Value="@Form.GraduationYear"/>
+                        <MyYearSelector Label="Год набора" @bind-Value="@Form.EnrollmentYear" MaximumYear="Form.GraduationYear"/>
+                        <MyYearSelector Label="Год выпуска" @bind-Value="@Form.GraduationYear" MinimalYear="Form.EnrollmentYear" MaximumYear="@(Form.EnrollmentYear + 10)"/>
                     </EditForm>
                 </div>
                 <div class="modal-footer">
@@ -89,6 +89,11 @@
 
     private async Task OnSubmitAsync()
     {
+        if (!EditContext.Validate())
+        {
+            return;
+        }
+        
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var group = Form.ToGroup();
         context.Add(group);

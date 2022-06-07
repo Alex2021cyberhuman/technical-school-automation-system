@@ -12,6 +12,7 @@ public class CreateGroupForm : IValidatableObject
     [MyMaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
+    [MyNotDefault(typeof(long))]
     public long SpecialityId { get; set; }
 
     public EducationForm EducationForm { get; set; }
@@ -20,11 +21,11 @@ public class CreateGroupForm : IValidatableObject
 
     [Display(Name = "Год выпуска")]
     [MyRequired]
-    public int GraduationYear { get; set; }
+    public int GraduationYear { get; set; }= DateTime.Today.Year + 4;
 
     [Display(Name = "Год набора")]
     [MyRequired]
-    public int EnrollmentYear { get; set; }
+    public int EnrollmentYear { get; set; } = DateTime.Today.Year;
 
     public Group ToGroup()
     {

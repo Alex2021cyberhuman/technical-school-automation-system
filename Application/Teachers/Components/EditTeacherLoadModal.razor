@@ -28,7 +28,7 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MySubjectSelector Subjects="Subjects" Required="true" ValueChanged="OnSubjectChangedAsync"/>
+                        <MySubjectSelector Subjects="Subjects" Required="true" Value="Form.Subject" ValueChanged="OnSubjectChangedAsync"/>
                         <MyGroupSelector @bind-Value="Form.Group" Groups="Groups" Required="true"/>
                         <MudField Label="Тип">
                             <strong>@StringLocalizer[Form.Group.FinanceEnrolmentType.ToString()]</strong>

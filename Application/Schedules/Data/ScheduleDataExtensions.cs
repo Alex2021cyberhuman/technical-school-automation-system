@@ -14,18 +14,23 @@ public static class ScheduleDataExtensions
     {
         if (teacher is not null)
         {
-            var element = await context.ClassSchedule
+            var query = context.ClassSchedule
                 .Where(x => x.Id != filter.ClassScheduleId)
                 .Where(x => x.Number == filter.Number)
                 .Where(x => x.DayOfWeek == filter.DayOfWeek)
-                .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
-                            x.WeeksSeparation == filter.WeekSeparation)
                 .Where(x => x.TeacherId == teacher.Id)
                 .Include(x => x.Schedule)
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Subject)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
+                .AsNoTracking();
+            if (filter.WeekSeparation != WeeksSeparationType.All)
+            {
+                query = query
+                    .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
+                                x.WeeksSeparation == filter.WeekSeparation);
+            }
+            var element = await query
+                .FirstOrDefaultAsync();
             if (filter.ReplacementMode)
             {
                 if (element is not null)
@@ -76,18 +81,23 @@ public static class ScheduleDataExtensions
     {
         if (cabinet is not null)
         {
-            var element = await context.ClassSchedule
+            var query = context.ClassSchedule
                 .Where(x => x.Id != filter.ClassScheduleId)
                 .Where(x => x.Number == filter.Number)
                 .Where(x => x.DayOfWeek == filter.DayOfWeek)
-                .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
-                            x.WeeksSeparation == filter.WeekSeparation)
                 .Where(x => x.CabinetId == cabinet.Id)
                 .Include(x => x.Schedule)
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Subject)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
+                .AsNoTracking();
+            if (filter.WeekSeparation != WeeksSeparationType.All)
+            {
+                query = query
+                    .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
+                                x.WeeksSeparation == filter.WeekSeparation);
+            }
+            var element = await query
+                .FirstOrDefaultAsync();
             if (filter.ReplacementMode)
             {
                 if (element is not null)

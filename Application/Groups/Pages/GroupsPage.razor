@@ -38,7 +38,7 @@
                 <MudTd>@context.StudentsCount</MudTd>
                 <MudTd>
                     <div class="btn-group">
-                        <GroupStudentsModal Group="context" StudentListChanged="() => OnStudentsAddedAsync(context.Id)"/>
+                        <GroupStudentsModal Group="context" StudentListChanged="() => OnStudentsAddedAsync(context.Id)" OnGroupRemoved="async () => await LoadGroupsAsync()" />
                         <GroupDownloadEnrolledStudentsButton Group="context"/>
                     </div>
                 </MudTd>

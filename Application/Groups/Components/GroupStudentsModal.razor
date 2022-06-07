@@ -80,6 +80,9 @@
     [Parameter]
     public EventCallback StudentListChanged { get; set; } = EventCallback.Empty;
 
+    [Parameter]
+    public EventCallback<Group> OnGroupRemoved { get; set; } = EventCallback<Group>.Empty;
+    
     private string? SearchString { get; set; }
 
     [CascadingParameter]
@@ -162,15 +165,23 @@
         }
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var dbGroup = await context.Group.SingleAsync(x => x.Id == Group.Id);
-        var applicantIds = Students.Select(student => student.ApplicantId).ToList();
-        await context.Applicant
-            .Where(x => applicantIds.Contains(x.Id))
-            .BatchUpdateAsync(x => new Applicant { DirectorDecision = DirectorDecisionType.NotСonsidered, Student = null });
+        if (Students.Count != 0)
+        {
+            var applicantIds = Students.Select(student => student.ApplicantId).ToList();
+            var applicants = await context.Applicant
+                .Where(x => applicantIds.Contains(x.Id))
+                .Include(x => x.Student)
+                .ToListAsync();
+            applicants.ForEach(x =>
+            {
+                x.Student = null;
+                x.DirectorDecision = DirectorDecisionType.NotСonsidered;
+            });
+        }
         context.Remove(dbGroup);
         await context.SaveChangesAsync();
         OnCancel();
         await OnGroupRemoved.InvokeAsync(Group);
     }
 
-    public EventCallback<Group> OnGroupRemoved { get; set; } = EventCallback<Group>.Empty;
 }

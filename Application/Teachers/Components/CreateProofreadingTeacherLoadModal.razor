@@ -66,7 +66,10 @@
     private async Task OnOpenAsync()
     {
         AllUserLoads = await GetAllUserLoadsAsync();
-        Form = new CreateProofreadingTeacherLoadForm();
+        Form = new CreateProofreadingTeacherLoadForm
+        {
+            TeacherLoad = AllUserLoads.FirstOrDefault()
+        };
         EditContext = new EditContext(Form);
         Visible = true;
     }

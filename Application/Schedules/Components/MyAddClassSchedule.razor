@@ -43,7 +43,7 @@
                         }
                         else
                         {
-                            <MudField Label="Недельное разделение">@Form.WeeksSeparation</MudField>
+                            <MudField Label="Недельное разделение">@StringLocalizer[Form.WeeksSeparation!.Value.ToString()]</MudField>
                         }
                         <MySubjectSelector Subjects="Subjects" @bind-Value="Form.Subject" ShowSemesters="true"/>
                         <MyTeacherPicker
