@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Application.Common.Data;
 using Application.Groups.Data;
 using Application.Specialities.Data;

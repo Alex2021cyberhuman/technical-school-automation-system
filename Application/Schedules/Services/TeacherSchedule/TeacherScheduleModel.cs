@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Internal;
-
 namespace Application.Schedules.Services.TeacherSchedule;
 
 public class TeacherScheduleModel

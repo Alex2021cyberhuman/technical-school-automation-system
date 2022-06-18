@@ -136,6 +136,8 @@ public class MainDbContext : DbContext, ISpecialitiesContext
                 .WithOne(x => x.Group)
                 .HasForeignKey(x => x.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
+            entity.Property(x => x.Graduation).HasComputedColumnSql(@"make_date(""graduation_year"", 8, 31)", true);
+            entity.Property(x => x.Enrollment).HasComputedColumnSql(@"make_date(""enrollment_year"", 9, 1)", true);
         });
 
         modelBuilder.Entity<Student>(entity =>

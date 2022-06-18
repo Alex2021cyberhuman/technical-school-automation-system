@@ -24,7 +24,11 @@ public class Group
 
     public int GraduationYear { get; set; }
 
+    public DateTime Graduation { get; set; }
+
     public int EnrollmentYear { get; set; }
 
+    public DateTime Enrollment { get; set; }
+    
     public List<Student> Students { get; set; } = null!;
 }

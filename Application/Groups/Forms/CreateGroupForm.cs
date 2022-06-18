@@ -37,7 +37,9 @@ public class CreateGroupForm : IValidatableObject
             EducationForm = EducationForm,
             FinanceEnrolmentType = FinanceEnrolmentType,
             GraduationYear = GraduationYear,
-            EnrollmentYear = EnrollmentYear
+            //Graduation = new DateTime(GraduationYear, 9, 1),
+            EnrollmentYear = EnrollmentYear,
+            //Enrollment = new DateTime(EnrollmentYear, 9, 1),
         };
     }
 

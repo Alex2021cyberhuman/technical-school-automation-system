@@ -1,5 +1,4 @@
 using Application.Common.Helpers;
-using Application.Schedules.Data;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml;
@@ -1818,7 +1817,7 @@ public class GeneratedTeacherSchedulePrinter
         const int cellsWidth = 2 + perWeekSectionWidth;
         columns1.Append(new Column
             {
-                Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 2D, Style = (UInt32Value)0U, Hidden = false,
+                Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 4D, Style = (UInt32Value)0U, Hidden = false,
                 CustomWidth = true, OutlineLevel = 0, Collapsed = false
             },
             new Column
@@ -2568,7 +2567,7 @@ public class GeneratedTeacherSchedulePrinter
                 CellReference = downRowIndex.GetCellReference(1),
                 StyleIndex = (UInt32Value)11U
             });
-            mergeCells.Append(new MergeCell()
+            mergeCells.Append(new MergeCell
             {
                 Reference = upRowIndex.GetCellReference(1) +
                             ":" +
@@ -2587,7 +2586,7 @@ public class GeneratedTeacherSchedulePrinter
                 CellReference = downRowIndex.GetCellReference(2),
                 StyleIndex = (UInt32Value)11U
             });
-            mergeCells.Append(new MergeCell()
+            mergeCells.Append(new MergeCell
             {
                 Reference = upRowIndex.GetCellReference(2) +
                             ":" +
@@ -2601,11 +2600,16 @@ public class GeneratedTeacherSchedulePrinter
                                           dayOfWeek * perDayOfWeekSectionWidth +
                                           number * perLessonCellWidth;
                     var tuple = teacher.Schedule.GetValueOrDefault((number, dayOfWeek));
+                    var mergeCabinetCells = upRowIndex.GetCellReference(horizontalStart + 1) +
+                                        ":" +
+                                        downRowIndex.GetCellReference(horizontalStart + 1);
+                    var mergeSubjectCells = upRowIndex.GetCellReference(horizontalStart) +
+                                        ":" +
+                                        downRowIndex.GetCellReference(horizontalStart);
                     if (tuple.all is not null &&
                         tuple.numerator is null &&
                         tuple.divisor is null)
                     {
-                        // subject full cell
                         upRow.Append(new Cell
                         {
                             CellReference = upRowIndex.GetCellReference(horizontalStart),
@@ -2613,7 +2617,6 @@ public class GeneratedTeacherSchedulePrinter
                             DataType = CellValues.String,
                             CellValue = new CellValue(tuple.all.Subject)
                         });
-                        // cabinet full cell
                         upRow.Append(new Cell
                         {
                             CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
@@ -2631,26 +2634,19 @@ public class GeneratedTeacherSchedulePrinter
                             CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
                             StyleIndex = (UInt32Value)11U
                         });
-                        // merge subject name full cells
-                        mergeCells.Append(new MergeCell()
+                        mergeCells.Append(new MergeCell
                         {
-                            Reference = upRowIndex.GetCellReference(horizontalStart) +
-                                        ":" +
-                                        downRowIndex.GetCellReference(horizontalStart)
+                            Reference = mergeSubjectCells
                         });
-                        // merge cabinet name full cells
-                        mergeCells.Append(new MergeCell()
+                        mergeCells.Append(new MergeCell
                         {
-                            Reference = upRowIndex.GetCellReference(horizontalStart + 1) +
-                                        ":" +
-                                        downRowIndex.GetCellReference(horizontalStart + 1)
+                            Reference = mergeCabinetCells
                         });
                     }
-                    else
+                    else if (tuple.numerator is not null || tuple.divisor is not null)
                     {
                         if (tuple.numerator is not null)
                         {
-                            // subject numerator cell
                             upRow.Append(new Cell
                             {
                                 CellReference = upRowIndex.GetCellReference(horizontalStart),
@@ -2658,7 +2654,6 @@ public class GeneratedTeacherSchedulePrinter
                                 DataType = CellValues.String,
                                 CellValue = new CellValue(tuple.numerator.Subject)
                             });
-                            // cabinet numerator cell
                             upRow.Append(new Cell
                             {
                                 CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
@@ -2683,7 +2678,6 @@ public class GeneratedTeacherSchedulePrinter
 
                         if (tuple.divisor is not null)
                         {
-                            // subject numerator cell
                             downRow.Append(new Cell
                             {
                                 CellReference = downRowIndex.GetCellReference(horizontalStart),
@@ -2691,7 +2685,6 @@ public class GeneratedTeacherSchedulePrinter
                                 DataType = CellValues.String,
                                 CellValue = new CellValue(tuple.divisor.Subject)
                             });
-                            // cabinet numerator cell
                             downRow.Append(new Cell
                             {
                                 CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
@@ -2713,6 +2706,37 @@ public class GeneratedTeacherSchedulePrinter
                                 StyleIndex = (UInt32Value)11U
                             });
                         }
+                    }
+                    else
+                    {
+                        upRow.Append(new Cell
+                        {
+                            CellReference = upRowIndex.GetCellReference(horizontalStart),
+                            StyleIndex = (UInt32Value)10U
+                        });
+                        upRow.Append(new Cell
+                        {
+                            CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
+                            StyleIndex = (UInt32Value)10U
+                        });
+                        downRow.Append(new Cell
+                        {
+                            CellReference = downRowIndex.GetCellReference(horizontalStart),
+                            StyleIndex = (UInt32Value)11U
+                        });
+                        downRow.Append(new Cell
+                        {
+                            CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
+                            StyleIndex = (UInt32Value)11U
+                        });
+                        mergeCells.Append(new MergeCell
+                        {
+                            Reference = mergeSubjectCells
+                        });
+                        mergeCells.Append(new MergeCell
+                        {
+                            Reference = mergeCabinetCells
+                        });
                     }
                 }
             }
@@ -2860,12 +2884,12 @@ public class GeneratedTeacherSchedulePrinter
             Text = "0"
         };
         var application1 = new Ap.Application
-        {
-            Text = "LibreOffice/7.3.3.2$Windows_X86_64 LibreOffice_project/d1d0ea68f081ee2800a922cac8f79445e4603348"
+        {            
+            Text = "TechnicalSchoolAutomationSystem"
         };
         var applicationVersion1 = new Ap.ApplicationVersion
         {
-            Text = "15.0000"
+            Text = "0.1"
         };
 
         properties1.Append(template1);

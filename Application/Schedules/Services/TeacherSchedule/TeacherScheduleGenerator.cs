@@ -15,14 +15,14 @@ public class TeacherScheduleGenerator
         _configuration = configuration;
     }
 
-    public async Task<string> GenerateScheduleAndSaveAsync(int year = -1)
+    public async Task<string> GenerateScheduleAndSaveAsync(DateTime? moment = null)
     {
-        year = year < 0 ? DateTime.Today.Year : year;
+        moment ??= DateTime.UtcNow.Date;
         var model = new TeacherScheduleModel();
         await using var context = await _factory.CreateDbContextAsync();
         var classSchedules = await context
             .ClassSchedule
-            .Where(x => x.Schedule.Group.GraduationYear >= year && x.Schedule.Group.EnrollmentYear <= year)
+            .Where(x => x.Schedule.Group.Graduation > moment && x.Schedule.Group.Enrollment <= moment)
             .Where(x => x.TeacherId.HasValue)
             .Select(x => new
             {

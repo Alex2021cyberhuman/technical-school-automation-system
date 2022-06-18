@@ -5,6 +5,7 @@ using Application.AdmissionCommittee.Services.StatementDocument;
 using Application.Common.Services;
 using Application.Data;
 using Application.Schedules.Data;
+using Application.Schedules.Services.GroupsSchedule;
 using Application.Schedules.Services.TeacherSchedule;
 using Application.Specialities.Data;
 using Application.Startup;
@@ -42,6 +43,7 @@ builder.Services.AddSingleton<MonthsService>();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<WeekSeparationService>();
 builder.Services.AddSingleton<TeacherScheduleGenerator>();
+builder.Services.AddSingleton<GroupsScheduleGenerator>();
 
 var app = builder.Build();
 
@@ -102,7 +104,7 @@ app.MapFallbackToPage("/_Host");
 await using var scope = app.Services.CreateAsyncScope();
 await app.InitializeAccessAsync();
 await scope.ServiceProvider.InitializeMainDbContextDevelopmentInstallationAsync();
-var gen = scope.ServiceProvider.GetRequiredService<TeacherScheduleGenerator>();
+var gen = scope.ServiceProvider.GetRequiredService<GroupsScheduleGenerator>();
 var res = await gen.GenerateScheduleAndSaveAsync();
 Console.WriteLine(res);
 
