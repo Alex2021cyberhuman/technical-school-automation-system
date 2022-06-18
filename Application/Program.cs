@@ -104,8 +104,5 @@ app.MapFallbackToPage("/_Host");
 await using var scope = app.Services.CreateAsyncScope();
 await app.InitializeAccessAsync();
 await scope.ServiceProvider.InitializeMainDbContextDevelopmentInstallationAsync();
-var gen = scope.ServiceProvider.GetRequiredService<GroupsScheduleGenerator>();
-var res = await gen.GenerateScheduleAndSaveAsync();
-Console.WriteLine(res);
 
-//app.Run();
+app.Run();

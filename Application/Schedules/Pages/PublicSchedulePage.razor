@@ -358,11 +358,11 @@
             return;
         }
         await using var context = await DbContextFactory.CreateDbContextAsync();
-        var year = DateTime.Today.Year;
+        
         Groups = await context.Group
             .AsNoTracking()
             .Where(x => x.SpecialityId == speciality.Id)
-            .Where(x => x.GraduationYear >= year)
+            .Where(x => x.Graduation >= DateTime.UtcNow.Date)
             .OrderBy(x => x.EnrollmentYear)
             .ThenBy(x => x.Name)
             .ToListAsync();

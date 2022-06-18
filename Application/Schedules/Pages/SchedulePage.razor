@@ -7,11 +7,23 @@
 @using Application.Data
 @using Application.Access.Data
 @using Application.Access.Enums
+@using Application.Schedules.Services.GroupsSchedule
+@using Application.Schedules.Services.TeacherSchedule
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDbContextFactory<AccessDbContext> AccessDbContextFactory
+@inject NavigationManager NavigationManager
+@inject TeacherScheduleGenerator TeacherScheduleGenerator
+@inject GroupsScheduleGenerator GroupsScheduleGenerator
 <PageTitle>Техникум - Расписание </PageTitle>
 <h3>Расписание</h3>
 <MudGrid>
+
+    <MudItem xs="12">
+        <MudButtonGroup VerticalAlign="true">
+            <MudButton OnClick="GetTeacherScheduleAsync">Загрузить учительское расписание</MudButton>
+            <MudButton OnClick="GetGroupsScheduleAsync">Загрузить расписание</MudButton>
+        </MudButtonGroup>
+    </MudItem>
     <MudItem xs="2">
         <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
             @if (SelectedSpeciality is not null)
@@ -162,6 +174,18 @@
         }
         SelectedSchedule = schedule;
         SelectedGroup = group;
+    }
+
+    private async Task GetTeacherScheduleAsync()
+    {
+        var filename = await TeacherScheduleGenerator.GenerateScheduleAndSaveAsync();
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + filename, true);
+    }
+
+    private async Task GetGroupsScheduleAsync()
+    {
+        var filename = await GroupsScheduleGenerator.GenerateScheduleAndSaveAsync();
+        NavigationManager.NavigateTo(NavigationManager.BaseUri + filename, true);
     }
 
 }
