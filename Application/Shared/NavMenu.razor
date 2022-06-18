@@ -85,6 +85,11 @@
                     Вычитка часов преподавателям
                 </NavLink>
             </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="/schedule/teacher" Match="NavLinkMatch.All">
+                    Расписание учителя
+                </NavLink>
+            </div>
         }
         @if (!CurrentUser.Identity?.IsAuthenticated ?? false)
         {
@@ -97,11 +102,14 @@
         @if (CurrentUser.Identity?.IsAuthenticated ?? false)
         {
             <div class="nav-item">
-                <NavLink class="nav-link" href="/Access/Logout" Match="NavLinkMatch.All">
-                    Выход
-                </NavLink>
+                <form action="/access/logout" method="post">
+
+                    <button type="submit" class="nav-link">Выход</button>
+
+                </form>
             </div>
         }
+
     </nav>
 </div>
 

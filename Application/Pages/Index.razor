@@ -53,6 +53,24 @@
         <a class="btn btn-outline-primary btn-block" href="/proofreading">
             Вычитка часов преподавателям
         </a>
+        <a class="btn btn-outline-primary btn-block" href="/schedule/teacher">
+            Расписание учителя
+        </a>
+    }
+    <hr/>
+    @if (!CurrentUser.Identity?.IsAuthenticated ?? false)
+    {
+        <a class="btn btn-outline-danger" href="/Access/Login">
+            Вход
+        </a>
+    }
+    @if (CurrentUser.Identity?.IsAuthenticated ?? false)
+    {
+        <form action="/access/logout" method="post">
+
+            <button type="submit" class="btn btn-outline-danger">Выход</button>
+
+        </form>
     }
 </MudContainer>
 

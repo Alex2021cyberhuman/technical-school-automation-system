@@ -177,6 +177,7 @@
                 <MudGrid>
                     <MudItem xs="12">
                         <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync" Disabled="LoadingDate"/>
+                        <MudText>@StringLocalizer[WeekSeparationService.GetCurrentWeekSeparation(SelectedDate).ToString()]</MudText>
                     </MudItem>
                     <MudItem xs="12">
                         <MudSimpleTable Bordered="true">
