@@ -1826,7 +1826,6 @@ public class GeneratedTeacherSchedulePrinter
                 CustomWidth = true, OutlineLevel = 0, Collapsed = false
             });
         for (var index = startScheduleTable; index < cellsWidth; index += 2)
-        {
             columns1.Append(new Column
             {
                 Min = (UInt32Value)(uint)index, Max = (UInt32Value)(uint)index, Width = 20D, Style = (UInt32Value)0U,
@@ -1834,11 +1833,11 @@ public class GeneratedTeacherSchedulePrinter
                 CustomWidth = true, OutlineLevel = 0, Collapsed = false
             }, new Column
             {
-                Min = (UInt32Value)(uint)index + 1, Max = (UInt32Value)(uint)index + 1, Width = 5D, Style = (UInt32Value)0U,
+                Min = (UInt32Value)(uint)index + 1, Max = (UInt32Value)(uint)index + 1, Width = 5D,
+                Style = (UInt32Value)0U,
                 Hidden = false,
                 CustomWidth = true, OutlineLevel = 0, Collapsed = false
             });
-        }
 
         var sheetData1 = new SheetData();
 
@@ -2593,119 +2592,77 @@ public class GeneratedTeacherSchedulePrinter
                             downRowIndex.GetCellReference(2)
             });
             for (var dayOfWeek = 0; dayOfWeek < studyDaysAtWeek; dayOfWeek++)
+            for (var number = 0; number < lessonsOnDayCount; number++)
             {
-                for (var number = 0; number < lessonsOnDayCount; number++)
-                {
-                    var horizontalStart = startScheduleTable +
-                                          dayOfWeek * perDayOfWeekSectionWidth +
-                                          number * perLessonCellWidth;
-                    var tuple = teacher.Schedule.GetValueOrDefault((number, dayOfWeek));
-                    var mergeCabinetCells = upRowIndex.GetCellReference(horizontalStart + 1) +
+                var horizontalStart = startScheduleTable +
+                                      dayOfWeek * perDayOfWeekSectionWidth +
+                                      number * perLessonCellWidth;
+                var tuple = teacher.Schedule.GetValueOrDefault((number, dayOfWeek));
+                var mergeCabinetCells = upRowIndex.GetCellReference(horizontalStart + 1) +
                                         ":" +
                                         downRowIndex.GetCellReference(horizontalStart + 1);
-                    var mergeSubjectCells = upRowIndex.GetCellReference(horizontalStart) +
+                var mergeSubjectCells = upRowIndex.GetCellReference(horizontalStart) +
                                         ":" +
                                         downRowIndex.GetCellReference(horizontalStart);
-                    if (tuple.all is not null &&
-                        tuple.numerator is null &&
-                        tuple.divisor is null)
+                if (tuple.all is not null &&
+                    tuple.numerator is null &&
+                    tuple.divisor is null)
+                {
+                    upRow.Append(new Cell
+                    {
+                        CellReference = upRowIndex.GetCellReference(horizontalStart),
+                        StyleIndex = (UInt32Value)10U,
+                        DataType = CellValues.String,
+                        CellValue = new CellValue(tuple.all.Subject)
+                    });
+                    upRow.Append(new Cell
+                    {
+                        CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
+                        StyleIndex = (UInt32Value)10U,
+                        DataType = CellValues.String,
+                        CellValue = !string.IsNullOrWhiteSpace(tuple.all.Cabinet)
+                            ? new CellValue(tuple.all.Cabinet)
+                            : null
+                    });
+                    downRow.Append(new Cell
+                    {
+                        CellReference = downRowIndex.GetCellReference(horizontalStart),
+                        StyleIndex = (UInt32Value)11U
+                    });
+                    downRow.Append(new Cell
+                    {
+                        CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
+                        StyleIndex = (UInt32Value)11U
+                    });
+                    mergeCells.Append(new MergeCell
+                    {
+                        Reference = mergeSubjectCells
+                    });
+                    mergeCells.Append(new MergeCell
+                    {
+                        Reference = mergeCabinetCells
+                    });
+                }
+                else if (tuple.numerator is not null || tuple.divisor is not null)
+                {
+                    if (tuple.numerator is not null)
                     {
                         upRow.Append(new Cell
                         {
                             CellReference = upRowIndex.GetCellReference(horizontalStart),
                             StyleIndex = (UInt32Value)10U,
                             DataType = CellValues.String,
-                            CellValue = new CellValue(tuple.all.Subject)
+                            CellValue = new CellValue(tuple.numerator.Subject)
                         });
                         upRow.Append(new Cell
                         {
                             CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
                             StyleIndex = (UInt32Value)10U,
                             DataType = CellValues.String,
-                            CellValue = !string.IsNullOrWhiteSpace(tuple.all.Cabinet) ? new CellValue(tuple.all.Cabinet) : null
+                            CellValue = !string.IsNullOrWhiteSpace(tuple.numerator.Cabinet)
+                                ? new CellValue(tuple.numerator.Cabinet)
+                                : null
                         });
-                        downRow.Append(new Cell
-                        {
-                            CellReference = downRowIndex.GetCellReference(horizontalStart),
-                            StyleIndex = (UInt32Value)11U
-                        });
-                        downRow.Append(new Cell
-                        {
-                            CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
-                            StyleIndex = (UInt32Value)11U
-                        });
-                        mergeCells.Append(new MergeCell
-                        {
-                            Reference = mergeSubjectCells
-                        });
-                        mergeCells.Append(new MergeCell
-                        {
-                            Reference = mergeCabinetCells
-                        });
-                    }
-                    else if (tuple.numerator is not null || tuple.divisor is not null)
-                    {
-                        if (tuple.numerator is not null)
-                        {
-                            upRow.Append(new Cell
-                            {
-                                CellReference = upRowIndex.GetCellReference(horizontalStart),
-                                StyleIndex = (UInt32Value)10U,
-                                DataType = CellValues.String,
-                                CellValue = new CellValue(tuple.numerator.Subject)
-                            });
-                            upRow.Append(new Cell
-                            {
-                                CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
-                                StyleIndex = (UInt32Value)10U,
-                                DataType = CellValues.String,
-                                CellValue = !string.IsNullOrWhiteSpace(tuple.numerator.Cabinet) ? new CellValue(tuple.numerator.Cabinet) : null
-                            });
-                        }
-                        else
-                        {
-                            upRow.Append(new Cell
-                            {
-                                CellReference = upRowIndex.GetCellReference(horizontalStart),
-                                StyleIndex = (UInt32Value)10U
-                            });
-                            upRow.Append(new Cell
-                            {
-                                CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
-                                StyleIndex = (UInt32Value)10U
-                            });
-                        }
-
-                        if (tuple.divisor is not null)
-                        {
-                            downRow.Append(new Cell
-                            {
-                                CellReference = downRowIndex.GetCellReference(horizontalStart),
-                                StyleIndex = (UInt32Value)11U,
-                                DataType = CellValues.String,
-                                CellValue = new CellValue(tuple.divisor.Subject)
-                            });
-                            downRow.Append(new Cell
-                            {
-                                CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
-                                StyleIndex = (UInt32Value)11U,
-                                DataType = CellValues.String,
-                                CellValue = !string.IsNullOrWhiteSpace(tuple.divisor.Cabinet) ? new CellValue(tuple.divisor.Cabinet) : null
-                            });
-                        }
-                        else
-                        {
-                            downRow.Append(new Cell
-                            {
-                                CellReference = downRowIndex.GetCellReference(horizontalStart),
-                                StyleIndex = (UInt32Value)11U
-                            });
-                            downRow.Append(new Cell
-                            {
-                                CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
-                                StyleIndex = (UInt32Value)11U
-                            });
-                        }
                     }
                     else
                     {
@@ -2719,6 +2676,29 @@ public class GeneratedTeacherSchedulePrinter
                             CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
                             StyleIndex = (UInt32Value)10U
                         });
+                    }
+
+                    if (tuple.divisor is not null)
+                    {
+                        downRow.Append(new Cell
+                        {
+                            CellReference = downRowIndex.GetCellReference(horizontalStart),
+                            StyleIndex = (UInt32Value)11U,
+                            DataType = CellValues.String,
+                            CellValue = new CellValue(tuple.divisor.Subject)
+                        });
+                        downRow.Append(new Cell
+                        {
+                            CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
+                            StyleIndex = (UInt32Value)11U,
+                            DataType = CellValues.String,
+                            CellValue = !string.IsNullOrWhiteSpace(tuple.divisor.Cabinet)
+                                ? new CellValue(tuple.divisor.Cabinet)
+                                : null
+                        });
+                    }
+                    else
+                    {
                         downRow.Append(new Cell
                         {
                             CellReference = downRowIndex.GetCellReference(horizontalStart),
@@ -2729,15 +2709,38 @@ public class GeneratedTeacherSchedulePrinter
                             CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
                             StyleIndex = (UInt32Value)11U
                         });
-                        mergeCells.Append(new MergeCell
-                        {
-                            Reference = mergeSubjectCells
-                        });
-                        mergeCells.Append(new MergeCell
-                        {
-                            Reference = mergeCabinetCells
-                        });
                     }
+                }
+                else
+                {
+                    upRow.Append(new Cell
+                    {
+                        CellReference = upRowIndex.GetCellReference(horizontalStart),
+                        StyleIndex = (UInt32Value)10U
+                    });
+                    upRow.Append(new Cell
+                    {
+                        CellReference = upRowIndex.GetCellReference(horizontalStart + 1),
+                        StyleIndex = (UInt32Value)10U
+                    });
+                    downRow.Append(new Cell
+                    {
+                        CellReference = downRowIndex.GetCellReference(horizontalStart),
+                        StyleIndex = (UInt32Value)11U
+                    });
+                    downRow.Append(new Cell
+                    {
+                        CellReference = downRowIndex.GetCellReference(horizontalStart + 1),
+                        StyleIndex = (UInt32Value)11U
+                    });
+                    mergeCells.Append(new MergeCell
+                    {
+                        Reference = mergeSubjectCells
+                    });
+                    mergeCells.Append(new MergeCell
+                    {
+                        Reference = mergeCabinetCells
+                    });
                 }
             }
 
@@ -2884,7 +2887,7 @@ public class GeneratedTeacherSchedulePrinter
             Text = "0"
         };
         var application1 = new Ap.Application
-        {            
+        {
             Text = "TechnicalSchoolAutomationSystem"
         };
         var applicationVersion1 = new Ap.ApplicationVersion
@@ -2909,9 +2912,9 @@ public class GeneratedTeacherSchedulePrinter
     private string extendedPart1Data =
         "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8Y3A6Y29yZVByb3BlcnRpZXMgeG1sbnM6Y3A9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9wYWNrYWdlLzIwMDYvbWV0YWRhdGEvY29yZS1wcm9wZXJ0aWVzIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIj48ZGN0ZXJtczpjcmVhdGVkIHhzaTp0eXBlPSJkY3Rlcm1zOlczQ0RURiI+MjAyMi0wNi0xNVQxMzowMzo0NVo8L2RjdGVybXM6Y3JlYXRlZD48ZGM6Y3JlYXRvcj5BZG1pbjwvZGM6Y3JlYXRvcj48ZGM6ZGVzY3JpcHRpb24+PC9kYzpkZXNjcmlwdGlvbj48ZGM6bGFuZ3VhZ2U+cnUtUlU8L2RjOmxhbmd1YWdlPjxjcDpsYXN0TW9kaWZpZWRCeT5BZG1pbjwvY3A6bGFzdE1vZGlmaWVkQnk+PGRjdGVybXM6bW9kaWZpZWQgeHNpOnR5cGU9ImRjdGVybXM6VzNDRFRGIj4yMDIyLTA2LTE1VDE1OjM5OjUxWjwvZGN0ZXJtczptb2RpZmllZD48Y3A6cmV2aXNpb24+MTwvY3A6cmV2aXNpb24+PGRjOnN1YmplY3Q+PC9kYzpzdWJqZWN0PjxkYzp0aXRsZT48L2RjOnRpdGxlPjwvY3A6Y29yZVByb3BlcnRpZXM+";
 
-    private System.IO.Stream GetBinaryDataStream(string base64String)
+    private Stream GetBinaryDataStream(string base64String)
     {
-        return new System.IO.MemoryStream(System.Convert.FromBase64String(base64String));
+        return new MemoryStream(Convert.FromBase64String(base64String));
     }
 
     #endregion

@@ -29,6 +29,6 @@ public class Group
     public int EnrollmentYear { get; set; }
 
     public DateTime Enrollment { get; set; }
-    
+
     public List<Student> Students { get; set; } = null!;
 }

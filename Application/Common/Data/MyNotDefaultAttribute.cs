@@ -28,20 +28,17 @@ public class MyNotDefaultAttribute : MyRequiredAttribute
     {
         DefaultValue = GetDefaultValue(type);
     }
-    
+
     private object? DefaultValue { get; }
 
     public override bool IsValid(object? value)
     {
         return base.IsValid(value) && value != null && value != DefaultValue;
     }
-    
+
     private static object? GetDefaultValue(Type type)
     {
-        if (!type.IsValueType)
-        {
-            return null;
-        }
+        if (!type.IsValueType) return null;
 
         // A bit of perf code to avoid calling Activator.CreateInstance for common types and
         // to avoid boxing on every call. This is about 50% faster than just calling CreateInstance

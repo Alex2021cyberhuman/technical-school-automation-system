@@ -8,12 +8,17 @@
 @using Application.Access.Data
 @using Application.Access.Enums
 @using Application.Schedules.Services.GroupsSchedule
+@using Application.Schedules.Services.ReplacementSchedule
+@using Application.Schedules.Services.TeacherReplacementSchedule
 @using Application.Schedules.Services.TeacherSchedule
 @inject IDbContextFactory<MainDbContext> DbContextFactory
 @inject IDbContextFactory<AccessDbContext> AccessDbContextFactory
 @inject NavigationManager NavigationManager
 @inject TeacherScheduleGenerator TeacherScheduleGenerator
 @inject GroupsScheduleGenerator GroupsScheduleGenerator
+@inject ReplacementScheduleGenerator ReplacementScheduleGenerator
+@inject TeacherReplacementScheduleGenerator TeacherReplacementScheduleGenerator
+@inject IDialogService DialogService
 <PageTitle>Техникум - Расписание </PageTitle>
 <h3>Расписание</h3>
 <MudGrid>
@@ -22,6 +27,8 @@
         <MudButtonGroup VerticalAlign="true">
             <MudButton OnClick="GetTeacherScheduleAsync">Загрузить учительское расписание</MudButton>
             <MudButton OnClick="GetGroupsScheduleAsync">Загрузить расписание</MudButton>
+            <MudButton OnClick="GetReplacementsScheduleAsync">Загрузить изменения</MudButton>
+            <MudButton OnClick="GetTeacherReplacementsScheduleAsync">Загрузить изменения для учителей</MudButton>
         </MudButtonGroup>
     </MudItem>
     <MudItem xs="2">
@@ -102,15 +109,14 @@
 
     private List<Subject> Subjects { get; set; } = new();
 
-    private int MaxNumber { get; } = 8;
+    private int MaxNumber { get; } = 7;
 
     private DayOfWeek[] DayOfWeeks { get; } = {
         DayOfWeek.Monday,
         DayOfWeek.Tuesday,
         DayOfWeek.Wednesday,
         DayOfWeek.Thursday,
-        DayOfWeek.Friday,
-        DayOfWeek.Saturday
+        DayOfWeek.Friday
     };
 
     protected override async Task OnInitializedAsync()
@@ -186,6 +192,28 @@
     {
         var filename = await GroupsScheduleGenerator.GenerateScheduleAndSaveAsync();
         NavigationManager.NavigateTo(NavigationManager.BaseUri + filename, true);
+    }
+
+    private async Task GetReplacementsScheduleAsync()
+    {
+        var dialog = DialogService.Show<MyWorkDatePickerDialog>();
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data is DateTime moment)
+        {
+            var filename = await ReplacementScheduleGenerator.GenerateScheduleAndSaveAsync(moment);
+            NavigationManager.NavigateTo(NavigationManager.BaseUri + filename, true);
+        }
+    }
+
+    private async Task GetTeacherReplacementsScheduleAsync()
+    {
+        var dialog = DialogService.Show<MyWorkDatePickerDialog>();
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data is DateTime moment)
+        {
+            var filename = await TeacherReplacementScheduleGenerator.GenerateScheduleAndSaveAsync(moment);
+            NavigationManager.NavigateTo(NavigationManager.BaseUri + filename, true);
+        }
     }
 
 }

@@ -4,13 +4,13 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using static Application.Common.Helpers.TableExtensions;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
 
-namespace Application.Schedules.Services.GroupsSchedule;
+namespace Application.Schedules.Services.ReplacementSchedule;
 
-public class GeneratedGroupsSchedulePrinter
+public class GeneratedReplacementSchedulePrinter
 {
-    private readonly GroupsScheduleModel _model;
+    private readonly ReplacementScheduleModel _model;
 
-    public GeneratedGroupsSchedulePrinter(GroupsScheduleModel model)
+    public GeneratedReplacementSchedulePrinter(ReplacementScheduleModel model)
     {
         _model = model;
     }
@@ -106,21 +106,23 @@ public class GeneratedGroupsSchedulePrinter
     {
         var stylesheet1 = new Stylesheet();
 
-        var numberingFormats1 = new NumberingFormats();
+        var numberingFormats1 = new NumberingFormats { Count = (UInt32Value)1U };
         var numberingFormat1 = new NumberingFormat { NumberFormatId = (UInt32Value)164U, FormatCode = "General" };
 
         numberingFormats1.Append(numberingFormat1);
 
-        var fonts1 = new Fonts();
+        var fonts1 = new Fonts { Count = (UInt32Value)5U };
 
         var font1 = new Font();
         var fontSize1 = new FontSize { Val = 10D };
         var fontName1 = new FontName { Val = "Arial" };
         var fontFamilyNumbering1 = new FontFamilyNumbering { Val = 2 };
+        var fontCharSet1 = new FontCharSet { Val = 1 };
 
         font1.Append(fontSize1);
         font1.Append(fontName1);
         font1.Append(fontFamilyNumbering1);
+        font1.Append(fontCharSet1);
 
         var font2 = new Font();
         var fontSize2 = new FontSize { Val = 10D };
@@ -150,49 +152,23 @@ public class GeneratedGroupsSchedulePrinter
         font4.Append(fontFamilyNumbering4);
 
         var font5 = new Font();
-        var fontSize5 = new FontSize { Val = 10D };
+        var fontSize5 = new FontSize { Val = 14D };
         var fontName5 = new FontName { Val = "Arial" };
         var fontFamilyNumbering5 = new FontFamilyNumbering { Val = 2 };
-        var fontCharSet1 = new FontCharSet { Val = 1 };
+        var fontCharSet2 = new FontCharSet { Val = 1 };
 
         font5.Append(fontSize5);
         font5.Append(fontName5);
         font5.Append(fontFamilyNumbering5);
-        font5.Append(fontCharSet1);
-
-        var font6 = new Font();
-        var bold1 = new Bold { Val = true };
-        var fontSize6 = new FontSize { Val = 10D };
-        var fontName6 = new FontName { Val = "Arial" };
-        var fontFamilyNumbering6 = new FontFamilyNumbering { Val = 2 };
-        var fontCharSet2 = new FontCharSet { Val = 1 };
-
-        font6.Append(bold1);
-        font6.Append(fontSize6);
-        font6.Append(fontName6);
-        font6.Append(fontFamilyNumbering6);
-        font6.Append(fontCharSet2);
-
-        var font7 = new Font();
-        var fontSize7 = new FontSize { Val = 9D };
-        var fontName7 = new FontName { Val = "Arial" };
-        var fontFamilyNumbering7 = new FontFamilyNumbering { Val = 2 };
-        var fontCharSet3 = new FontCharSet { Val = 1 };
-
-        font7.Append(fontSize7);
-        font7.Append(fontName7);
-        font7.Append(fontFamilyNumbering7);
-        font7.Append(fontCharSet3);
+        font5.Append(fontCharSet2);
 
         fonts1.Append(font1);
         fonts1.Append(font2);
         fonts1.Append(font3);
         fonts1.Append(font4);
         fonts1.Append(font5);
-        fonts1.Append(font6);
-        fonts1.Append(font7);
 
-        var fills1 = new Fills();
+        var fills1 = new Fills { Count = (UInt32Value)2U };
 
         var fill1 = new Fill();
         var patternFill1 = new PatternFill { PatternType = PatternValues.None };
@@ -207,7 +183,7 @@ public class GeneratedGroupsSchedulePrinter
         fills1.Append(fill1);
         fills1.Append(fill2);
 
-        var borders1 = new Borders();
+        var borders1 = new Borders { Count = (UInt32Value)2U };
 
         var border1 = new Border { DiagonalUp = false, DiagonalDown = false };
         var leftBorder1 = new LeftBorder();
@@ -238,7 +214,7 @@ public class GeneratedGroupsSchedulePrinter
         borders1.Append(border1);
         borders1.Append(border2);
 
-        var cellStyleFormats1 = new CellStyleFormats();
+        var cellStyleFormats1 = new CellStyleFormats { Count = (UInt32Value)23U };
 
         var cellFormat1 = new CellFormat
         {
@@ -248,7 +224,7 @@ public class GeneratedGroupsSchedulePrinter
         };
         var alignment1 = new Alignment
         {
-            Horizontal = HorizontalAlignmentValues.General, Vertical = VerticalAlignmentValues.Bottom,
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
             TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
         };
         var protection1 = new Protection { Locked = true, Hidden = false };
@@ -370,6 +346,48 @@ public class GeneratedGroupsSchedulePrinter
             ApplyProtection = false
         };
 
+        var cellFormat21 = new CellFormat
+        {
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)1U, ApplyFont = true, ApplyBorder = true, ApplyAlignment = true,
+            ApplyProtection = false
+        };
+        var alignment2 = new Alignment
+        {
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center,
+            TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
+        };
+
+        cellFormat21.Append(alignment2);
+
+        var cellFormat22 = new CellFormat
+        {
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)1U, ApplyFont = true, ApplyBorder = true, ApplyAlignment = true,
+            ApplyProtection = false
+        };
+        var alignment3 = new Alignment
+        {
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
+            TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
+        };
+
+        cellFormat22.Append(alignment3);
+
+        var cellFormat23 = new CellFormat
+        {
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true, ApplyAlignment = true,
+            ApplyProtection = false
+        };
+        var alignment4 = new Alignment
+        {
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
+            TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
+        };
+
+        cellFormat23.Append(alignment4);
+
         cellStyleFormats1.Append(cellFormat1);
         cellStyleFormats1.Append(cellFormat2);
         cellStyleFormats1.Append(cellFormat3);
@@ -390,130 +408,82 @@ public class GeneratedGroupsSchedulePrinter
         cellStyleFormats1.Append(cellFormat18);
         cellStyleFormats1.Append(cellFormat19);
         cellStyleFormats1.Append(cellFormat20);
+        cellStyleFormats1.Append(cellFormat21);
+        cellStyleFormats1.Append(cellFormat22);
+        cellStyleFormats1.Append(cellFormat23);
 
-        var cellFormats1 = new CellFormats();
+        var cellFormats1 = new CellFormats { Count = (UInt32Value)4U };
 
-        var cellFormat21 = new CellFormat
+        var cellFormat24 = new CellFormat
         {
             NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U,
             BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = false, ApplyBorder = false,
             ApplyAlignment = false, ApplyProtection = false
         };
-        var alignment2 = new Alignment
+        var alignment5 = new Alignment
         {
-            Horizontal = HorizontalAlignmentValues.General, Vertical = VerticalAlignmentValues.Bottom,
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
             TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
         };
         var protection2 = new Protection { Locked = true, Hidden = false };
 
-        cellFormat21.Append(alignment2);
-        cellFormat21.Append(protection2);
+        cellFormat24.Append(alignment5);
+        cellFormat24.Append(protection2);
 
-        var cellFormat22 = new CellFormat
+        var cellFormat25 = new CellFormat
         {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)0U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = false,
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)0U, FormatId = (UInt32Value)22U, ApplyFont = true, ApplyBorder = false,
             ApplyAlignment = false, ApplyProtection = false
         };
-        var alignment3 = new Alignment
+        var alignment6 = new Alignment
         {
-            Horizontal = HorizontalAlignmentValues.General, Vertical = VerticalAlignmentValues.Bottom,
+            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
             TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
         };
         var protection3 = new Protection { Locked = true, Hidden = false };
 
-        cellFormat22.Append(alignment3);
-        cellFormat22.Append(protection3);
+        cellFormat25.Append(alignment6);
+        cellFormat25.Append(protection3);
 
-        var cellFormat23 = new CellFormat
+        var cellFormat26 = new CellFormat
         {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)5U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true,
-            ApplyAlignment = true, ApplyProtection = false
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)20U, ApplyFont = false, ApplyBorder = false,
+            ApplyAlignment = false, ApplyProtection = false
         };
-        var alignment4 = new Alignment
+        var alignment7 = new Alignment
         {
             Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center,
             TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
         };
         var protection4 = new Protection { Locked = true, Hidden = false };
 
-        cellFormat23.Append(alignment4);
-        cellFormat23.Append(protection4);
+        cellFormat26.Append(alignment7);
+        cellFormat26.Append(protection4);
 
-        var cellFormat24 = new CellFormat
+        var cellFormat27 = new CellFormat
         {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true,
-            ApplyAlignment = true, ApplyProtection = false
+            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)0U, FillId = (UInt32Value)0U,
+            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)21U, ApplyFont = true, ApplyBorder = false,
+            ApplyAlignment = false, ApplyProtection = false
         };
-        var alignment5 = new Alignment
-        {
-            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Bottom,
-            TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
-        };
-        var protection5 = new Protection { Locked = true, Hidden = false };
-
-        cellFormat24.Append(alignment5);
-        cellFormat24.Append(protection5);
-
-        var cellFormat25 = new CellFormat
-        {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true,
-            ApplyAlignment = true, ApplyProtection = false
-        };
-        var alignment6 = new Alignment
-        {
-            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center,
-            TextRotation = (UInt32Value)255U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
-        };
-        var protection6 = new Protection { Locked = true, Hidden = false };
-
-        cellFormat25.Append(alignment6);
-        cellFormat25.Append(protection6);
-
-        var cellFormat26 = new CellFormat
-        {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)4U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true,
-            ApplyAlignment = true, ApplyProtection = false
-        };
-        var alignment7 = new Alignment
+        var alignment8 = new Alignment
         {
             Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Top,
             TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
         };
-        var protection7 = new Protection { Locked = true, Hidden = false };
-
-        cellFormat26.Append(alignment7);
-        cellFormat26.Append(protection7);
-
-        var cellFormat27 = new CellFormat
-        {
-            NumberFormatId = (UInt32Value)164U, FontId = (UInt32Value)6U, FillId = (UInt32Value)0U,
-            BorderId = (UInt32Value)1U, FormatId = (UInt32Value)0U, ApplyFont = true, ApplyBorder = true,
-            ApplyAlignment = true, ApplyProtection = false
-        };
-        var alignment8 = new Alignment
-        {
-            Horizontal = HorizontalAlignmentValues.Center, Vertical = VerticalAlignmentValues.Center,
-            TextRotation = (UInt32Value)0U, WrapText = false, Indent = (UInt32Value)0U, ShrinkToFit = false
-        };
-        var protection8 = new Protection { Locked = true, Hidden = false };
+        var protection5 = new Protection { Locked = true, Hidden = false };
 
         cellFormat27.Append(alignment8);
-        cellFormat27.Append(protection8);
+        cellFormat27.Append(protection5);
 
-        cellFormats1.Append(cellFormat21);
-        cellFormats1.Append(cellFormat22);
-        cellFormats1.Append(cellFormat23);
         cellFormats1.Append(cellFormat24);
         cellFormats1.Append(cellFormat25);
         cellFormats1.Append(cellFormat26);
         cellFormats1.Append(cellFormat27);
 
-        var cellStyles1 = new CellStyles();
+        var cellStyles1 = new CellStyles { Count = (UInt32Value)9U };
         var cellStyle1 = new CellStyle { Name = "Normal", FormatId = (UInt32Value)0U, BuiltinId = (UInt32Value)0U };
         var cellStyle2 = new CellStyle { Name = "Comma", FormatId = (UInt32Value)15U, BuiltinId = (UInt32Value)3U };
         var cellStyle3 = new CellStyle { Name = "Comma [0]", FormatId = (UInt32Value)16U, BuiltinId = (UInt32Value)6U };
@@ -521,6 +491,9 @@ public class GeneratedGroupsSchedulePrinter
         var cellStyle5 = new CellStyle
             { Name = "Currency [0]", FormatId = (UInt32Value)18U, BuiltinId = (UInt32Value)7U };
         var cellStyle6 = new CellStyle { Name = "Percent", FormatId = (UInt32Value)19U, BuiltinId = (UInt32Value)5U };
+        var cellStyle7 = new CellStyle { Name = "Title", FormatId = (UInt32Value)20U };
+        var cellStyle8 = new CellStyle { Name = "Table", FormatId = (UInt32Value)21U };
+        var cellStyle9 = new CellStyle { Name = "TailText", FormatId = (UInt32Value)22U };
 
         cellStyles1.Append(cellStyle1);
         cellStyles1.Append(cellStyle2);
@@ -528,23 +501,9 @@ public class GeneratedGroupsSchedulePrinter
         cellStyles1.Append(cellStyle4);
         cellStyles1.Append(cellStyle5);
         cellStyles1.Append(cellStyle6);
-
-        var differentialFormats1 = new DifferentialFormats();
-
-        var differentialFormat1 = new DifferentialFormat();
-
-        var fill3 = new Fill();
-
-        var patternFill3 = new PatternFill { PatternType = PatternValues.Solid };
-        var foregroundColor1 = new ForegroundColor { Rgb = "00FFFFFF" };
-
-        patternFill3.Append(foregroundColor1);
-
-        fill3.Append(patternFill3);
-
-        differentialFormat1.Append(fill3);
-
-        differentialFormats1.Append(differentialFormat1);
+        cellStyles1.Append(cellStyle7);
+        cellStyles1.Append(cellStyle8);
+        cellStyles1.Append(cellStyle9);
 
         stylesheet1.Append(numberingFormats1);
         stylesheet1.Append(fonts1);
@@ -553,7 +512,6 @@ public class GeneratedGroupsSchedulePrinter
         stylesheet1.Append(cellStyleFormats1);
         stylesheet1.Append(cellFormats1);
         stylesheet1.Append(cellStyles1);
-        stylesheet1.Append(differentialFormats1);
 
         workbookStylesPart1.Stylesheet = stylesheet1;
     }
@@ -572,7 +530,7 @@ public class GeneratedGroupsSchedulePrinter
         var pageSetupProperties1 = new PageSetupProperties { FitToPage = false };
 
         sheetProperties1.Append(pageSetupProperties1);
-        var sheetDimension1 = new SheetDimension { Reference = "A1:J72" };
+        var sheetDimension1 = new SheetDimension { Reference = "A1:H8" };
 
         var sheetViews1 = new SheetViews();
 
@@ -586,8 +544,8 @@ public class GeneratedGroupsSchedulePrinter
         };
         var selection1 = new Selection
         {
-            Pane = PaneValues.TopLeft, ActiveCell = "G2", ActiveCellId = (UInt32Value)0U,
-            SequenceOfReferences = new ListValue<StringValue> { InnerText = "G2" }
+            Pane = PaneValues.TopLeft, ActiveCell = "A9", ActiveCellId = (UInt32Value)0U,
+            SequenceOfReferences = new ListValue<StringValue> { InnerText = "A9" }
         };
 
         sheetView1.Append(selection1);
@@ -595,184 +553,178 @@ public class GeneratedGroupsSchedulePrinter
         sheetViews1.Append(sheetView1);
         var sheetFormatProperties1 = new SheetFormatProperties
         {
-            DefaultColumnWidth = 11.53515625D, DefaultRowHeight = 12.8D, ZeroHeight = false, OutlineLevelRow = 0,
+            DefaultColumnWidth = 9.625D, DefaultRowHeight = 15D, ZeroHeight = false, OutlineLevelRow = 0,
             OutlineLevelColumn = 0
         };
 
         var columns1 = new Columns();
-
-        columns1.Append(new Column
+        var column1 = new Column
         {
-            Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 5.1D, Style = (UInt32Value)0U, Hidden = false,
+            Min = (UInt32Value)1U, Max = (UInt32Value)1U, Width = 12.35D, Style = (UInt32Value)0U, Hidden = false,
             CustomWidth = true, OutlineLevel = 0, Collapsed = false
-        }, new Column
+        };
+        var column2 = new Column
         {
-            Min = (UInt32Value)2U, Max = (UInt32Value)2U, Width = 2.55D, Style = (UInt32Value)0U, Hidden = false,
+            Min = (UInt32Value)2U, Max = (UInt32Value)8U, Width = 8.51D, Style = (UInt32Value)0U, Hidden = false,
             CustomWidth = true, OutlineLevel = 0, Collapsed = false
-        });
+        };
 
-        for (var index = 0; index < _model.Groups.Count; index++)
-        {
-            var subject = (UInt32Value)(3U + index * 2);
-            var cabinet = (UInt32Value)(4U + index * 2);
-            columns1.Append(new Column
-            {
-                Min = subject, Max = subject, Width = 12.75D, Style = (UInt32Value)0U, Hidden = false,
-                CustomWidth = true, OutlineLevel = 0, Collapsed = false
-            }, new Column
-            {
-                Min = cabinet, Max = cabinet, Width = 2.55D, Style = (UInt32Value)0U, Hidden = false,
-                CustomWidth = true, OutlineLevel = 0, Collapsed = false
-            });
-        }
-
+        columns1.Append(column1);
+        columns1.Append(column2);
 
         var sheetData1 = new SheetData();
-        var mergeCells1 = new MergeCells();
+
+        var mergeCells1 = new MergeCells { Count = (UInt32Value)2U };
+        var mergeCell1 = new MergeCell { Reference = "A1:H1" };
+
+        mergeCells1.Append(mergeCell1);
 
         var row1 = new Row
         {
-            RowIndex = (UInt32Value)1U, CustomFormat = false, Height = 12.8D, Hidden = false, CustomHeight = false,
+            RowIndex = (UInt32Value)1U, CustomFormat = false, Height = 15D, Hidden = false, CustomHeight = false,
             OutlineLevel = 0, Collapsed = false
         };
-        row1.Append(GetCell(1, 1), GetCell(1, 2));
+
+        var dayOfWeekText = GetDayOfWeekText((int)_model.Date.DayOfWeek - 1);
+        var dateText = _model.Date.ToShortDateString();
+        var weekSeparationText = GetWeekSeparationText(_model.WeekSeparation);
+        row1.Append(
+            GetCell(1, 1, 1, $"Изменения в расписании на {dateText} {dayOfWeekText} ({weekSeparationText})"),
+            GetCell(1, 2),
+            GetCell(1, 3),
+            GetCell(1, 4),
+            GetCell(1, 5),
+            GetCell(1, 6),
+            GetCell(1, 7),
+            GetCell(1, 8));
+
+        sheetData1.Append(row1);
+
         var row2 = new Row
         {
-            RowIndex = (UInt32Value)2U, CustomFormat = false, Height = 12.8D, Hidden = false, CustomHeight = false,
+            RowIndex = (UInt32Value)4U, CustomFormat = false, Height = 17.35D, Hidden = false, CustomHeight = false,
             OutlineLevel = 0, Collapsed = false
         };
-        row2.Append(GetCell(2, 1), GetCell(2, 2));
-        var columnIndex = 3;
-        const uint firstRow = 1;
-        const uint secondRow = 2;
-        var courses = _model.Groups.GroupBy(x => x.course).OrderBy(x => x.Key)
-            .Select(x => (x.Key, x.OrderBy(g => g.name).ToList())).ToList();
-        foreach (var (course, groups) in courses)
-        {
-            var titleSet = false;
-            var firstCourseCellColumn = columnIndex;
-            var lastCourseCellColumn = columnIndex;
-            foreach (var group in groups)
-            {
-                if (!titleSet)
-                {
-                    row1.Append(
-                        GetCell(1, columnIndex, 2, $"{course} КУРС"),
-                        GetCell(1, columnIndex + 1, 2));
-                    titleSet = true;
-                }
-                else
-                {
-                    row1.Append(GetCell(1, columnIndex, 2), GetCell(1, columnIndex + 1, 2));
-                }
 
-                row2.Append(
-                    GetCell(2, columnIndex, 2, group.name),
-                    GetCell(2, columnIndex + 1, 2));
-                mergeCells1.Append(GetMergeCell(secondRow, columnIndex, secondRow, columnIndex + 1));
-                lastCourseCellColumn = columnIndex + 1;
-                columnIndex += 2;
+        var cell9 = GetCell(4, 1, 2, "Группа");
+
+        var cell10 = new Cell { CellReference = "B4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue2 = new CellValue
+        {
+            Text = "1"
+        };
+
+        cell10.Append(cellValue2);
+
+        var cell11 = new Cell { CellReference = "C4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue3 = new CellValue
+        {
+            Text = "2"
+        };
+
+        cell11.Append(cellValue3);
+
+        var cell12 = new Cell { CellReference = "D4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue4 = new CellValue
+        {
+            Text = "3"
+        };
+
+        cell12.Append(cellValue4);
+
+        var cell13 = new Cell { CellReference = "E4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue5 = new CellValue
+        {
+            Text = "4"
+        };
+
+        cell13.Append(cellValue5);
+
+        var cell14 = new Cell { CellReference = "F4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue6 = new CellValue
+        {
+            Text = "5"
+        };
+
+        cell14.Append(cellValue6);
+
+        var cell15 = new Cell { CellReference = "G4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue7 = new CellValue
+        {
+            Text = "6"
+        };
+
+        cell15.Append(cellValue7);
+
+        var cell16 = new Cell { CellReference = "H4", StyleIndex = (UInt32Value)2U, DataType = CellValues.Number };
+        var cellValue8 = new CellValue
+        {
+            Text = "7"
+        };
+
+        cell16.Append(cellValue8);
+
+        row2.Append(cell9);
+        row2.Append(cell10);
+        row2.Append(cell11);
+        row2.Append(cell12);
+        row2.Append(cell13);
+        row2.Append(cell14);
+        row2.Append(cell15);
+        row2.Append(cell16);
+
+        sheetData1.Append(row2);
+
+        var rowIndex = 5U;
+
+        foreach (var (name, groupId) in _model.Groups)
+        {
+            var row = new Row
+            {
+                RowIndex = (UInt32Value)rowIndex,
+                CustomFormat = false,
+                Height = 15D,
+                Hidden = false,
+                CustomHeight = true,
+                OutlineLevel = 0,
+                Collapsed = false
+            };
+            row.Append(GetCell(rowIndex, 1, 3, name));
+            for (var number = 0; number < 7; number++)
+            {
+                var column = number + 2;
+                var item = _model.Schedule.GetValueOrDefault((number, groupId));
+                row.Append(item is null
+                    ? GetCell(rowIndex, column, 3)
+                    : GetCell(rowIndex, column, 3, item.Text));
             }
 
-            mergeCells1.Append(GetMergeCell(firstRow, firstCourseCellColumn, firstRow, lastCourseCellColumn));
+            sheetData1.Append(row);
+            rowIndex += 1;
         }
 
-        sheetData1.Append(row1, row2);
-
-        const int studyDaysAtWeek = 5;
-        const int lessonsOnDay = 7;
-        const int perLessonHeight = 2;
-        const int perDayHeight = perLessonHeight * lessonsOnDay;
-        const int verticalScheduleOffset = 3;
-        for (var dayOfWeek = 0; dayOfWeek < studyDaysAtWeek; dayOfWeek++)
+        rowIndex += 1;
+        var row5 = new Row
         {
-            var dayOfWeekTitleSet = false;
-            for (var number = 0; number < lessonsOnDay; number++)
-            {
-                var upRowIndex = (uint)(number * perLessonHeight + dayOfWeek * perDayHeight + verticalScheduleOffset);
-                var downRowIndex = upRowIndex + 1;
-                var upRow = new Row
-                {
-                    RowIndex = (UInt32Value)upRowIndex, CustomFormat = false, Height = 12.8D, Hidden = false,
-                    CustomHeight = false, OutlineLevel = 0, Collapsed = false
-                };
-                var downRow = new Row
-                {
-                    RowIndex = (UInt32Value)downRowIndex, CustomFormat = false, Height = 12.8D, Hidden = false,
-                    CustomHeight = false, OutlineLevel = 0, Collapsed = false
-                };
+            RowIndex = (UInt32Value)rowIndex, CustomFormat = false, Height = 15D, Hidden = false, CustomHeight = false,
+            OutlineLevel = 0, Collapsed = false
+        };
 
-                if (!dayOfWeekTitleSet)
-                {
-                    var dayOfWeekText = GetDayOfWeekText(dayOfWeek);
-                    upRow.Append(GetCell(upRowIndex, 1, 4, dayOfWeekText));
-                    downRow.Append(GetCell(downRowIndex, 1, 4));
-                    dayOfWeekTitleSet = true;
-                }
-                else
-                {
-                    upRow.Append(GetCell(upRowIndex, 1, 4));
-                    downRow.Append(GetCell(downRowIndex, 1, 4));
-                }
+        row5.Append(GetCell(rowIndex, 1, 1, "Зам. Дирекотора по УР ___________________________________"),
+            GetCell(rowIndex, 2),
+            GetCell(rowIndex, 3),
+            GetCell(rowIndex, 4),
+            GetCell(rowIndex, 5),
+            GetCell(rowIndex, 6),
+            GetCell(rowIndex, 7),
+            GetCell(rowIndex, 8));
 
-                upRow.Append(GetCell(upRowIndex, 2, 5, number: number + 1));
-                downRow.Append(GetCell(downRowIndex, 2, 5));
+        var mergeCell2 = GetMergeCell(rowIndex, 1, rowIndex, 8);
 
-                mergeCells1.Append(
-                    GetMergeCell(upRowIndex, 2, downRowIndex, 2));
+        mergeCells1.Append(mergeCell2);
 
-                columnIndex = 3;
-                foreach (var (_, groups) in courses)
-                foreach (var group in groups)
-                {
-                    var (numerator, divisor, all) =
-                        _model.Schedule.GetValueOrDefault((dayOfWeek, number, group.groupId));
-                    var mergeCellsSubjectCabinet = all is not null || (divisor is null && numerator is null);
-                    if (all is not null)
-                    {
-                        upRow.Append(GetCell(upRowIndex, columnIndex, 5, all.Subject),
-                            GetCell(upRowIndex, columnIndex + 1, 5, all.Cabinet));
-                        downRow.Append(GetCell(downRowIndex, columnIndex, 5),
-                            GetCell(downRowIndex, columnIndex + 1, 5));
-                    }
-                    else if (divisor is not null || numerator is not null)
-                    {
-                        if (numerator is not null)
-                            upRow.Append(GetCell(upRowIndex, columnIndex, 5, numerator.Subject),
-                                GetCell(upRowIndex, columnIndex + 1, 5, numerator.Cabinet));
-                        else
-                            upRow.Append(GetCell(upRowIndex, columnIndex, 5),
-                                GetCell(upRowIndex, columnIndex + 1, 5));
+        sheetData1.Append(row5);
 
-                        if (divisor is not null)
-                            downRow.Append(GetCell(downRowIndex, columnIndex, 5, divisor.Subject),
-                                GetCell(downRowIndex, columnIndex + 1, 5, divisor.Cabinet));
-                        else
-                            downRow.Append(GetCell(downRowIndex, columnIndex, 5),
-                                GetCell(downRowIndex, columnIndex + 1, 5));
-                    }
-                    else
-                    {
-                        upRow.Append(GetCell(upRowIndex, columnIndex, 5),
-                            GetCell(upRowIndex, columnIndex + 1, 5));
-                        downRow.Append(GetCell(downRowIndex, columnIndex, 5),
-                            GetCell(downRowIndex, columnIndex + 1, 5));
-                    }
-
-                    if (mergeCellsSubjectCabinet)
-                        mergeCells1.Append(GetMergeCell(upRowIndex, columnIndex, downRowIndex, columnIndex),
-                            GetMergeCell(upRowIndex, columnIndex + 1, downRowIndex, columnIndex + 1));
-
-                    columnIndex += 2;
-                }
-
-                sheetData1.Append(upRow, downRow);
-            }
-
-            var dayOfWeekTitleRowStart = (uint)(verticalScheduleOffset + dayOfWeek * perDayHeight);
-            var dayOfWeekTitleRowEnd = (uint)(verticalScheduleOffset + (dayOfWeek + 1) * perDayHeight - 1);
-            mergeCells1.Append(GetMergeCell(dayOfWeekTitleRowStart, 1, dayOfWeekTitleRowEnd, 1));
-        }
 
         var printOptions1 = new PrintOptions
         {
@@ -781,8 +733,8 @@ public class GeneratedGroupsSchedulePrinter
         };
         var pageMargins1 = new PageMargins
         {
-            Left = 0.7875D, Right = 0.7875D, Top = 1.05277777777778D, Bottom = 1.05277777777778D, Header = 0.7875D,
-            Footer = 0.7875D
+            Left = 0D, Right = 0D, Top = 1.05277777777778D, Bottom = 1.05277777777778D, Header = 0D,
+            Footer = 0D
         };
         var pageSetup1 = new PageSetup
         {
@@ -796,11 +748,11 @@ public class GeneratedGroupsSchedulePrinter
         var headerFooter1 = new HeaderFooter { DifferentOddEven = false, DifferentFirst = false };
         var oddHeader1 = new OddHeader
         {
-            Text = "&C&\"Times New Roman,Обычный\"&12&A"
+            Text = "&C&\"Times New Roman,Обычный\"&A"
         };
         var oddFooter1 = new OddFooter
         {
-            Text = "&C&\"Times New Roman,Обычный\"&12Страница &P"
+            Text = "&C&\"Times New Roman,Обычный\"Страница &P"
         };
 
         headerFooter1.Append(oddHeader1);
@@ -822,7 +774,7 @@ public class GeneratedGroupsSchedulePrinter
     }
 
     // Generates content of extendedPart1.
-    private void GenerateExtendedPart1Content(ExtendedPart extendedPart1)
+    private void GenerateExtendedPart1Content(OpenXmlPart extendedPart1)
     {
         var data = GetBinaryDataStream(extendedPart1Data);
         extendedPart1.FeedData(data);
@@ -830,7 +782,8 @@ public class GeneratedGroupsSchedulePrinter
     }
 
     // Generates content of extendedFilePropertiesPart1.
-    private void GenerateExtendedFilePropertiesPart1Content(ExtendedFilePropertiesPart extendedFilePropertiesPart1)
+    private static void GenerateExtendedFilePropertiesPart1Content(
+        ExtendedFilePropertiesPart extendedFilePropertiesPart1)
     {
         var properties1 = new Ap.Properties();
         properties1.AddNamespaceDeclaration("vt",
@@ -841,7 +794,7 @@ public class GeneratedGroupsSchedulePrinter
         };
         var totalTime1 = new Ap.TotalTime
         {
-            Text = "4"
+            Text = "0"
         };
         var application1 = new Ap.Application
         {
@@ -851,6 +804,7 @@ public class GeneratedGroupsSchedulePrinter
         {
             Text = "0.1"
         };
+
         properties1.Append(template1);
         properties1.Append(totalTime1);
         properties1.Append(application1);
@@ -862,12 +816,11 @@ public class GeneratedGroupsSchedulePrinter
     #region Binary Data
 
     private string extendedPart1Data =
-        "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8Y3A6Y29yZVByb3BlcnRpZXMgeG1sbnM6Y3A9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9wYWNrYWdlLzIwMDYvbWV0YWRhdGEvY29yZS1wcm9wZXJ0aWVzIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIj48ZGN0ZXJtczpjcmVhdGVkIHhzaTp0eXBlPSJkY3Rlcm1zOlczQ0RURiI+MjAyMi0wNi0xOFQxMzozNTo0MFo8L2RjdGVybXM6Y3JlYXRlZD48ZGM6Y3JlYXRvcj48L2RjOmNyZWF0b3I+PGRjOmRlc2NyaXB0aW9uPjwvZGM6ZGVzY3JpcHRpb24+PGRjOmxhbmd1YWdlPnJ1LVJVPC9kYzpsYW5ndWFnZT48Y3A6bGFzdE1vZGlmaWVkQnk+PC9jcDpsYXN0TW9kaWZpZWRCeT48ZGN0ZXJtczptb2RpZmllZCB4c2k6dHlwZT0iZGN0ZXJtczpXM0NEVEYiPjIwMjItMDYtMThUMTQ6MDY6MjZaPC9kY3Rlcm1zOm1vZGlmaWVkPjxjcDpyZXZpc2lvbj4xPC9jcDpyZXZpc2lvbj48ZGM6c3ViamVjdD48L2RjOnN1YmplY3Q+PGRjOnRpdGxlPjwvZGM6dGl0bGU+PC9jcDpjb3JlUHJvcGVydGllcz4=";
+        "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8Y3A6Y29yZVByb3BlcnRpZXMgeG1sbnM6Y3A9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9wYWNrYWdlLzIwMDYvbWV0YWRhdGEvY29yZS1wcm9wZXJ0aWVzIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIj48ZGN0ZXJtczpjcmVhdGVkIHhzaTp0eXBlPSJkY3Rlcm1zOlczQ0RURiI+MjAyMi0wNi0xOFQxNzo0MTo0M1o8L2RjdGVybXM6Y3JlYXRlZD48ZGM6Y3JlYXRvcj48L2RjOmNyZWF0b3I+PGRjOmRlc2NyaXB0aW9uPjwvZGM6ZGVzY3JpcHRpb24+PGRjOmxhbmd1YWdlPnJ1LVJVPC9kYzpsYW5ndWFnZT48Y3A6bGFzdE1vZGlmaWVkQnk+PC9jcDpsYXN0TW9kaWZpZWRCeT48ZGN0ZXJtczptb2RpZmllZCB4c2k6dHlwZT0iZGN0ZXJtczpXM0NEVEYiPjIwMjItMDYtMThUMTc6NTM6NDJaPC9kY3Rlcm1zOm1vZGlmaWVkPjxjcDpyZXZpc2lvbj4xPC9jcDpyZXZpc2lvbj48ZGM6c3ViamVjdD48L2RjOnN1YmplY3Q+PGRjOnRpdGxlPjwvZGM6dGl0bGU+PC9jcDpjb3JlUHJvcGVydGllcz4=";
 
     private Stream GetBinaryDataStream(string base64String)
     {
-        return new
-            MemoryStream(Convert.FromBase64String(base64String));
+        return new MemoryStream(Convert.FromBase64String(base64String));
     }
 
     #endregion

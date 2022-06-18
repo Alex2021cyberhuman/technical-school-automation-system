@@ -10,126 +10,137 @@
 @using Application.Schedules.Services.TeacherSchedule
 @inject IStringLocalizer StringLocalizer
 @inject IDbContextFactory<MainDbContext> DbContextFactory
+
 <MudContainer>
-    <MudGrid>
-        <MudItem xs="12">
-            <MudSimpleTable Bordered="true">
-                <thead>
-                <tr>
-                    <th></th>
-                    @foreach (var dayOfWeek in DayOfWeeks)
-                    {
-                        <th>@StringLocalizer[dayOfWeek.ToString()]</th>
-                    }
-                </tr>
-                </thead>
-                <tbody>
-                @for (var i = 1; i <= MaxNumber; i++)
-                {
-                    var classNumber = i;
-                    <tr>
-                        <td>@classNumber</td>
-                        @foreach (var dayOfWeek in DayOfWeeks)
+    @if (!Loading)
+    {
+        <MudContainer>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudSimpleTable Bordered="true">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            @foreach (var dayOfWeek in DayOfWeeks)
+                            {
+                                <th>@StringLocalizer[dayOfWeek.ToString()]</th>
+                            }
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @for (var i = 1; i <= MaxNumber; i++)
                         {
-                            var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
-                            @if (classSchedulesOfDayNumber is null || !classSchedulesOfDayNumber.Any())
-                            {
-                                <td>
-                                    <div class="schedule-cell">
-                                        <MyAddClassSchedule
-                                            WeeksSeparation="WeeksSeparationType.All"
-                                            CanChangeWeekSeparation="true"
-                                            DayOfWeek="dayOfWeek"
-                                            Number="classNumber"
-                                            Schedule="Schedule"
-                                            Subjects="Subjects"
-                                            Teachers="Teachers"
-                                            Cabinets="Cabinets"
-                                            OnClassScheduleCreated="OnClassScheduleCreated"/>
-                                    </div>
-                                </td>
-                            }
-                            else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
-                            {
-                                var item = classSchedulesOfDayNumber.First();
-                                <td>
-                                    <div class="schedule-cell">
-                                        <MyEditClassSchedule
-                                            CanChangeWeekSeparation="true"
-                                            ClassSchedule="item"
-                                            Subjects="Subjects"
-                                            Teachers="Teachers"
-                                            Cabinets="Cabinets"
-                                            OnClassScheduleEdited="OnClassScheduleEdited"
-                                            OnClassScheduleRemoved="OnClassScheduleRemoved"/>
-                                    </div>
-                                </td>
-                            }
-                            else
-                            {
-                                var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Divisor);
-                                var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Numerator);
-                                <td>
-                                    <div class="schedule-cell">
-                                        @if (oddItem is not null)
-                                        {
-                                            <MyEditClassSchedule
-                                                CanChangeWeekSeparation="@(evenItem is null)"
-                                                ClassSchedule="oddItem"
-                                                Subjects="Subjects"
-                                                Teachers="Teachers"
-                                                Cabinets="Cabinets"
-                                                OnClassScheduleEdited="OnClassScheduleEdited"
-                                                OnClassScheduleRemoved="OnClassScheduleRemoved"/>
-                                        }
-                                        else
-                                        {
-                                            <MyAddClassSchedule
-                                                WeeksSeparation="WeeksSeparationType.Divisor"
-                                                CanChangeWeekSeparation="@(evenItem is null)"
-                                                DayOfWeek="dayOfWeek"
-                                                Number="classNumber"
-                                                Schedule="Schedule"
-                                                Subjects="Subjects"
-                                                Teachers="Teachers"
-                                                Cabinets="Cabinets"
-                                                OnClassScheduleCreated="OnClassScheduleCreated"/>
-                                        }
-                                        @if (evenItem is not null)
-                                        {
-                                            <MyEditClassSchedule
-                                                CanChangeWeekSeparation="@(oddItem is null)"
-                                                ClassSchedule="evenItem"
-                                                Subjects="Subjects"
-                                                Teachers="Teachers"
-                                                Cabinets="Cabinets"
-                                                OnClassScheduleEdited="OnClassScheduleEdited"
-                                                OnClassScheduleRemoved="OnClassScheduleRemoved"/>
-                                        }
-                                        else
-                                        {
-                                            <MyAddClassSchedule
-                                                WeeksSeparation="WeeksSeparationType.Numerator"
-                                                CanChangeWeekSeparation="@(oddItem is null)"
-                                                DayOfWeek="dayOfWeek"
-                                                Number="classNumber"
-                                                Schedule="Schedule"
-                                                Subjects="Subjects"
-                                                Teachers="Teachers"
-                                                Cabinets="Cabinets"
-                                                OnClassScheduleCreated="OnClassScheduleCreated"/>
-                                        }
-                                    </div>
-                                </td>
-                            }
+                            var classNumber = i;
+                            <tr>
+                                <td>@classNumber</td>
+                                @foreach (var dayOfWeek in DayOfWeeks)
+                                {
+                                    var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
+                                    @if (classSchedulesOfDayNumber is null || !classSchedulesOfDayNumber.Any())
+                                    {
+                                        <td>
+                                            <div class="schedule-cell">
+                                                <MyAddClassSchedule
+                                                    WeeksSeparation="WeeksSeparationType.All"
+                                                    CanChangeWeekSeparation="true"
+                                                    DayOfWeek="dayOfWeek"
+                                                    Number="classNumber"
+                                                    Schedule="Schedule"
+                                                    Subjects="Subjects"
+                                                    Teachers="Teachers"
+                                                    Cabinets="Cabinets"
+                                                    OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                            </div>
+                                        </td>
+                                    }
+                                    else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
+                                    {
+                                        var item = classSchedulesOfDayNumber.First();
+                                        <td>
+                                            <div class="schedule-cell">
+                                                <MyEditClassSchedule
+                                                    CanChangeWeekSeparation="true"
+                                                    ClassSchedule="item"
+                                                    Subjects="Subjects"
+                                                    Teachers="Teachers"
+                                                    Cabinets="Cabinets"
+                                                    OnClassScheduleEdited="OnClassScheduleEdited"
+                                                    OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Divisor);
+                                        var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Numerator);
+                                        <td>
+                                            <div class="schedule-cell">
+                                                @if (oddItem is not null)
+                                                {
+                                                    <MyEditClassSchedule
+                                                        CanChangeWeekSeparation="@(evenItem is null)"
+                                                        ClassSchedule="oddItem"
+                                                        Subjects="Subjects"
+                                                        Teachers="Teachers"
+                                                        Cabinets="Cabinets"
+                                                        OnClassScheduleEdited="OnClassScheduleEdited"
+                                                        OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                                }
+                                                else
+                                                {
+                                                    <MyAddClassSchedule
+                                                        WeeksSeparation="WeeksSeparationType.Divisor"
+                                                        CanChangeWeekSeparation="@(evenItem is null)"
+                                                        DayOfWeek="dayOfWeek"
+                                                        Number="classNumber"
+                                                        Schedule="Schedule"
+                                                        Subjects="Subjects"
+                                                        Teachers="Teachers"
+                                                        Cabinets="Cabinets"
+                                                        OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                                }
+                                                @if (evenItem is not null)
+                                                {
+                                                    <MyEditClassSchedule
+                                                        CanChangeWeekSeparation="@(oddItem is null)"
+                                                        ClassSchedule="evenItem"
+                                                        Subjects="Subjects"
+                                                        Teachers="Teachers"
+                                                        Cabinets="Cabinets"
+                                                        OnClassScheduleEdited="OnClassScheduleEdited"
+                                                        OnClassScheduleRemoved="OnClassScheduleRemoved"/>
+                                                }
+                                                else
+                                                {
+                                                    <MyAddClassSchedule
+                                                        WeeksSeparation="WeeksSeparationType.Numerator"
+                                                        CanChangeWeekSeparation="@(oddItem is null)"
+                                                        DayOfWeek="dayOfWeek"
+                                                        Number="classNumber"
+                                                        Schedule="Schedule"
+                                                        Subjects="Subjects"
+                                                        Teachers="Teachers"
+                                                        Cabinets="Cabinets"
+                                                        OnClassScheduleCreated="OnClassScheduleCreated"/>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                            </tr>
                         }
-                    </tr>
-                }
-                </tbody>
-            </MudSimpleTable>
-        </MudItem>
-    </MudGrid>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    }
+    else
+    {
+        <MudProgressCircular Color="@Color.Primary" Indeterminate="true"/>
+    }
 </MudContainer>
+
 
 @code {
 
@@ -142,6 +153,8 @@
     [Parameter]
     public Schedule Schedule { get; set; } = null!;
 
+    public long ScheduleId { get; set; }
+
     [Parameter]
     public List<Subject> Subjects { get; set; } = new();
 
@@ -151,6 +164,8 @@
     [Parameter]
     public DayOfWeek[] DayOfWeeks { get; set; } = null!;
 
+    public bool Loading { get; set; }
+    
     private List<ClassSchedule> ClassSchedules { get; set; } = new();
 
     private Dictionary<(int number, DayOfWeek dayOfWeek), List<ClassSchedule>> ClassScheduleCache { get; set; } = new();
@@ -202,8 +217,10 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        if (ClassSchedules.Count == 0 || ClassSchedules.First().ScheduleId != Schedule.Id)
+        if (Schedule.Id != ScheduleId)
         {
+            ScheduleId = Schedule.Id;
+            Loading = true;
             await using var context = await DbContextFactory.CreateDbContextAsync();
             ClassSchedules = await context.ClassSchedule
                 .Where(x => x.ScheduleId == Schedule.Id)
@@ -217,7 +234,9 @@
             ClassScheduleCache = ClassSchedules
                 .GroupBy(x => (x.Number, x.DayOfWeek))
                 .ToDictionary(x => x.Key, x => x.ToList());
+            Loading = false;
         }
     }
+
 
 }

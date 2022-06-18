@@ -41,6 +41,6 @@ public class EditUserForm
     public DateTime? LockoutEnd { get; set; }
 
     public string Profile { get; set; } = string.Empty;
-    
+
     public bool LockoutForever { get; set; }
 }

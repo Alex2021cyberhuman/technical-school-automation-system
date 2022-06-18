@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-12 col-md-4">
         <EditForm EditContext="FilterContext">
-            <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString" />
+            <MyInputComponent Label="Строка поиска" @bind-Value="@Filter.SearchString"/>
         </EditForm>
         <CreateUserModal OnSubmit="RefreshAsync"/>
     </div>

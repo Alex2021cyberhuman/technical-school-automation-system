@@ -46,11 +46,8 @@ public class TeacherScheduleGenerator
             foreach (var item in grouping)
             {
                 var key = (item.Number, item.DayOfWeek);
-                if (!schedule.ContainsKey(key))
-                {
-                    schedule[key] = (null, null, null);
-                }
-                var scheduleItem =new TeacherScheduleModel.ScheduleItem()
+                if (!schedule.ContainsKey(key)) schedule[key] = (null, null, null);
+                var scheduleItem = new TeacherScheduleModel.ScheduleItem()
                 {
                     Cabinet = item.Cabinet,
                     Subject = item.Subject
@@ -63,6 +60,7 @@ public class TeacherScheduleGenerator
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
+
             model.Teachers.Add(new TeacherScheduleModel.Teacher
             {
                 Name = teacher.Initials,

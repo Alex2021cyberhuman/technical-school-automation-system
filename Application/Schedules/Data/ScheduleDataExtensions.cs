@@ -24,11 +24,9 @@ public static class ScheduleDataExtensions
                 .Include(x => x.Subject)
                 .AsNoTracking();
             if (filter.WeekSeparation != WeeksSeparationType.All)
-            {
                 query = query
                     .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
                                 x.WeeksSeparation == filter.WeekSeparation);
-            }
             var element = await query
                 .FirstOrDefaultAsync();
             if (filter.ReplacementMode)
@@ -91,11 +89,9 @@ public static class ScheduleDataExtensions
                 .Include(x => x.Subject)
                 .AsNoTracking();
             if (filter.WeekSeparation != WeeksSeparationType.All)
-            {
                 query = query
                     .Where(x => x.WeeksSeparation == WeeksSeparationType.All ||
                                 x.WeeksSeparation == filter.WeekSeparation);
-            }
             var element = await query
                 .FirstOrDefaultAsync();
             if (filter.ReplacementMode)

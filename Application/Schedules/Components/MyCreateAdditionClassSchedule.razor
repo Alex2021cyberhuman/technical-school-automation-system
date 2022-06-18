@@ -149,7 +149,6 @@
         return false;
     }
 
-
     private async Task<bool> CheckCabinetAvailabilityAsync(MainDbContext context, bool valid)
     {
         var (validCabinetPick, cabinetPickError) = await context.ValidateCabinetAvailabilityAsync(StringLocalizer, ScheduleAvailabilityFilter, Form.Cabinet);
@@ -159,7 +158,6 @@
         EditContext.NotifyValidationStateChanged();
         return false;
     }
-
 
     public class ComponentForm
     {

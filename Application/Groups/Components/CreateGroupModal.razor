@@ -26,7 +26,7 @@
                     <EditForm EditContext="EditContext">
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Название группы" @bind-Value="@Form.Name" />
+                        <MyInputComponent Label="Название группы" @bind-Value="@Form.Name"/>
                         <MyInputRadioGroup Label="Специальность" @bind-Value="@Form.SpecialityId" RadioItems="SpecialityRadioItems"/>
                         <MyEnumInputRadioGroup Label="Форма обучения" @bind-Value="@Form.EducationForm" TValue="EducationForm"/>
                         <MyEnumInputRadioGroup Label="Тип" @bind-Value="@Form.FinanceEnrolmentType" TValue="FinanceEnrolmentType"/>
@@ -93,7 +93,7 @@
         {
             return;
         }
-        
+
         await using var context = await DbContextFactory.CreateDbContextAsync();
         var group = Form.ToGroup();
         context.Add(group);

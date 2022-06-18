@@ -1,0 +1,44 @@
+@using Application.Common.Helpers
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            Выбор даты
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDate"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Отмена</MudButton>
+        <MudButton Color="@Color.Primary" OnClick="Submit">Продолжить</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; } = null!;
+
+    public DateTime SelectedDate { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SelectedDate = DateTime.UtcNow.Date.GetWorkDateFrom();
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(SelectedDate));
+    }
+
+    private void ChangeDate(DateTime? dateTime)
+    {
+        SelectedDate = dateTime.GetWorkDateFrom();
+    }
+}

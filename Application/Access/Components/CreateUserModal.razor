@@ -31,14 +31,14 @@
                         }
                         <DataAnnotationsValidator/>
                         <ValidationSummary/>
-                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login" />
-                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email" />
-                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName" />
-                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName" />
-                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName" />
-                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password" />
-                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword" />
-                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile" />
+                        <MyInputComponent Label="Имя пользователя" @bind-Value="@Form.Login"/>
+                        <MyInputComponent Label="Электронная почта" @bind-Value="@Form.Email"/>
+                        <MyInputComponent Label="Фамилия" @bind-Value="@Form.FamilyName"/>
+                        <MyInputComponent Label="Имя" @bind-Value="@Form.FirstName"/>
+                        <MyInputComponent Label="Отчество" @bind-Value="@Form.SurName"/>
+                        <MyInputComponent Type="password" Label="Пароль" @bind-Value="@Form.Password"/>
+                        <MyInputComponent Type="password" Label="Подтвердите пароль" @bind-Value="@Form.ConfirmPassword"/>
+                        <MyInputComponent Label="Профиль работы" @bind-Value="@Form.Profile"/>
                         <MyCheckboxGroup TCheck="string" Label="Роли" @bind-Value="@Form.RoleNames" Options="AllRoles"/>
                     </EditForm>
                 </div>

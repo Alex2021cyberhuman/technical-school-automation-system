@@ -6,6 +6,8 @@ using Application.Common.Services;
 using Application.Data;
 using Application.Schedules.Data;
 using Application.Schedules.Services.GroupsSchedule;
+using Application.Schedules.Services.ReplacementSchedule;
+using Application.Schedules.Services.TeacherReplacementSchedule;
 using Application.Schedules.Services.TeacherSchedule;
 using Application.Specialities.Data;
 using Application.Startup;
@@ -44,6 +46,8 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<WeekSeparationService>();
 builder.Services.AddSingleton<TeacherScheduleGenerator>();
 builder.Services.AddSingleton<GroupsScheduleGenerator>();
+builder.Services.AddSingleton<ReplacementScheduleGenerator>();
+builder.Services.AddSingleton<TeacherReplacementScheduleGenerator>();
 
 var app = builder.Build();
 

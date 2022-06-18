@@ -1285,7 +1285,8 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         {
             var cellDay = new Cell
             {
-                CellReference = TableExtensions.GetCellReference(6, i + 4), StyleIndex = (UInt32Value)5U, DataType = CellValues.Number
+                CellReference = TableExtensions.GetCellReference(6, i + 4), StyleIndex = (UInt32Value)5U,
+                DataType = CellValues.Number
             };
             var cellValueDay = new CellValue
             {
@@ -1297,7 +1298,8 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
         var cellSummary = new Cell
         {
-            CellReference = TableExtensions.GetCellReference(6, _model.DaysInMonthCount + 5), StyleIndex = (UInt32Value)5U,
+            CellReference = TableExtensions.GetCellReference(6, _model.DaysInMonthCount + 5),
+            StyleIndex = (UInt32Value)5U,
             DataType = CellValues.String
         };
         var cellValueSummary = new CellValue
@@ -1433,7 +1435,8 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
             {
                 cell = new Cell
                 {
-                    CellReference = TableExtensions.GetCellReference(rowIndex, columnIndex), StyleIndex = (UInt32Value)8U,
+                    CellReference = TableExtensions.GetCellReference(rowIndex, columnIndex),
+                    StyleIndex = (UInt32Value)8U,
                     DataType = CellValues.Number
                 };
                 cellValue = new CellValue
@@ -1452,7 +1455,8 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
             };
             var cellFormula = new CellFormula
             {
-                Text = $"SUM({TableExtensions.GetCellReference(rowIndex, 5)}:{TableExtensions.GetCellReference(rowIndex, daysEnd - 1)})"
+                Text =
+                    $"SUM({TableExtensions.GetCellReference(rowIndex, 5)}:{TableExtensions.GetCellReference(rowIndex, daysEnd - 1)})"
             };
             cellValue = new CellValue
             {

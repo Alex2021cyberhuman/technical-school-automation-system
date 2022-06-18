@@ -54,11 +54,8 @@ public class GroupsScheduleGenerator
                 Subject = item.Subject,
                 Cabinet = item.Cabinet
             };
-            
-            if (!scheduleDict.ContainsKey(key))
-            {
-                scheduleDict[key] = (null, null, null);
-            }
+
+            if (!scheduleDict.ContainsKey(key)) scheduleDict[key] = (null, null, null);
 
             scheduleDict[key] = item.WeeksSeparation switch
             {
@@ -84,10 +81,7 @@ public class GroupsScheduleGenerator
 
     private static int GetCourse(DateTime enrollment, DateTime moment)
     {
-        if (moment.Month >= 9)
-        {
-            return moment.Year - enrollment.Year + 1;
-        }
+        if (moment.Month >= 9) return moment.Year - enrollment.Year + 1;
 
         return moment.Year - enrollment.Year;
     }
