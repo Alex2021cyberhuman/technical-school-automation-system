@@ -1,3 +1,4 @@
+using Application.Common.Helpers;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml;
@@ -1284,7 +1285,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         {
             var cellDay = new Cell
             {
-                CellReference = GetCellReference(6, i + 4), StyleIndex = (UInt32Value)5U, DataType = CellValues.Number
+                CellReference = TableExtensions.GetCellReference(6, i + 4), StyleIndex = (UInt32Value)5U, DataType = CellValues.Number
             };
             var cellValueDay = new CellValue
             {
@@ -1296,7 +1297,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
         var cellSummary = new Cell
         {
-            CellReference = GetCellReference(6, _model.DaysInMonthCount + 5), StyleIndex = (UInt32Value)5U,
+            CellReference = TableExtensions.GetCellReference(6, _model.DaysInMonthCount + 5), StyleIndex = (UInt32Value)5U,
             DataType = CellValues.String
         };
         var cellValueSummary = new CellValue
@@ -1364,21 +1365,6 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         worksheetPart1.Worksheet = worksheet1;
     }
 
-    public static string GetCellReference(UInt32Value rowIndex, int columIndex)
-    {
-        var n = columIndex;
-        var s = "";
-        while (n > 26)
-        {
-            s = new string((char)(65 + n % 27), 1) + s;
-            n /= 26;
-        }
-
-        s = new string((char)(64 + n % 27), 1) + s;
-        var cellReference = $"{s}{rowIndex}";
-        return cellReference;
-    }
-
     private void AppendTableBody(OpenXmlElement sheetData)
     {
         var rowIndex = (UInt32Value)7U;
@@ -1391,7 +1377,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
             var cell = new Cell
             {
-                CellReference = GetCellReference(rowIndex, 1), StyleIndex = (UInt32Value)5U,
+                CellReference = TableExtensions.GetCellReference(rowIndex, 1), StyleIndex = (UInt32Value)5U,
                 DataType = CellValues.Number
             };
             var cellValue = new CellValue
@@ -1404,7 +1390,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
             cell = new Cell
             {
-                CellReference = GetCellReference(rowIndex, 2), StyleIndex = (UInt32Value)7U,
+                CellReference = TableExtensions.GetCellReference(rowIndex, 2), StyleIndex = (UInt32Value)7U,
                 DataType = CellValues.String
             };
             cellValue = new CellValue
@@ -1417,7 +1403,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
             cell = new Cell
             {
-                CellReference = GetCellReference(rowIndex, 3), StyleIndex = (UInt32Value)7U,
+                CellReference = TableExtensions.GetCellReference(rowIndex, 3), StyleIndex = (UInt32Value)7U,
                 DataType = CellValues.String
             };
             cellValue = new CellValue
@@ -1430,7 +1416,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
             cell = new Cell
             {
-                CellReference = GetCellReference(rowIndex, 4), StyleIndex = (UInt32Value)7U,
+                CellReference = TableExtensions.GetCellReference(rowIndex, 4), StyleIndex = (UInt32Value)7U,
                 DataType = CellValues.String
             };
             cellValue = new CellValue
@@ -1447,7 +1433,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
             {
                 cell = new Cell
                 {
-                    CellReference = GetCellReference(rowIndex, columnIndex), StyleIndex = (UInt32Value)8U,
+                    CellReference = TableExtensions.GetCellReference(rowIndex, columnIndex), StyleIndex = (UInt32Value)8U,
                     DataType = CellValues.Number
                 };
                 cellValue = new CellValue
@@ -1461,12 +1447,12 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
 
             cell = new Cell
             {
-                CellReference = GetCellReference(rowIndex, daysEnd), StyleIndex = (UInt32Value)9U,
+                CellReference = TableExtensions.GetCellReference(rowIndex, daysEnd), StyleIndex = (UInt32Value)9U,
                 DataType = CellValues.Number
             };
             var cellFormula = new CellFormula
             {
-                Text = $"SUM({GetCellReference(rowIndex, 5)}:{GetCellReference(rowIndex, daysEnd - 1)})"
+                Text = $"SUM({TableExtensions.GetCellReference(rowIndex, 5)}:{TableExtensions.GetCellReference(rowIndex, daysEnd - 1)})"
             };
             cellValue = new CellValue
             {
@@ -1500,7 +1486,7 @@ public class GeneratedMonthProofreadingTeacherLoadsTable
         foreach (var _ in _model.Items)
         {
             var calculationCell = new CalculationCell
-                { CellReference = GetCellReference(rowIndex, summaryColumn), SheetId = 1 };
+                { CellReference = TableExtensions.GetCellReference(rowIndex, summaryColumn), SheetId = 1 };
             calculationChain1.Append(calculationCell);
             rowIndex++;
         }

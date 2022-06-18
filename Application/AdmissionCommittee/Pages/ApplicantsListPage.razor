@@ -210,6 +210,7 @@
         if (dbApplicant.Student != null)
         {
             _ = await DialogService.ShowMessageBox("Удаление", $"Невозможно удалить данные зачисленного студента группы {dbApplicant.Student.Group.Name} {dbApplicant.FullName}! Сначала должно идти отчисление на странице этой группы.");
+            return;
         }
 
         var deleteApplicant = await DialogService.ShowMessageBox("Удаление", $"Вы хотите удалить данные абитуриента {dbApplicant.FullName}?", "Да", "Нет");

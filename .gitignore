@@ -38,7 +38,7 @@ bld/
 #wwwroot/
 
 # Visual Studio 2017 auto generated files
-Generated\ Files/
+Generated Files/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -398,15 +398,17 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Sqlite Databases
-**\*.sqlite.db
-**\*.sqlite.db-shm
-**\*.sqlite.db-wal
+**/*.sqlite.db
+**/*.sqlite.db-shm
+**/*.sqlite.db-wal
 
 # Drawio misc files
-**\*.drawio.bkp
-**\*.drawio.dtmp
-Application/.technical-school-automation-system/statements/
-Application/.technical-school-automation-system/applicants-tables
-Application/.technical-school-automation-system/enrolled-tables
-Application/.technical-school-automation-system/month-proofreading-teacher-loads/
-Application/.technical-school-automation-system/proofreading-teacher-load-vacancies/
+**/*.drawio.bkp
+**/*.drawio.dtmp
+Application/.technical-school-automation-system/statements/*
+Application/.technical-school-automation-system/applicants-tables/*
+Application/.technical-school-automation-system/enrolled-tables/*
+Application/.technical-school-automation-system/month-proofreading-teacher-loads/*
+Application/.technical-school-automation-system/proofreading-teacher-load-vacancies/*
+Application/.technical-school-automation-system/temp-files/*
+publish*/*

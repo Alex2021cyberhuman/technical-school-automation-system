@@ -86,6 +86,22 @@
                 </NavLink>
             </div>
         }
+        @if (!CurrentUser.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="nav-item">
+                <NavLink class="nav-link" href="/Access/Login" Match="NavLinkMatch.All">
+                    Вход
+                </NavLink>
+            </div>
+        }
+        @if (CurrentUser.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="nav-item">
+                <NavLink class="nav-link" href="/Access/Logout" Match="NavLinkMatch.All">
+                    Выход
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
 

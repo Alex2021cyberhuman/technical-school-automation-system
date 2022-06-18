@@ -5,6 +5,7 @@ using Application.AdmissionCommittee.Services.StatementDocument;
 using Application.Common.Services;
 using Application.Data;
 using Application.Schedules.Data;
+using Application.Schedules.Services.TeacherSchedule;
 using Application.Specialities.Data;
 using Application.Startup;
 using Application.Teachers.Services.MonthProofreadingTeacherLoads;
@@ -40,6 +41,8 @@ builder.AddAccess();
 builder.Services.AddSingleton<MonthsService>();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<WeekSeparationService>();
+builder.Services.AddSingleton<TeacherScheduleGenerator>();
+
 var app = builder.Build();
 
 app.UseResourceRequestLocalization();
@@ -50,6 +53,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var tempFiles = Path.GetFullPath(builder.Configuration["TempFilesPath"]);
+Directory.CreateDirectory(tempFiles);
 
 var applicantsTablePath = Path.GetFullPath(builder.Configuration["AdmissionCommittee:ApplicantsTablePath"]);
 Directory.CreateDirectory(applicantsTablePath);
@@ -77,6 +83,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "",
     FileProvider = new CompositeFileProvider(
         new PhysicalFileProvider(wwwrootPath),
+        new PhysicalFileProvider(tempFiles),
         new PhysicalFileProvider(applicantsTablePath),
         new PhysicalFileProvider(statementPath),
         new PhysicalFileProvider(enrolledPath),
@@ -95,5 +102,8 @@ app.MapFallbackToPage("/_Host");
 await using var scope = app.Services.CreateAsyncScope();
 await app.InitializeAccessAsync();
 await scope.ServiceProvider.InitializeMainDbContextDevelopmentInstallationAsync();
+var gen = scope.ServiceProvider.GetRequiredService<TeacherScheduleGenerator>();
+var res = await gen.GenerateScheduleAndSaveAsync();
+Console.WriteLine(res);
 
-app.Run();
+//app.Run();

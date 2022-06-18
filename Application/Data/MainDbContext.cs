@@ -47,6 +47,8 @@ public class MainDbContext : DbContext, ISpecialitiesContext
 
     public DbSet<Schedule> Schedule => Set<Schedule>();
 
+    public DbSet<User> User => Set<User>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
