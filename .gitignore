@@ -411,5 +411,6 @@ Application/.technical-school-automation-system/enrolled-tables/*
 Application/.technical-school-automation-system/month-proofreading-teacher-loads/*
 Application/.technical-school-automation-system/proofreading-teacher-load-vacancies/*
 Application/.technical-school-automation-system/temp-files/*
+publish-linux-x64.tar.gz
 publish*
 publish*/*
