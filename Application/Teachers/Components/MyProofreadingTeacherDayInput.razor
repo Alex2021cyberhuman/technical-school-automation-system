@@ -1,4 +1,5 @@
 @using Application.Teachers.Forms
+@using Application.Common.Helpers
 @inherits MudBaseInput<List<Application.Teachers.Forms.ProofreadingTeacherDayForm>>
 <MudField Label="Часы в день">
     <div class="row justify-content-between">
@@ -6,9 +7,17 @@
         {
             var currentIndex = index;
             var day = Value[index];
-            var label = $"{day.Number}";
+            var date = new DateTime(Year, Month, day.Number);
+            var label = $"{day.Number} {date.GetShortDayOfWeek()}";
+            var isNotWorkDay = date.DayOfWeek is DayOfWeek. Sunday or DayOfWeek.Saturday;
+            if (isNotWorkDay)
+            {
+                <div class="col-sm-4 col-lg-2">
+                    <MudField Label="@label" Disabled="true"><small>выходной</small></MudField>
+                </div>
+            }
             <div class="col-sm-4 col-lg-2">
-                <MudNumericField T="int" Label="@label" ValueChanged="@(async value => await SetValueAsync(currentIndex, value))" Min="0" Max="24"/>
+                <MudNumericField T="int" Label="@label" ValueChanged="@(async value => await SetValueAsync(currentIndex, value))" Value="day.Hours" Min="0" Max="24"/>
             </div>
         }
     </div>

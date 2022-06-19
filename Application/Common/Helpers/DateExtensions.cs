@@ -28,4 +28,19 @@ public static class DateExtensions
 
         return dateTime;
     }
+
+    public static string GetShortDayOfWeek(this DateTime dateTime)
+    {
+        return dateTime.DayOfWeek switch
+        {
+            DayOfWeek.Sunday => "вс",
+            DayOfWeek.Monday => "пн",
+            DayOfWeek.Tuesday => "вт",
+            DayOfWeek.Wednesday => "ср",
+            DayOfWeek.Thursday => "чт",
+            DayOfWeek.Friday => "пт",
+            DayOfWeek.Saturday => "сб",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 }

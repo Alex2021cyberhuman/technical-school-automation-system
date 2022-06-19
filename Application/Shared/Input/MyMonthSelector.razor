@@ -3,7 +3,7 @@
 @inherits MudSelect<int>
 
 <MudField Label="Месяц">
-    <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" ValueChanged="@ValueChanged" ToStringFunc="@ToStringMonth">
+    <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" ValueChanged="OnValueChanged" ToStringFunc="@ToStringMonth" Value="Value">
         @foreach (var month in Enumerable.Range(1, 12))
         {
             <MudSelectItem Value="@month"/>
@@ -30,4 +30,8 @@
         }
     }
 
+    private async Task OnValueChanged(int arg)
+    {
+        await SetValueAsync(arg);
+    }
 }

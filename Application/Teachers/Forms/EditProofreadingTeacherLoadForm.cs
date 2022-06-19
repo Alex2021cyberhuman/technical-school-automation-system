@@ -22,6 +22,7 @@ public class EditProofreadingTeacherLoadForm
 
     public void ToProofreadingTeacherLoad(ProofreadingTeacherLoad load)
     {
+        load.TeacherLoadId = TeacherLoad.Id;
         load.Month = Month;
         load.Year = Year;
         load.TotalHours = Days.Sum(x => x.Hours);

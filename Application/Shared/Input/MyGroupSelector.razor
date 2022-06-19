@@ -1,7 +1,7 @@
 @using Application.Groups.Data
 @inherits MudSelect<Group>
 
-<MudSelect T="Group" Label="Группа" AnchorOrigin="Origin.BottomCenter" @bind-Value="Value" ToStringFunc="GetGroupSelect">
+<MudSelect T="Group" Label="Группа" AnchorOrigin="Origin.BottomCenter" ValueChanged="OnValueChanged" Value="Value" ToStringFunc="GetGroupSelect">
     @foreach (var group in Groups)
     {
         <MudSelectItem Value="group"/>
@@ -38,5 +38,10 @@
             Value = Groups.First();
             await ValueChanged.InvokeAsync(Value);
         }
+    }
+
+    private async Task OnValueChanged(Group arg)
+    {
+        await SetValueAsync(arg);
     }
 }

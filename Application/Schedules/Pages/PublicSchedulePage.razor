@@ -50,243 +50,239 @@
     {
         <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">
         <MudTabPanel Text="Основное расписание">
-            <MudContainer>
-                <MudGrid>
-                    <MudItem xs="12">
-                        <MudSimpleTable Bordered="true">
-                            <thead>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudSimpleTable Bordered="true">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            @foreach (var dayOfWeek in DayOfWeeks)
+                            {
+                                <th>@StringLocalizer[dayOfWeek.ToString()]</th>
+                            }
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @for (var i = 1; i <= MaxNumber; i++)
+                        {
+                            var classNumber = i;
                             <tr>
-                                <th></th>
+                                <td>@classNumber</td>
                                 @foreach (var dayOfWeek in DayOfWeeks)
                                 {
-                                    <th>@StringLocalizer[dayOfWeek.ToString()]</th>
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @for (var i = 1; i <= MaxNumber; i++)
-                            {
-                                var classNumber = i;
-                                <tr>
-                                    <td>@classNumber</td>
-                                    @foreach (var dayOfWeek in DayOfWeeks)
+                                    var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
+                                    @if (classSchedulesOfDayNumber is null ||
+                                         !classSchedulesOfDayNumber.Any())
                                     {
-                                        var classSchedulesOfDayNumber = ClassScheduleCache.GetValueOrDefault((classNumber, dayOfWeek));
-                                        @if (classSchedulesOfDayNumber is null ||
-                                             !classSchedulesOfDayNumber.Any())
-                                        {
-                                            <td>
-                                                <div class="schedule-cell">
-                                                    <div class="schedule-cell-solid-item">
-                                                    </div>
+                                        <td>
+                                            <div class="schedule-cell">
+                                                <div class="schedule-cell-solid-item">
                                                 </div>
-                                            </td>
-                                        }
-                                        else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
-                                        {
-                                            var item = classSchedulesOfDayNumber.First();
-                                            <td>
-                                                <div class="schedule-cell">
-                                                    <div class="schedule-cell-text schedule-cell-solid-item">
+                                            </div>
+                                        </td>
+                                    }
+                                    else if (classSchedulesOfDayNumber.First().WeeksSeparation == WeeksSeparationType.All)
+                                    {
+                                        var item = classSchedulesOfDayNumber.First();
+                                        <td>
+                                            <div class="schedule-cell">
+                                                <div class="schedule-cell-text schedule-cell-solid-item">
+                                                    <strong>
+                                                        @item.Subject.Name
+                                                    </strong>
+                                                    @if (item.Cabinet != null)
+                                                    {
+                                                        <small>
+                                                            (@item.Cabinet.Code)
+                                                        </small>
+                                                    }
+                                                    <br/>
+                                                    @if (item.Teacher != null)
+                                                    {
+                                                        <i>@item.Teacher.Initials</i>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Divisor);
+                                        var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Numerator);
+                                        <td>
+                                            <div class="schedule-cell">
+                                                @if (oddItem is not null)
+                                                {
+                                                    <div class="schedule-cell-text schedule-cell-half-item">
                                                         <strong>
-                                                            @item.Subject.Name
+                                                            @oddItem.Subject.Name
                                                         </strong>
-                                                        @if (item.Cabinet != null)
+                                                        @if (oddItem.Cabinet != null)
                                                         {
                                                             <small>
-                                                                (@item.Cabinet.Code)
+                                                                (@oddItem.Cabinet.Code)
                                                             </small>
                                                         }
                                                         <br/>
-                                                        @if (item.Teacher != null)
+                                                        @if (oddItem.Teacher != null)
                                                         {
-                                                            <i>@item.Teacher.Initials</i>
+                                                            <i>@oddItem.Teacher.Initials</i>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="schedule-cell-half-item">
+                                                    </div>
+                                                }
+                                                @if (evenItem is not null)
+                                                {
+                                                    <div class="schedule-cell-text schedule-cell-half-item">
+                                                        <strong>
+                                                            @evenItem.Subject.Name
+                                                        </strong>
+                                                        @if (evenItem.Cabinet != null)
+                                                        {
+                                                            <small>
+                                                                (@evenItem.Cabinet.Code)
+                                                            </small>
+                                                        }
+                                                        <br/>
+                                                        @if (evenItem.Teacher != null)
+                                                        {
+                                                            <i>@evenItem.Teacher.Initials</i>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="schedule-cell-half-item">
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                        </tbody>
+                    </MudSimpleTable>
+                </MudItem>
+            </MudGrid>
+        </MudTabPanel>
+        <MudTabPanel Text="Расписание на определенную дату">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync" Disabled="LoadingDate"/>
+                    <MudText>@StringLocalizer[WeekSeparationService.GetCurrentWeekSeparation(SelectedDate).ToString()]</MudText>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSimpleTable Bordered="true">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @for (var i = 1; i <= MaxNumber; i++)
+                        {
+                            var classNumber = i;
+                            var classScheduleList =
+                                ClassScheduleCache.GetValueOrDefault((classNumber, SelectedDate.DayOfWeek));
+                            var classSchedule = classScheduleList?.SingleOrDefault(
+                                x => x.WeeksSeparation == WeeksSeparationType.All ||
+                                     x.WeeksSeparation == CurrentWeekSeparation);
+                            var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
+                            <tr>
+                                <td>@classNumber</td>
+                                <td>
+                                    <div class="replacements-cell">
+                                        @if (classScheduleReplacement is null)
+                                        {
+                                            if (classSchedule is not null)
+                                            {
+                                                <div
+                                                    class="replacements-cell-solid-item">
+                                                    <div class="replacements-cell-text">
+                                                        <strong>
+                                                            @classSchedule.Subject.Name
+                                                        </strong>
+                                                        @if (classSchedule.Cabinet != null)
+                                                        {
+                                                            <small>
+                                                                (@classSchedule.Cabinet.Code)
+                                                            </small>
+                                                        }
+                                                        <br/>
+                                                        @if (classSchedule.Teacher != null)
+                                                        {
+                                                            <i>@classSchedule.Teacher.Initials</i>
                                                         }
                                                     </div>
                                                 </div>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            var oddItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Divisor);
-                                            var evenItem = classSchedulesOfDayNumber.FirstOrDefault(x => x.WeeksSeparation == WeeksSeparationType.Numerator);
-                                            <td>
-                                                <div class="schedule-cell">
-                                                    @if (oddItem is not null)
-                                                    {
-                                                        <div class="schedule-cell-text schedule-cell-half-item">
-                                                            <strong>
-                                                                @oddItem.Subject.Name
-                                                            </strong>
-                                                            @if (oddItem.Cabinet != null)
-                                                            {
-                                                                <small>
-                                                                    (@oddItem.Cabinet.Code)
-                                                                </small>
-                                                            }
-                                                            <br/>
-                                                            @if (oddItem.Teacher != null)
-                                                            {
-                                                                <i>@oddItem.Teacher.Initials</i>
-                                                            }
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="schedule-cell-half-item">
-                                                        </div>
-                                                    }
-                                                    @if (evenItem is not null)
-                                                    {
-                                                        <div class="schedule-cell-text schedule-cell-half-item">
-                                                            <strong>
-                                                                @evenItem.Subject.Name
-                                                            </strong>
-                                                            @if (evenItem.Cabinet != null)
-                                                            {
-                                                                <small>
-                                                                    (@evenItem.Cabinet.Code)
-                                                                </small>
-                                                            }
-                                                            <br/>
-                                                            @if (evenItem.Teacher != null)
-                                                            {
-                                                                <i>@evenItem.Teacher.Initials</i>
-                                                            }
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="schedule-cell-half-item">
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </td>
-                                        }
-                                    }
-                                </tr>
-                            }
-                            </tbody>
-                        </MudSimpleTable>
-                    </MudItem>
-                </MudGrid>
-            </MudContainer>
-        </MudTabPanel>
-        <MudTabPanel Text="Расписание на определенную дату">
-            <MudContainer>
-                <MudGrid>
-                    <MudItem xs="12">
-                        <MudDatePicker Label="Дата" DisplayMonths="2" Date="SelectedDate" DateChanged="ChangeDateAsync" Disabled="LoadingDate"/>
-                        <MudText>@StringLocalizer[WeekSeparationService.GetCurrentWeekSeparation(SelectedDate).ToString()]</MudText>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <MudSimpleTable Bordered="true">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>@StringLocalizer[SelectedDate.DayOfWeek.ToString()]</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @for (var i = 1; i <= MaxNumber; i++)
-                            {
-                                var classNumber = i;
-                                var classScheduleList =
-                                    ClassScheduleCache.GetValueOrDefault((classNumber, SelectedDate.DayOfWeek));
-                                var classSchedule = classScheduleList?.SingleOrDefault(
-                                    x => x.WeeksSeparation == WeeksSeparationType.All ||
-                                         x.WeeksSeparation == CurrentWeekSeparation);
-                                var classScheduleReplacement = ClassScheduleReplacementCache.GetValueOrDefault(classNumber);
-                                <tr>
-                                    <td>@classNumber</td>
-                                    <td>
-                                        <div class="replacements-cell">
-                                            @if (classScheduleReplacement is null)
-                                            {
-                                                if (classSchedule is not null)
-                                                {
-                                                    <div
-                                                        class="replacements-cell-solid-item">
-                                                        <div class="replacements-cell-text">
-                                                            <strong>
-                                                                @classSchedule.Subject.Name
-                                                            </strong>
-                                                            @if (classSchedule.Cabinet != null)
-                                                            {
-                                                                <small>
-                                                                    (@classSchedule.Cabinet.Code)
-                                                                </small>
-                                                            }
-                                                            <br/>
-                                                            @if (classSchedule.Teacher != null)
-                                                            {
-                                                                <i>@classSchedule.Teacher.Initials</i>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="replacements-cell-solid-item">
-                                                        <div class="replacements-cell-text">
-                                                        </div>
-                                                    </div>
-                                                }
                                             }
                                             else
                                             {
-                                                @if (!classScheduleReplacement.IsCancel)
-                                                {
-                                                    <div class="replacements-cell-solid-item">
-                                                        <div class="replacements-cell-text">
-                                                            @if (classScheduleReplacement.ClassScheduleId.HasValue)
-                                                            {
-                                                                <strong>
-                                                                    Замена
-                                                                </strong>
-                                                            }
-                                                            else
-                                                            {
-                                                                <strong>
-                                                                    Добавление
-                                                                </strong>
-                                                            }
-                                                            @classScheduleReplacement.Subject!.Name
-                                                            @if (classScheduleReplacement.Cabinet != null)
-                                                            {
-                                                                <small>
-                                                                    (@classScheduleReplacement.Cabinet.Code)
-                                                                </small>
-                                                            }
-                                                            <br/>
-                                                            @if (classScheduleReplacement.Teacher != null)
-                                                            {
-                                                                <i>@classScheduleReplacement.Teacher.Initials</i>
-                                                            }
-                                                        </div>
+                                                <div class="replacements-cell-solid-item">
+                                                    <div class="replacements-cell-text">
                                                     </div>
-                                                }
-                                                else
-                                                {
-                                                    <div
-                                                        class="replacements-cell-solid-item">
-                                                        <div class="replacements-cell-text">
-                                                            <strong>
-                                                                Отмена
-                                                            </strong>
-                                                        </div>
-                                                    </div>
-                                                }
+                                                </div>
                                             }
-                                        </div>
-                                    </td >
-                                </tr>
-                            }
-                            </tbody>
-                        </MudSimpleTable>
-                    </MudItem>
-                </MudGrid>
-            </MudContainer>
+                                        }
+                                        else
+                                        {
+                                            @if (!classScheduleReplacement.IsCancel)
+                                            {
+                                                <div class="replacements-cell-solid-item">
+                                                    <div class="replacements-cell-text">
+                                                        @if (classScheduleReplacement.ClassScheduleId.HasValue)
+                                                        {
+                                                            <strong>
+                                                                Замена
+                                                            </strong>
+                                                        }
+                                                        else
+                                                        {
+                                                            <strong>
+                                                                Добавление
+                                                            </strong>
+                                                        }
+                                                        @classScheduleReplacement.Subject!.Name
+                                                        @if (classScheduleReplacement.Cabinet != null)
+                                                        {
+                                                            <small>
+                                                                (@classScheduleReplacement.Cabinet.Code)
+                                                            </small>
+                                                        }
+                                                        <br/>
+                                                        @if (classScheduleReplacement.Teacher != null)
+                                                        {
+                                                            <i>@classScheduleReplacement.Teacher.Initials</i>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div
+                                                    class="replacements-cell-solid-item">
+                                                    <div class="replacements-cell-text">
+                                                        <strong>
+                                                            Отмена
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </td >
+                            </tr>
+                        }
+                        </tbody>
+                    </MudSimpleTable>
+                </MudItem>
+            </MudGrid>
         </MudTabPanel>
         </MudTabs>
     }

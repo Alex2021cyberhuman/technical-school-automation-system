@@ -31,7 +31,7 @@
             <MudButton OnClick="GetTeacherReplacementsScheduleAsync">Загрузить изменения для учителей</MudButton>
         </MudButtonGroup>
     </MudItem>
-    <MudItem xs="2">
+    <MudItem xs="6">
         <MudList Clickable="true" SelectedValue="SelectedSpeciality" SelectedValueChanged="SelectSpecialityAsync">
             @if (SelectedSpeciality is not null)
             {
@@ -48,7 +48,7 @@
     </MudItem>
     @if (SelectedSpeciality is not null)
     {
-        <MudItem xs="2">
+        <MudItem xs="6">
             <MudList Clickable="true" SelectedValue="SelectedGroup" SelectedValueChanged="SelectGroupAsync">
                 @if (SelectedGroup is not null)
                 {
@@ -63,7 +63,7 @@
                 }
             </MudList>
         </MudItem>
-        <MudItem xs="8">
+        <MudItem xs="12">
             @if (SelectedSchedule is not null)
             {
                 <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-3">

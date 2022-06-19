@@ -1,11 +1,28 @@
+@using Application.Teachers.Forms
 @inherits MudBaseInput<List<Application.Teachers.Forms.SemesterForm>>
+
 <MudInputLabel>Часы по семестрам</MudInputLabel>
 <div class="row justify-content-between">
-    @foreach (var semester in Value)
+    @foreach (var semester in Value.OrderBy(x => x.Number))
     {
         var label = $"Семестр №{semester.Number}";
         <div class="col-sm-12 col-lg-4">
-            <MudNumericField Label="@label" @bind-Value="@semester.Hours" Min="0" Max="5000"/>
+            <MudNumericField T="int" Label="@label" Value="semester.Hours" ValueChanged="async (value) => await OnHourChanged(semester, value)" Min="0" Max="5000"/>
         </div>
     }
 </div>
+
+
+@code {
+    private async Task OnHourChanged(SemesterForm semester, int value)
+    {
+        var index = Value.IndexOf(semester);
+        if (index >= 0)
+        {
+            semester.Hours = value;
+            Value[index] = semester;
+            await SetValueAsync(Value);
+        }
+    }
+
+}
